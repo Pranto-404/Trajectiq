@@ -10,6 +10,8 @@ This is a tested **release candidate**, not a flight-design tool or a certified 
 
 **Source:** https://github.com/Pranto-404/Trajectiq
 
+**Updates:** push changes to `main` to trigger Vercel. Each deployment builds the game and runs the tests before release. Local edits must be committed and pushed; cached game clients adopt updates after all game tabs are closed and reopened.
+
 ## Play immediately
 
 Open **`dist/TRAJECTIQ_Play.html`** in a desktop browser, or double-click `START_GAME.bat` on Windows. The HTML embeds the complete game; no installation, internet, account, paid AI service or API key is required. A phone's file preview may not execute HTML: use a hosted HTTPS version for mobile play.

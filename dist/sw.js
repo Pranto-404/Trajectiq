@@ -1,4 +1,4 @@
-const CACHE='trajectiq-5.0.0';
+const CACHE='trajectiq-5.0.0-ui1';
 const ASSETS=['./','./index.html','./styles.css','./icon.svg','./ui/app.js','./ui/scene.js','./ui/space3d.js','./data/nasa.js','./data/catalog.js','./engine/model.js','./engine/assistant.js','./engine/copilot.js'];
 // Install the complete version before making it eligible to activate. Do not
 // force activation over a running flight: close all game tabs to adopt updates.

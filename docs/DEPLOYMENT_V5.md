@@ -1,6 +1,6 @@
 # GitHub and Vercel deployment · v5
 
-## Status checked 16 October 2026
+## Original deployment (16 October 2026); Git connection updated 17 October 2026
 
 The user selected the connected **Pranto-404** GitHub account and its associated Vercel account for a new project. Vercel project `trajectiq` was successfully created in that connected account using its default account route. Explicit team-list access returned403, but default-account project creation and deployment succeeded.
 
@@ -16,9 +16,11 @@ The user selected the connected **Pranto-404** GitHub account and its associated
 
 The user created the public repository **https://github.com/Pranto-404/Trajectiq**. The connected GitHub account has write access. This release includes the full reviewed v5 source, tests, documentation, standalone game and build configuration, preserving the repository's initial README commit as its parent. Internal hosting metadata is excluded from the public source.
 
-The Vercel deployment above remains live and was uploaded directly through the connected API. **Automatic deployments from GitHub are not configured.** The exposed Git-project creation action cannot reconnect an existing unlinked project with the same name. To enable future automatic deployments, open the existing `trajectiq` project's Settings → Git in Vercel and connect `Pranto-404/Trajectiq`, using `main` as the production branch. Keep the existing project to preserve its assigned URL.
+The existing Vercel project is now connected to **Pranto-404/Trajectiq** through the Vercel GitHub integration (17 October 2026, Asia/Dhaka). Its live domain remains **https://trajectiq-omega.vercel.app/**. Changes committed and pushed to the production branch `main` trigger deployment; saving a file locally alone does not publish it. Feature branches are used for preview deployments.
 
-Build configuration: **Other** framework, repository root, **npm run build**, output **dist**. No runtime environment variables or paid API keys are required.
+Build configuration: **Other** framework, repository root, **npm run build && npm test**, output **dist**. A failing test fails the deployment build. No runtime environment variables or paid API keys are required. The Git-triggered deployment result is verified separately after the maintenance commit is pushed.
+
+For cached clients, close all game tabs and reopen after deployment to activate the new release. In-progress flights are not forcibly interrupted. The UI maintenance patch uses cache `trajectiq-5.0.0-ui1` while retaining the compatible 5.0.0 model/checkpoint schema.
 
 ## Alternative: preserve the previous repository history
 

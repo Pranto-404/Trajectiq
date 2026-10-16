@@ -62,3 +62,18 @@ test('Untrusted persisted event labels render as text and malformed archives can
 test('Malformed raw JSON is preserved until explicit discard instead of silently overwritten',async()=>{
  for(const raw of ['{broken', 'null', '[]']){const ui=await uiAdapter(raw);assert.match(ui.elements['#modal-root'].innerHTML,/original text is preserved/);ui.click({action:'game-launch'});ui.change({custom:'name'},'Replacement');assert.equal(ui.rawStored(),raw);ui.click({action:'discard-rejected-save'});assert.equal(ui.stored().checkpoint,null);ui.click({action:'game-launch'});assert.ok(ui.stored().checkpoint);}
 });
+
+
+test('Operations dropdown input does not trigger a hardware lock or replace the control before change',async()=>{
+ let run=newRun(PRESETS.balanced);while(run.phase!=='operations'&&!run.done){if(run.crisis)run=resolve(run,run.crisis.actions[0].id);else run=advance(run);}
+ const ui=await uiAdapter({checkpoint:{schema:1,version:VERSION,run}});ui.click({action:'resume-checkpoint'});ui.click({page:'control'});
+ let renders=0;const app=ui.elements['#app'];let html=app.innerHTML;Object.defineProperty(app,'innerHTML',{get:()=>html,set:v=>{renders++;html=v;}});
+ ui.input({field:'mode'},'downlink');assert.equal(renders,0,'input must not remove the select before its change event');assert.doesNotMatch(ui.elements['#toast'].textContent,/Hardware is locked/);
+ ui.change({field:'mode'},'downlink');assert.equal(ui.stored().checkpoint.run.mode,'downlink');assert.equal(ui.stored().checkpoint.run.autoResume,false);
+ const restored=await uiAdapter(ui.stored());assert.equal(restored.stored().checkpoint.run.mode,'downlink');assert.equal(restored.intervals.size,0);
+});
+test('Coast command is accurately represented in telemetry schedule selector',async()=>{
+ let run=newRun(PRESETS.balanced);while(run.phase!=='operations'&&!run.done){if(run.crisis)run=resolve(run,run.crisis.actions[0].id);else run=advance(run);}
+ const ui=await uiAdapter({checkpoint:{schema:1,version:VERSION,run}});ui.click({action:'resume-checkpoint'});ui.click({command:'coast'});ui.click({page:'control'});
+ assert.match(ui.html(),/<option value="coast" selected>Coast · save energy<\/option>/);assert.equal(ui.stored().checkpoint.run.mode,'coast');
+});
