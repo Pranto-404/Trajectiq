@@ -1,0 +1,9 @@
+parameter,value,unit,source,verified_utc
+radius,1737.4,km,JPL DE440 table,2026-10-06
+mu,4902.8,km3/s2,JPL DE440 table,2026-10-06
+solar,1361,W/m2,NASA Moon Fact Sheet,2026-10-06
+perigee,363300,km,NASA Moon Fact Sheet,2026-10-06
+mean,384400,km,NASA Moon Fact Sheet,2026-10-06
+apogee,405500,km,NASA Moon Fact Sheet,2026-10-06
+gravity,1.62,m/s2,NASA Moon Fact Sheet,2026-10-06
+escape,2.38,km/s,NASA Moon Fact Sheet,2026-10-06

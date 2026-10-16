@@ -1,0 +1,7 @@
+"parameter","value","unit","evidence","source_url","verified_utc"
+"radius","3389.5","km","NASA/JPL","https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html","2026-10-10"
+"mu","42828.37362","km³/s²","NASA/JPL","https://ssd.jpl.nasa.gov/sats/phys_par/","2026-10-10"
+"solar","586.2","W/m²","NASA/JPL","https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html","2026-10-10"
+"perigee","54600000","km","NASA/JPL","https://science.nasa.gov/mars/mars-relay-network/","2026-10-10"
+"mean","225000000","km","educational assumption","","2026-10-10"
+"apogee","400200000","km","NASA/JPL","https://science.nasa.gov/mars/mars-relay-network/","2026-10-10"

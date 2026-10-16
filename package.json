@@ -1,0 +1,12 @@
+{
+  "name": "trajectiq",
+  "version": "5.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "standalone": "node scripts/build-standalone.mjs",
+    "start": "python3 -m http.server 3000 --directory dist",
+    "build": "node scripts/build-standalone.mjs"
+  }
+}
