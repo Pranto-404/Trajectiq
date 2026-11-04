@@ -24,7 +24,7 @@ export const SCENARIOS = {
     id: 'mars-dust', destination: 'mars', title: 'Mars Dust Season', tag: 'Expert · Mars',
     summary: 'A regional dust storm dims the Sun during the campaign. Power margin decides whether you keep observing.',
     budget: 150, scienceTarget: 560, referenceAltitude: 400, polarExp: 1, altitudeExp: 1, critical: 'power',
-    weather: { kind: 'dust', title: 'Regional dust storm', solar: 0.6, quality: 1, duration: 70, from: 60, span: 80 },
+    weather: { kind: 'dust', title: 'Regional dust storm', solar: 0.4, quality: 1, duration: 90, from: 60, span: 80 },
     why: 'Teaches energy margin under changing environmental conditions.'
   }
 };
@@ -38,7 +38,7 @@ export const DIFFICULTY = {
 
 // Roles for 1–4 players. Each role owns subsystems and one lens on readiness.
 export const ROLES = {
-  commander: { id: 'commander', label: 'Mission Commander', short: 'Commander', owns: ['launch'], lens: ['budget', 'mass'], crisis: [], blurb: 'Owns budget and the launch vehicle. Casts the deciding vote.' },
+  commander: { id: 'commander', label: 'Mission Commander', short: 'Commander', owns: ['launch'], lens: ['budget', 'mass', 'schedule', 'launchOrbit'], crisis: [], blurb: 'Owns budget and the launch vehicle. Casts the deciding vote.' },
   engineer: { id: 'engineer', label: 'Spacecraft Engineer', short: 'Engineer', owns: ['bus', 'propulsion'], lens: ['compatibility', 'deltaV', 'pointing'], crisis: ['propulsion'], blurb: 'Owns the bus and propulsion. Guards structure, pointing and maneuver reserve.' },
   science: { id: 'science', label: 'Science Lead', short: 'Science', owns: ['payload'], lens: ['orbit', 'pointing'], crisis: ['weather'], blurb: 'Owns the instrument and orbit choice. Defends scientific value.' },
   power: { id: 'power', label: 'Power & Comms Officer', short: 'Power/Comms', owns: ['power', 'comms', 'storage'], lens: ['power', 'eclipse', 'data', 'recorder'], crisis: ['eclipse', 'storage', 'link'], blurb: 'Owns power, communications and the recorder. Keeps the spacecraft alive and the data flowing.' }

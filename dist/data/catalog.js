@@ -81,7 +81,7 @@ export function missionFor(d={}){
  const common={...MISSION,scenarioId:scenario.id,difficulty:diff.id,difficultyLabel:diff.label,sandbox:d.sandbox===true,
   budget:d.sandbox===true?999:Math.round(scenario.budget*diff.budgetScale),scienceTarget:scenario.scienceTarget,scienceSuccess:diff.success,
   referenceAltitude:scenario.referenceAltitude,polarExp:scenario.polarExp,altitudeExp:scenario.altitudeExp,
-  weather:scenario.weather||(diff.weather?(mars?{kind:'dust',title:'Regional dust storm',solar:.6,quality:1,duration:70,from:60,span:80}:{kind:'particle',title:'Solar particle event',solar:1,quality:.5,duration:45,from:70,span:90}):null),
+  weather:scenario.weather||(diff.weather?(mars?{kind:'dust',title:'Regional dust storm',solar:.4,quality:1,duration:90,from:60,span:80}:{kind:'particle',title:'Solar particle event',solar:1,quality:.5,duration:45,from:70,span:90}):null),
   factorScale:diff.factors,deadline:Math.round(22*diff.deadlineScale),critical:scenario.critical,title:scenario.title,scenarioTag:scenario.tag,scenarioSummary:scenario.summary};
  const orbitAltitude=(lo,hi,fallback)=>Math.min(hi,Math.max(lo,Number.isFinite(Number(d.altitude))?Number(d.altitude):fallback));
  if(!mars){

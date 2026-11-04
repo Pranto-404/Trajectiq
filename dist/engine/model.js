@@ -21,7 +21,7 @@ export function normalize(raw) {
   n.altitude=clamp(finite(d.altitude,n.altitude),m.altitudeMin,m.altitudeMax);n.inclination=clamp(finite(d.inclination,n.inclination),0,90);
   n.arrayScale=clamp(finite(d.arrayScale,n.arrayScale||1),0.75,1.5);n.batteryScale=clamp(finite(d.batteryScale,n.batteryScale||1),0.75,1.5);
   n.duty=clamp(finite(d.duty,1),0.25,1);n.distance=Object.hasOwn(DISTANCES,d.distance)?d.distance:'mean';
-  n.name=String(d.name||m.title).replace(/[<>]/g,'').slice(0,40);
+  n.name=String(d.name||m.title).replace(/[\u0000-\u001f\u007f<>]/g,'').slice(0,40);
   n.livery=['gold','cyan','coral'].includes(d.livery)?d.livery:'gold';
   n.scenario=SCENARIOS[d.scenario]?.destination===n.destination?d.scenario:DEFAULT_SCENARIO[n.destination];n.difficulty=Object.hasOwn(DIFFICULTY,d.difficulty)?d.difficulty:'engineer';n.sandbox=d.sandbox===true;return n;
 }
@@ -58,6 +58,16 @@ export function calculate(raw) {
   return {d,c,m:M,dry,wet,period,base,scienceLoad,peak,eclipseEnergy,usableBattery,deltaV,cost,scienceDuty,dataGenerated,dataDownlink,pointingFactor,polarFactor,altitudeFactor,potential,months,contactStart,fillMinutes,margins,checks,risk,launchable:!checks.some(x=>x.status==='fail')};
 }
 function log(s,type,title,detail){s.logs.push({minute:s.minute,type,title,detail});}
+let probing=false;
+// Replay a paused state under every available response with the default policy: used only to judge whether a decision matters.
+function quickFinish(state){let r=state;for(let i=0;i<260&&!r.done;i++){if(r.crisis){const open=r.crisis.actions.filter(x=>!x.disabled),pick=open.find(x=>x.id==='ride')||open.find(x=>x.id==='continue')||open.find(x=>x.id==='wait')||open[0];r=resolve(r,pick.id);}else r=advance(r);}return r;}
+function decisionMatters(s){
+  if(probing||!s.crisis)return true;probing=true;
+  try{const open=s.crisis.actions.filter(x=>!x.disabled);if(open.length<2)return false;
+   const ends=open.map(x=>quickFinish(resolve(s,x.id))),sp=k=>Math.max(...ends.map(k))-Math.min(...ends.map(k)),target=calculate(s.design).m.scienceTarget;
+   return sp(e=>e.science)>=target*0.015||sp(e=>e.outcome.finalBattery)>=8||sp(e=>e.lostMB)>=calculate(s.design).c.storage.capacity*0.25;
+  }finally{probing=false;}
+}
 function crisis(s,id,title,body,chain,actions){s.crisis={id,title,body,chain,actions};s.seen.push(id);log(s,'warning',title,body);}
 function storageBody(s,a,link){const c=a.c,M=a.m,nominal=c.comms.downlinkMbps*linkEnvironment(s.design).factor*s.factors.link*s.linkBoost,duty=M.contactMinutes/a.period,avgReturn=nominal*duty,sunMin=a.period-M.eclipseMinutes-M.contactMinutes,avgGenerate=c.payload.dataMbps*s.throttle*sunMin/a.period;
   return `Recorder is ${Math.round(s.backlog/c.storage.capacity*100)}% full (${Math.round(s.backlog)} of ${c.storage.capacity} MB). The ${c.payload.name.toLowerCase()} produces ${(c.payload.dataMbps*s.throttle).toFixed(2)} Mb/s in sunlight. The ${c.comms.name.toLowerCase()} sends at ${nominal.toFixed(2)} Mb/s, but only during a ${M.contactMinutes}-minute ground contact once per ${a.period.toFixed(0)}-minute orbit, about ${Math.round(duty*100)}% of the time. Averaged over an orbit it returns ${avgReturn.toFixed(2)} Mb/s${avgGenerate>avgReturn?` while the instrument generates ${avgGenerate.toFixed(2)} Mb/s on average, so data piles up between contacts`:`, so a recorder that is small for the data collected between contacts overflows`}.`;}
@@ -157,8 +167,9 @@ function advanceSlice(input,dt,copy=true,calculation=null) {
     crisis(s,'weather',W.title,dust?`A regional dust storm will cut solar output to ${Math.round(W.solar*100)}% for ${W.duration} minutes. Battery is ${Math.round(s.battery/c.power.battery*100)}%. Sunlight alone may not cover the operating load.`:`Energetic particles will corrupt measurements for ${W.duration} minutes. Observations collected during the event are only ${Math.round(W.quality*100)}% as useful.`,dust?['Dust in the atmosphere','Solar generation falls',`${c.power.name}: ${Math.round(c.power.solar*0.85*s.factors.solar*W.solar)} W available`,'Battery drains faster than it charges']:['Solar particle event','Detector noise rises','Observations lose quality','Science per minute drops'],[
     {id:'shield',name:'Safe the instruments',effect:`Pause science and transmission for ${W.duration} minutes. Nothing is lost to the event, but the collection time is.`,disabled:false},
     {id:'reduce',name:'Reduce instrument duty',effect:dust?'Halve instrument duty during the event. Cuts load, keeps part of the science.':'Halve duty and use a low-gain mode: half the observations, 80% as useful.',disabled:false},
-    {id:'ride',name:'Keep observing',effect:dust?'Full science through the storm. The battery may drain.':`Keep collecting. Observations during the event count only ${Math.round(W.quality*100)}%.`,disabled:false}
-  ]);}
+    {id:'ride',name:'Keep observing',effect:dust?'Full science through the storm. The battery may drain.':`Keep collecting. Observations during the event count only ${Math.round(W.quality*100)}%. Data already on the recorder can be corrupted.`,disabled:false}
+  ]);
+    if(!decisionMatters(s)){s.crisis=null;s.weather={kind:W.kind,solar:W.solar,quality:W.quality,start:s.minute,end:s.minute+W.duration,choice:'ride'};log(s,'info',`${W.title} passed`,`The ${c.power.name.toLowerCase()} and your margins absorbed it: every response would have ended about the same, so no decision was needed.`);}}
   if(s.mode==='downlink'&&s.backlog<c.storage.capacity*0.25)s.mode='science';
   return s;
 }
@@ -176,7 +187,9 @@ export function resolve(input,actionId){const s=clone(input);if(s.done||!s.crisi
   if(e.id==='eclipse'){if(actionId==='conserve'){s.mode='coast';s.autoResume=true;}if(actionId==='throttle')s.throttle*=0.5;}
   if(e.id==='storage'){if(actionId==='downlink')s.mode='downlink';if(actionId==='compress')s.throttle*=0.5;}
   if(e.id==='link'){if(actionId==='boost'){s.linkBoost=2;s.qualityHit=0.9;}if(actionId==='pause')s.mode='downlink';}
-  if(e.id==='weather'){const W=M.weather;s.weather={kind:W.kind,solar:W.solar,quality:W.quality,start:s.minute,end:s.minute+W.duration,choice:actionId};}
+  if(e.id==='weather'){const W=M.weather;s.weather={kind:W.kind,solar:W.solar,quality:W.quality,start:s.minute,end:s.minute+W.duration,choice:actionId};
+    const hit=W.kind==='particle'?({ride:0.35,reduce:0.15,shield:0}[actionId]||0):0;
+    if(hit>0&&s.backlog>0){const mb=s.backlog*hit,q=s.qualityBacklog*hit;s.backlog-=mb;s.qualityBacklog-=q;s.lostMB+=mb;s.lostScience+=q;log(s,'warning','Recorder data corrupted',`${Math.round(mb)} MB of stored observations were corrupted by energetic particles.`);}}
   s.crisis=null;return s;
 }
 function finish(s,a,abort=false,reason='Capture aborted'){const M=a.m;s.done=true;s.phase='debrief';const completion=clamp(s.science/M.scienceTarget*100,0,100);const achieved=!abort&&completion>=M.scienceSuccess&&s.battery>0;
@@ -200,7 +213,7 @@ export function diagnose(s){
   }
   if(s.qualityBacklog>0)add('stranded',s.qualityBacklog,`${n0(s.outcome?.retainedMB??s.backlog)} MB of science was still onboard when the campaign ended, so it did not count.`,'Leave time for a final contact and avoid pausing transmission late in the campaign. Only returned science counts.','stranded');
   const voluntary=Math.max(0,s.pausedMin);
-  if(voluntary>0)add('paused',voluntary*rate,`Collection was paused for ${n0(voluntary)} minutes of sunlight (conserve, return priority or an instrument safing). At roughly ${rate.toFixed(1)} science units per minute that is about ${n0(voluntary*rate)} units forgone.${s.contactIdleMin>1?` The antenna also sat idle for ${n0(s.contactIdleMin)} minutes of contact with nothing left to send.`:''}`,'Pause only when the numbers demand it. If the recorder is the problem, reduce duty instead; if the battery is fine, keep mapping.','paused');
+  if(voluntary>0)add('paused',voluntary*rate,`Collection was paused for ${n0(voluntary)} minutes of sunlight (conserve, return priority or an instrument safing). At roughly ${rate.toFixed(1)} science units per minute that is up to ${n0(voluntary*rate)} units forgone.${s.contactIdleMin>1?` The antenna also sat idle for ${n0(s.contactIdleMin)} minutes of contact with nothing left to send.`:''}`,'Pause only when the numbers demand it. If the recorder is the problem, reduce duty instead; if the battery is fine, keep mapping.','paused');
   const safeMin=s.safeSteps*M.step;
   if(safeMin>0)add('energy',safeMin*rate,`The spacecraft spent ${n0(safeMin)} minutes in safe mode after the battery reached its 15% threshold. Final battery was ${n0(o.finalBattery??0)}%.`,`Add battery capacity or array area, lower instrument duty, or avoid collecting through eclipse. Eclipse here lasts ${a.m.eclipseMinutes.toFixed(1)} minutes.`,'energy');
   if(a.pointingFactor<1)add('pointing',s.generatedScience*(1/a.pointingFactor-1),`The ${a.c.bus.name.toLowerCase()} points to ${a.c.bus.pointing}″ but the ${a.c.payload.name.toLowerCase()} needs ${a.c.payload.pointingMax}″, so useful quality was cut to ${n0(a.pointingFactor*100)}%.`,'Match pointing precision to the instrument requirement.','pointing');
