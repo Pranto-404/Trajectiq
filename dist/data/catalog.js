@@ -1,5 +1,12 @@
 import {NASA_DATA,MARS_DATA,nasaValue} from './nasa.js';
-export const VERSION = '5.0.0';
+import {SCENARIOS,DEFAULT_SCENARIO,DIFFICULTY} from './scenarios.js';
+export const VERSION = '6.0.0';
+// One orbit model for every destination: circular two-body period, and the
+// central cylindrical-shadow bound for time in eclipse (zero solar beta angle).
+export const orbitPeriodMinutes=(radius,mu,altitude)=>2*Math.PI*Math.sqrt((radius+altitude)**3/mu)/60;
+export const shadowMinutes=(radius,mu,altitude)=>orbitPeriodMinutes(radius,mu,altitude)/Math.PI*Math.asin(radius/(radius+altitude));
+// Science units that must be returned for the objective to count.
+export const neededScience=m=>Math.round(m.scienceTarget*m.scienceSuccess/100);
 export const SOURCES = [
   {id:'nasa-data',title:'NASA NSSDCA · Moon Fact Sheet numeric dataset',url:NASA_DATA.factURL,use:'Curated snapshot: solar irradiance 1361 W/m², mean perigee 363300 km, reference distance 384400 km and mean apogee 405500 km. Drives array sizing, educational distance-based link scaling and signal-delay readout. Last source update: 2024-01-11; verified 2026-10-06.',type:'NASA numeric dataset'},
   { id:'jpl', title:'JPL · Planetary satellite physical parameters', url:'https://ssd.jpl.nasa.gov/sats/phys_par/sep.html', use:'Moon mean radius 1,737.4 km and gravitational parameter 4,902.800 km³/s², used to calculate circular orbital period.', type:'Sourced physical constants' },
@@ -43,15 +50,22 @@ export const CATALOG = {
     {...a, id:'dedicated', name:'Dedicated injection', label:'MORE CAPACITY', mass:0, power:0, cost:32, capacity:300, note:'300 kg injected-mass allowance. More flexibility, fewer credits for instruments.'}
   ]
 };
+// Development lead time (months) and launch-orbit envelope: educational assumptions.
+const LEAD={bus:{compact:5,precision:8},payload:{survey:4,hires:9},power:{balanced:5,compact:3,endurance:6},propulsion:{standard:4,efficient:7},comms:{medium:4,compact:3,highgain:6},storage:{medium:2,standard:2,expanded:3},launch:{rideshare:2,dedicated:5}};
+const ENVELOPE={rideshare:{altMax:{moon:150,mars:600},incMin:45},dedicated:{altMax:{moon:200,mars:1000},incMin:0}};
+for(const [k,list] of Object.entries(CATALOG))for(const c of list){c.lead=LEAD[k][c.id];if(k==='launch')c.envelope=ENVELOPE[c.id];}
+CATALOG.launch[0].note+=' Shared rides serve inclinations of 45° or more and orbits up to 150 km (Moon) or 600 km (Mars).';
+CATALOG.launch[1].note+=' Can fly any inclination and the full altitude range.';
+export const developmentMonths=leads=>{const max=Math.max(...leads),sum=leads.reduce((s,x)=>s+x,0);return Math.round((6+max+0.25*(sum-max))*10)/10;};
 export const CATEGORIES = [
   ['bus','Spacecraft bus','Platform & pointing'],['payload','Science payload','Observation & data'],['power','Power system','Generation & battery'],['propulsion','Propulsion','Fuel & maneuver reserve'],['comms','Communications','Return your discoveries'],['storage','Avionics & storage','Protect the science'],['launch','Launch provider','Capacity & injection']
 ];
 export const MISSION = {
   id:'lunar-polar-mapper', title:'Lunar Polar Mapper', subtitle:'Map the shadows. Bring the science home.',
   budget:150, duration:240, step:5, scienceTarget:650, scienceSuccess:80, mu:nasaValue('mu'), radius:nasaValue('radius'),
-  maneuver:650, reserve:100, thermalMass:15, operationsCost:8, eclipseMinutes:35, contactMinutes:25,
+  maneuver:650, reserve:100, thermalMass:15, operationsCost:8, eclipseMinutes:shadowMinutes(nasaValue('radius'),nasaValue('mu'),100), contactMinutes:25,
   note:'Educational mission: 4 hours of lunar mapping after a compressed launch and capture phase. Earn 650 science units from downlinked observations, and return ≥80% of the target.',
-  assumption:'Duration, 650 science-unit target, 650 m/s capture/correction, 100 m/s reserve, 35-minute eclipse, 25-minute contact, costs and component values are educational assumptions.'
+  assumption:'Duration, 650 science-unit target, 650 m/s capture/correction, 100 m/s reserve, 25-minute contact, costs and component values are educational assumptions. Eclipse time is calculated from the orbit.'
 };
 export const PRESETS = {
   balanced: {bus:'precision',payload:'survey',power:'endurance',propulsion:'standard',comms:'highgain',storage:'standard',launch:'rideshare',fuel:55,altitude:100,inclination:90},
@@ -61,15 +75,24 @@ export const PRESETS = {
 export const UNCERTAINTY = {seed:4385,samples:200,solar:[0.8,1],link:[0.65,1],isp:[0.95,1],pointing:[1,1.25]};
 
 export function missionFor(d={}){
- const mars=d.destination==='mars';
- if(!mars)return {...MISSION,destination:'moon',bodyName:'Moon',solarIrradiance:nasaValue('solar'),referenceDistance:nasaValue('mean'),altitudeMin:50,altitudeMax:200,referenceAltitude:100,eclipseModel:'Fixed teaching window',source:NASA_DATA};
- const radius=MARS_DATA.rows.find(r=>r.id==='radius').value,mu=MARS_DATA.rows.find(r=>r.id==='mu').value;
- const altitude=Math.min(1000,Math.max(200,Number.isFinite(Number(d.altitude))?Number(d.altitude):400));
- const period=2*Math.PI*Math.sqrt((radius+altitude)**3/mu)/60;
- const eclipseMinutes=period/Math.PI*Math.asin(radius/(radius+altitude));
- return {...MISSION,id:'mars-polar-mapper',destination:'mars',bodyName:'Mars',title:'Mars Polar Mapper',subtitle:'Budget sunlight. Plan the return link.',radius,mu,solarIrradiance:MARS_DATA.rows.find(r=>r.id==='solar').value,referenceDistance:225000000,altitudeMin:200,altitudeMax:1000,referenceAltitude:400,eclipseMinutes,eclipseModel:'Central cylindrical-shadow bound; zero solar beta angle',source:MARS_DATA,
+ const mars=d.destination==='mars',destination=mars?'mars':'moon';
+ const scenario=SCENARIOS[d.scenario]?.destination===destination?SCENARIOS[d.scenario]:SCENARIOS[DEFAULT_SCENARIO[destination]];
+ const diff=DIFFICULTY[d.difficulty]||DIFFICULTY.engineer;
+ const common={...MISSION,scenarioId:scenario.id,difficulty:diff.id,difficultyLabel:diff.label,sandbox:d.sandbox===true,
+  budget:d.sandbox===true?999:Math.round(scenario.budget*diff.budgetScale),scienceTarget:scenario.scienceTarget,scienceSuccess:diff.success,
+  referenceAltitude:scenario.referenceAltitude,polarExp:scenario.polarExp,altitudeExp:scenario.altitudeExp,
+  weather:scenario.weather||(diff.weather?(mars?{kind:'dust',title:'Regional dust storm',solar:.6,quality:1,duration:70,from:60,span:80}:{kind:'particle',title:'Solar particle event',solar:1,quality:.5,duration:45,from:70,span:90}):null),
+  factorScale:diff.factors,deadline:Math.round(22*diff.deadlineScale),critical:scenario.critical,title:scenario.title,scenarioTag:scenario.tag,scenarioSummary:scenario.summary};
+ const orbitAltitude=(lo,hi,fallback)=>Math.min(hi,Math.max(lo,Number.isFinite(Number(d.altitude))?Number(d.altitude):fallback));
+ if(!mars){
+  const radius=nasaValue('radius'),mu=nasaValue('mu'),altitude=orbitAltitude(50,200,100);
+  return {...common,destination:'moon',bodyName:'Moon',radius,mu,solarIrradiance:nasaValue('solar'),referenceDistance:nasaValue('mean'),altitudeMin:50,altitudeMax:200,eclipseMinutes:shadowMinutes(radius,mu,altitude),eclipseModel:'Central cylindrical-shadow bound; zero solar beta angle',source:NASA_DATA,
+   note:scenario.summary+' Educational mission: 4 hours of orbital operations after a compressed launch and capture phase. Return at least '+Math.round(scenario.scienceTarget*diff.success/100)+' of '+scenario.scienceTarget+' science units.'};
+ }
+ const radius=MARS_DATA.rows.find(r=>r.id==='radius').value,mu=MARS_DATA.rows.find(r=>r.id==='mu').value,altitude=orbitAltitude(200,1000,400);
+ return {...common,id:'mars-polar-mapper',destination:'mars',bodyName:'Mars',subtitle:'Budget sunlight. Plan the return link.',radius,mu,solarIrradiance:MARS_DATA.rows.find(r=>r.id==='solar').value,referenceDistance:225000000,altitudeMin:200,altitudeMax:1000,eclipseMinutes:shadowMinutes(radius,mu,altitude),eclipseModel:'Central cylindrical-shadow bound; zero solar beta angle',source:MARS_DATA,
  note:'Mars orbital-operations teaching scenario. Circular orbit uses NASA/JPL values; pre-arranged interplanetary transport and deep-space network support are assumed. No cruise, landing, launch window or n-body solution is calculated.',
- assumption:MISSION.assumption.replace('35-minute eclipse, ','')+' Mars uses a central cylindrical-shadow bound for shadow duration. Contact remains an assumed 25-minute teaching window. A separately engineered fictional link is normalized at 225 million km; this is not the same Moon antenna maintaining its rate at Mars. Displayed light-time does not delay player controls.'};
+ assumption:MISSION.assumption.replace(' Eclipse time is calculated from the orbit.','')+' Mars and Moon use the same central cylindrical-shadow bound for shadow duration. Contact remains an assumed 25-minute teaching window. A separately engineered fictional link is normalized at 225 million km, a game reference distance rather than a measured average; this is not the same Moon antenna maintaining its rate at Mars. Displayed light-time does not delay player controls.'};
 }
 export function presetFor(destination='moon',key='balanced'){
  const base={...(PRESETS[key]||PRESETS.balanced)};

@@ -38,7 +38,7 @@ test('V5 physics: seeded Mars designs conserve bytes/science at every step and b
  assert.ok(count>=10);
 });
 test('V5 physics: completed state, design snapshots and over-target scoring remain immutable',()=>{
- const design=presetFor('moon');const r=runToEnd(design);design.fuel=0;assert.notEqual(r.design.fuel,design.fuel);assert.ok(r.outcome.rawCompletion>100);assert.equal(r.outcome.completion,100);assert.deepEqual(advance(r),r);assert.deepEqual(resolve(r,'abort'),r);assert.throws(()=>advance({...newRun(PRESETS.balanced),phase:'invalid'}),/Invalid mission phase/);
+ const design=presetFor('moon');const r=runToEnd(design,{mode:'aggressive'});design.fuel=0;assert.notEqual(r.design.fuel,design.fuel);assert.ok(r.outcome.rawCompletion>100);assert.equal(r.outcome.completion,100);assert.deepEqual(advance(r),r);assert.deepEqual(resolve(r,'abort'),r);assert.throws(()=>advance({...newRun(PRESETS.balanced),phase:'invalid'}),/Invalid mission phase/);
 });
 test('V5 physics: checkpoint button flags cannot authorize physically unavailable burns',()=>{
  let s=advance(advance(newRun({...PRESETS.balanced,fuel:5})));for(const action of s.crisis.actions)action.disabled=false;assert.throws(()=>resolve(s,'nominal'),/insufficient propellant/);assert.throws(()=>resolve(s,'wide'),/insufficient propellant/);assert.ok(resolve(s,'abort').done);
