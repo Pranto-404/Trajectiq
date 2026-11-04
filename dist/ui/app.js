@@ -299,7 +299,7 @@ Object.assign(actions,{
 // ---- Motion: view transitions, tilt, count-up -----------------------------------------------------------------------------
 function swap(update){
   if(state.prefs.reducedMotion||!document.startViewTransition){update();return;}
-  try{document.startViewTransition(update);}catch{update();}
+  try{const vt=document.startViewTransition(update);for(const k of ['ready','finished','updateCallbackDone'])vt?.[k]?.catch?.(()=>{});}catch{update();}
 }
 function afterRender(){
   if(state.prefs.reducedMotion||!globalThis.requestAnimationFrame||!document.querySelectorAll)return;

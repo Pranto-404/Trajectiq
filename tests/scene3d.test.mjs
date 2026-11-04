@@ -17,7 +17,7 @@ test('WebGL adapter issues geometry for hangar, launch, transfer and orbital gam
   const canvas={width:0,height:0,clientWidth:800,clientHeight:550,getContext:()=>gl,addEventListener(){},removeEventListener(){}};
   const data={stage:'hangar',design:PRESETS.resilient,period:118,selected:'power',run:null};const r=mountSpace3D(canvas,()=>data,()=>{});
   assert.equal(r.supported,true);assert.doesNotThrow(()=>next(0));assert.ok(draws.some(d=>d.type===gl.TRIANGLES&&d.count>0));assert.ok(draws.some(d=>d.type===gl.POINTS&&d.count>0));
-  for(const phase of ['launch','transfer','capture','operations']){data.stage='flight';data.run={phase,minute:30,contact:phase==='operations',eclipse:false};assert.doesNotThrow(()=>next(2000));}
+  let clock=2000;for(const phase of ['launch','transfer','capture','operations']){data.stage='flight';data.run={phase,minute:30,contact:phase==='operations',eclipse:false};assert.doesNotThrow(()=>next(clock+=100));}
   assert.ok(draws.some(d=>d.type===gl.LINE_STRIP));assert.ok(draws.some(d=>d.type===gl.LINES));assert.doesNotThrow(()=>r.dispose());
   globalThis.requestAnimationFrame=nativeRAF;globalThis.cancelAnimationFrame=nativeCancel;globalThis.window=nativeWindow;
 });

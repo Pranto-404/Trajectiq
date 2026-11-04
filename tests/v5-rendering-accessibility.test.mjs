@@ -49,15 +49,26 @@ test('Vertical touch drags do not move the camera; horizontal drags and cancella
  r.handlers.pointerdown({pointerId:2,pointerType:'touch',clientX:100,clientY:100});r.handlers.pointermove({pointerId:2,clientX:140,clientY:102});assert.ok(cameraState.yaw>original.yaw);assert.equal(cameraState.pitch,original.pitch);
  Object.assign(cameraState,original);r.renderer.dispose();
 });
-test('Paused and reduced-motion scenes avoid redundant GPU drawing; camera changes redraw',t=>{
- const r=mockRenderer(t);r.step(0);const count=r.draws.length;r.step(17);assert.equal(r.draws.length,count);
+test('Reduced-motion scenes avoid redundant GPU drawing; camera changes redraw',t=>{
+ const r=mockRenderer(t);r.data.reducedMotion=true;r.step(0);const count=r.draws.length;r.step(17);assert.equal(r.draws.length,count);
  r.handlers.keydown({key:'ArrowRight',preventDefault(){}});r.step(34);assert.ok(r.draws.length>count);
- r.data.stage='flight';r.data.playing=true;r.data.reducedMotion=true;r.data.run={phase:'operations',minute:50};r.step(51);const paused=r.draws.length;r.step(68);assert.equal(r.draws.length,paused);r.renderer.dispose();
+ r.data.stage='flight';r.data.playing=true;r.data.run={phase:'operations',minute:50};r.step(51);const paused=r.draws.length;r.step(68);assert.equal(r.draws.length,paused);r.renderer.dispose();
+});
+test('Ambient motion animates the scene but is capped near 30 fps',t=>{
+ const r=mockRenderer(t);r.step(0);const first=r.draws.length;r.step(10);assert.equal(r.draws.length,first,'under 30 ms is skipped');
+ r.step(40);assert.ok(r.draws.length>first,'later frames animate even when nothing else changed');
+ const uniforms=[];r.gl.uniform1f=(name,v)=>uniforms.push([name,v]);r.step(80);r.step(120);
+ const times=uniforms.filter(([n])=>n==='uTime').map(([,v])=>v);assert.ok(times.length>=2&&times.at(-1)>times[0],'time uniform advances');
+ for(const name of ['uRim','uAlpha','uSpin'])assert.ok(uniforms.some(([n])=>n===name),name);r.renderer.dispose();
+});
+test('Hangar idle drift, intro dolly and blending are disabled by reduced motion',t=>{
+ const r=mockRenderer(t);r.data.reducedMotion=true;const blends=[];r.gl.blendFunc=()=>blends.push(1);const before=cameraState.yaw;
+ r.step(0);r.step(5000);r.step(9000);assert.equal(cameraState.yaw,before);r.renderer.dispose();
 });
 test('Moon/Mars WebGL body colors and fallback labels follow the selected design',t=>{
  const r=mockRenderer(t);r.data.stage='flight';r.data.run={phase:'operations',minute:0};r.step(0);
  assert.ok(r.colors.some(v=>JSON.stringify(v)==='[0.65,0.68,0.71]'));
- r.data.design.destination='mars';r.step(17);assert.ok(r.colors.some(v=>JSON.stringify(v)==='[0.8,0.36,0.22]'));
+ r.data.design.destination='mars';r.step(60);assert.ok(r.colors.some(v=>JSON.stringify(v)==='[0.8,0.36,0.22]'));
  assert.match(scene({design:{destination:'mars'}}),/orbiting Mars/);assert.match(scene({design:{destination:'mars'}}),/MARS MAPPING ORBIT/);assert.match(scene({design:{destination:'moon'}}),/orbiting Moon/);
  assert.match(scene({running:true,reducedMotion:true}),/spacecraft-orbit paused/);r.renderer.dispose();
 });
@@ -116,7 +127,7 @@ test('Asynchronous GPU rendering errors request fallback and clean up',t=>{
 test('Canvas resize follows CSS dimensions and caps high-DPI backing buffers',t=>{
  const r=mockRenderer(t);window.devicePixelRatio=4;r.step(0);
  assert.equal(r.canvas.width,780);assert.equal(r.canvas.height,720);
- r.canvas.clientWidth=320;r.canvas.clientHeight=200;r.step(1);
+ r.canvas.clientWidth=320;r.canvas.clientHeight=200;r.step(60);
  assert.equal(r.canvas.width,640);assert.equal(r.canvas.height,400);r.renderer.dispose();
 });
 
