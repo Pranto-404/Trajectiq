@@ -33,7 +33,8 @@ test('Security: hosted pages ship a strict Content-Security-Policy and hardening
 test('Security: the standalone file pins its exact script by hash and has no network permission', () => {
   const html = read('dist/TRAJECTIQ_Play.html');
   const meta = html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]+)"/)[1];
-  const script = html.match(/<script type="module">([\s\S]*?)<\/script>/)[1];
+  // Browsers normalise CRLF to LF while parsing HTML, so the hash is over the LF form (a Windows checkout may store CRLF).
+  const script = html.match(/<script type="module">([\s\S]*?)<\/script>/)[1].replace(/\r\n/g, '\n');
   assert.equal(directive(meta, 'default-src'), "'none'");
   assert.equal(directive(meta, 'script-src'), `'sha256-${createHash('sha256').update(script).digest('base64')}'`, 'the CSP hash matches the embedded script');
   assert.doesNotMatch(meta, /connect-src|unsafe-eval|https?:/);
