@@ -1,78 +1,82 @@
-# TRAJECTIQ · v5.0.0
+# TRAJECTIQ · v6
 
-**Design → validate → launch → operate → understand → redesign.**
+**Space Mission Design Game** · built for the NASA International Space Apps Challenge 2026 challenge of the same name.
 
-Team: **Kemon Dilam Bondhura**. An educational Space Mission Design Game with Moon and Mars scenarios, seven spacecraft subsystem categories, deterministic simulation, crises, causal debriefs and an offline mission assistant.
+> Design a spacecraft, launch it, fly the mission, find out *why* it succeeded or failed, and redesign. Alone, or as a crew of up to four.
 
-This is a tested **release candidate**, not a flight-design tool or a certified cross-device release. Automated verification is complete; physical-device verification remains pending. The deployed Moon journey, crisis refresh, Mars setup and assistant smoke checks passed. See `docs/QA_V5.md`.
+**Play online:** https://trajectiq-omega.vercel.app/ · **Source:** https://github.com/Pranto-404/Trajectiq
 
-**Live game:** https://trajectiq-omega.vercel.app/
+## What the challenge asks, and where to find it in the game
 
-**Source:** https://github.com/Pranto-404/Trajectiq
+| Challenge asks for | In TRAJECTIQ |
+|---|---|
+| Define a mission objective first | **Mission board** with four scenarios, a mission charter (budget, science target, schedule, orbit limits) and the most critical resource named for each |
+| Design a spacecraft, instruments, launch vehicle and orbit | Hangar with seven subsystems, drag-and-drop in 3D, **orbit options explained**, and a launch-vehicle envelope check |
+| Manage mass, power, budget, data, communications and **time** | Live margins for all six, including a development-schedule resource |
+| Check mass and orbit against the launch vehicle | Launch–orbit compatibility check; rideshare cannot reach low inclinations or high orbits |
+| Simulate the mission and evaluate it | Deterministic engine: rocket equation, orbit period, shadow, battery, recorder and contact link |
+| Single player and teams of up to four with different roles | **Crew mode**: four roles own different subsystems, negotiate by suggestion, sign off Go/No-Go and vote in crises |
+| Scoring that rewards performance, scientific value, efficient resources, decisions, collaboration | **Mission Score out of 1000** across exactly those five things |
+| Difficulty levels, scenarios, random events, sandbox | Cadet / Engineer / Flight Director; Moon and Mars scenarios; a seeded **space-weather event**; **Sandbox** mode |
+| Save, share and compare designs; leaderboard; mission report | **Mission codes** that re-fly any design fairly, a local leaderboard, a printable report |
+| Explain *why* a mission failed | **Decision review**: every crisis choice is replayed under each alternative and explained |
+| Teach without assuming knowledge | Concept cards behind every "?" button, plain-language crises, beginner coaching |
 
-**Updates:** push changes to `main` to trigger Vercel. Each deployment builds the game and runs the tests before release. Local edits must be committed and pushed; cached game clients adopt updates after all game tabs are closed and reopened.
+## Play in 60 seconds
 
-## Play immediately
+1. Choose **Solo**, **Crew** or **Sandbox**, a scenario and a difficulty. Accept the mission.
+2. Build in the hangar. Watch mass, cost, schedule, maneuver reserve and eclipse margins move. Click "?" for a plain-language explanation.
+3. Open launch readiness, accept or fix the warnings, and launch.
+4. Fly. When a crisis pauses the mission you see the **direction** each response will push science, battery and data (no exact numbers). You get **one forecast** per mission that shows ranges.
+5. Read the score, the decision review and the causes. Redesign and compare.
 
-Open **`dist/TRAJECTIQ_Play.html`** in a desktop browser, or double-click `START_GAME.bat` on Windows. The HTML embeds the complete game; no installation, internet, account, paid AI service or API key is required. A phone's file preview may not execute HTML: use a hosted HTTPS version for mobile play.
+## Modes, scenarios, difficulty
 
-For modular development, use Node.js 22+ for build/tests and Python 3 for the optional local server:
+- **Scenarios:** Lunar Polar Mapper (beginner), Lunar Ice Hunter (low polar orbit plus a solar particle event), Mars Polar Mapper, Mars Dust Season (a dust storm dims the Sun).
+- **Difficulty:** Cadet (more budget, 70% objective), Engineer (150 credits, 80%), Flight Director (92% budget, 85% objective, degraded environment, space weather in every scenario).
+- **Crew mode (1–4 players on one device):** the Commander owns budget and launch, the Engineer the bus and propulsion, the Science Lead the instrument and orbit, the Power & Comms Officer power, communications and the recorder. Fewer players share roles. Other roles can *suggest* a part to its owner. Launch needs every role's sign-off, and each role judges readiness through its own lens. In a crisis each role advises from its own priority (so roles can honestly disagree), the team votes, and the Commander breaks ties. This is pass-the-controls play on one device, not network multiplayer.
+
+## Mission Score (0–1000)
+
+Mission performance 300, scientific value 200, resource efficiency 200, decision quality 200, and (crew mode) team collaboration 100, normalised to 1000. Decision quality ranks your choice against every alternative by replaying it from the exact paused moment. Formulas are in `dist/engine/review.js`.
+
+## Honest science
+
+NASA/JPL snapshots supply Moon and Mars radius, gravitational parameter, solar irradiance and distance examples. Established equations supply the ideal rocket equation, circular orbit period, **eclipse duration for both bodies from one formula** (central cylindrical shadow, zero beta angle, 46.5 minutes at 100 km above the Moon) and energy integration. Hardware values, credits, science units, contact windows, crisis triggers and development schedules are educational assumptions. The 225 million km Mars reference distance is a **game choice for normalising the radio link, not a measured average**, and is labelled in the game as well as here. Details: `docs/SCIENTIFIC_VALIDATION_V6.md`.
+
+## Run it
 
 ```sh
-npm run build
-npm test
-npm start
+npm run build   # regenerates dist/TRAJECTIQ_Play.html, a single offline file
+npm test        # 327 tests, no dependencies
+npm start       # serves dist/ on http://localhost:3000
 ```
 
-Open `http://localhost:3000`. Windows users without `python3` can run `py -m http.server 3000 --directory dist`. There are no npm dependencies. `npm run build` regenerates the standalone file from the same modules.
+Node.js 22+ for build and tests; Python 3 for the optional local server. Open `dist/TRAJECTIQ_Play.html` to play with no server. Pushing to `main` deploys to Vercel, which runs the build and all tests first.
 
-## First mission
+## Quality and security
 
-1. Choose **Accept mission · enter hangar**. Start with Moon and the Balanced design.
-2. Choose a subsystem, then a component. Watch cost, mass, power, battery and data margins change. Customize name, color, fuel, orbit, array/battery size and instrument duty.
-3. Open **Launch readiness**, read blockers/warnings, then authorize launch.
-4. Use **Next event** or the step button. Recovery decisions pause the mission. Choose a response, then resume. Operations commands become available after capture.
-5. Return at least **520 science units** of the 650-unit target while ending with battery above zero. The budget is 150 fictional credits. Observations left onboard do not count as returned science.
-6. Read the debrief. **Apply power + comms fix** previews a targeted upgrade; it preserves unrelated choices and can be cancelled. Relaunch and compare.
+- 327 automated tests: physics, scoring, decision replay, crew logic, assistant accuracy, UI flows, rendering fallbacks, accessibility CSS rules, offline behaviour and security.
+- Security: strict Content-Security-Policy and hardening headers on the hosted pages (no inline or eval scripts, no outside origins); the offline file pins its exact script by SHA-256; mission codes, saved data and player names are treated as untrusted input (size limits, whitelisted fields, clamped values, escaped output, fuzz and XSS tests); no network access, accounts or trackers.
+- Offline: the hosted game caches itself after the first visit. Online, the newest release always wins.
 
-Mars is available through **Choose destination** in the hangar/lab. Switching loads a Mars starter design; it changes radius, gravity, sunlight, altitude limits, eclipse estimate and distance examples. It is a simplified pre-arranged arrival/orbital mapping scenario, not a full Earth–Mars cruise or landing simulation.
+## Device and browser testing status
 
-## Save, resume and offline
+Verified in an emulated 375×812 touch viewport (Chromium): the mission board, hangar, crisis, score and trade screens fit without horizontal scrolling and the controls are usable. The standalone file was also loaded under its own Content-Security-Policy. **Not yet verified on physical iOS or Android devices.** A five-minute checklist is in `docs/MOBILE_TEST_CHECKLIST.md`. Judges opening the link on a phone should expect the 3D scene to fall back to a 2D view if WebGL is unavailable; gameplay stays fully available.
 
-An active flight is automatically checkpointed in this browser, including pending crises. Reload restores it paused. Hardware is locked during a flight; changing presets/resetting requires explicit discard. Damaged/incompatible checkpoints are retained for export until explicitly discarded.
+## Team
 
-Browser storage is local to the origin, device and browser. Clearing site data loses it; private browsing or quota restrictions can prevent saving. The JSON mission report is **read-only**, not an import/restore file. There is no cloud sync or online multiplayer.
-
-The standalone file contains all runtime assets. The hosted app becomes offline-ready after its first successful service-worker cache installation; it cannot load for the first time without a network. Close every game tab and reopen to activate a new cached release. v5 pins cached modules to one version and avoids forcing an update over an active game. External NASA links require a connection.
-
-## Assistant
-
-The assistant is a **deterministic offline project copilot**, not a live general-purpose generative AI. It uses actual design/flight state and the game engine. English, Bangla and common Banglish prompts are supported; the whole interface is only partly translated.
-
-Try `Review my design`, `What if fuel = 45 kg?`, `What if battery size = 125%?`, `What if solar array size = 1.25x?`, `Compare presets`, or ask which crisis response to choose. Experiments show original/proposed values and require an explicit apply action. Unknown, ambiguous and unsupported questions receive a limitation/clarification instead of an invented specification.
-
-## Scientific scope
-
-NASA/JPL snapshots supply Moon/Mars radius, gravitational parameter, solar irradiance and distance examples. Established equations supply ideal rocket performance, circular period, energy integration and unit conversions. Hardware values, mission credits, science units, recovery triggers, contact scheduling and uncertainty ranges are **educational assumptions**.
-
-Mars's 225-million-km reference distance is a game normalization, not a measured average. Communication classes represent separately engineered fictional destination systems. Displayed light-time does not delay commands. The reduced-return capture choice keeps the reference orbit unchanged and labels its penalty as an approximation.
-
-The Educational Robustness Index is a seeded sensitivity experiment, not a real spacecraft reliability probability. Its 200 samples run in cancellable event-loop batches. Hardware robustness does not guarantee objective completion: the Resilient preset fails under the conservative policy but succeeds under the ordinary policy.
-
-Full formulas, sources, numerical checks and limits are in `docs/SCIENTIFIC_VALIDATION_V5.md`.
+Team: **Kemon Dilam Bondhura**. Member names, roles and contributions: *to be added before submission.*
 
 ## Documentation
 
-- `docs/BUG_FIX_REPORT_V5.md`: baseline, defects, reproduction, changes and regression evidence.
-- `docs/QA_V5.md`: executed tests, compatibility matrix, performance and unresolved gates.
-- `docs/SCIENTIFIC_VALIDATION_V5.md`: sources, equations, assumptions and numerical cases.
-- `docs/DEPLOYMENT_V5.md`: GitHub/Vercel publication status and update workflow.
-- `docs/DEVELOPER_V5.md`: architecture and maintenance.
-- `docs/DEMO_V5.md`: 90-second and 3-minute demonstration paths.
-- `docs/RELEASE_NOTES_V5.md`: changes and limitations.
+- `docs/RELEASE_NOTES_V6.md`: what changed and why, mapped to the review findings.
+- `docs/COMPETITIVE_ANALYSIS.md`: the official challenge text and comparable projects.
+- `docs/QA_V6.md`: what was tested, how, and what remains unverified.
+- `docs/SCIENTIFIC_VALIDATION_V6.md`: formulas, sources, assumptions.
+- `docs/MOBILE_TEST_CHECKLIST.md`: five-minute phone test.
+- Earlier v3–v5 documents are historical records; v6 supersedes their statements about current behaviour.
 
-Earlier v3/v4 reports and research notes are historical records; v5 documentation supersedes their statements about current functionality.
+## Attribution
 
-## Attribution and competition use
-
-NASA/JPL references are linked inside the game and scientific report. The code-generated visuals use no external art or runtime dependencies. Implemented with Codex assistance; do not imply NASA endorsement. This work is preparation material: verify the applicable event/challenge rules, disclose pre-existing work, cite sources and add the six members' actual contributions before submission. Award eligibility or success is not guaranteed.
+NASA/JPL data sources are linked inside the game and in the science document. All visuals are generated in code; there are no external assets or runtime dependencies. This project is not endorsed by NASA. A first version of TRAJECTIQ existed before the event; the scenarios, scoring, crew mode, decision review, sharing and interface described here were built for it.

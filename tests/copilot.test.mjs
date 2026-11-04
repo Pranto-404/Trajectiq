@@ -48,15 +48,19 @@ test('Copilot: reviewer gives an actual tested candidate under an explicit bound
 test('Copilot: crisis forecasts continue from the exact current state and leave it intact',()=>{
  let r=newRun(PRESETS.fragile);r.mode='aggressive';for(let i=0;i<100&&!r.crisis;i++)r=advance(r);
  assert.ok(r.crisis);const original=JSON.stringify(r),answer=answerQuestion('Compare crisis choices',{run:r});
- const options=r.crisis.actions.filter(x=>!x.disabled);assert.equal(answer.comparisons.length,options.length);
+ const options=r.crisis.actions.filter(x=>!x.disabled);assert.equal(answer.directions.length,options.length);
+ // Item 2: the free preview shows direction only, never the exact outcome of each option.
+ assert.equal(answer.comparisons,undefined);assert.equal(answer.ranges,undefined);assert.doesNotMatch(answer.text,/\d{3} (?:units|science)/);assert.equal(answer.forecastAvailable,true);
+ const forecast=answerQuestion('Use my one forecast',{run:r});assert.equal(forecast.consumesForecast,true);assert.equal(forecast.ranges.length,options.length);
  for(const [i,option]of options.entries()){
-  const expected=continuePreview(resolve(r,option.id));approx(answer.comparisons[i].science,expected.science);approx(answer.comparisons[i].battery,expected.outcome.finalBattery);
+  assert.equal(forecast.ranges[i].id,option.id);assert.ok(forecast.ranges[i].science[0]<=forecast.ranges[i].science[1]);assert.equal(forecast.ranges[i].science[0]%10,0);
  }
+ const used=answerQuestion('Use my one forecast',{run:{...r,forecasts:1}});assert.equal(used.consumesForecast,undefined);assert.equal(used.ranges,undefined);
  assert.equal(JSON.stringify(r),original);assert.equal(answer.proposal,undefined);
 });
 test('Copilot: previews respect disabled capture decisions and handle an ended mission',()=>{
  let r=newRun({...PRESETS.balanced,fuel:1});r=advance(advance(r));assert.ok(r.crisis);
- const answer=answerQuestion('Compare crisis choices',{run:r});assert.equal(answer.comparisons.length,1);assert.equal(answer.comparisons[0].status,'Capture aborted');
+ const answer=answerQuestion('Compare crisis choices',{run:r});assert.equal(answer.directions.length,1);assert.match(answer.directions[0].name,/End capture/);
  const ended=continuePreview(r);assert.deepEqual(continuePreview(ended),ended);assert.match(answerQuestion('Mission status',{run:ended}).text,/debrief/);
 });
 test('Copilot: conversational follow-up retains the last supported topic',()=>{
