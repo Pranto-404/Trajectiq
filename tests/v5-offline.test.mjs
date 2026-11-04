@@ -12,7 +12,8 @@ test('Offline update waits for open clients and installs every module before act
  const w=worker();let pending;w.events.install({waitUntil:p=>pending=p});await pending;
  assert.ok(w.installs.includes('./engine/copilot.js'));assert.ok(w.installs.includes('./data/nasa.js'));
  assert.doesNotMatch(source,/self\.skipWaiting\(|clients\.claim\(/);
- w.events.activate({waitUntil:p=>pending=p});await pending;assert.deepEqual(w.removed,['trajectiq-4.0.0','trajectiq-5.0.0']);
+ w.events.activate({waitUntil:p=>pending=p});await pending;assert.deepEqual(w.removed,['trajectiq-4.0.0','trajectiq-5.0.0','trajectiq-5.0.0-ui1']);
+ for(const f of ['./engine/review.js','./engine/crew.js','./engine/share.js','./ui/panels.js','./data/scenarios.js','./data/learn.js'])assert.ok(w.installs.includes(f),f);
 });
 test('Cached shell remains one version online/offline, including query-string module requests',async()=>{
  for(const offline of [false,true]){const w=worker({offline});let result;w.events.fetch({request:{method:'GET',url:'https://game.test/engine/model.js?v=5'},respondWith:p=>result=p});assert.equal(await(await result).text(),'pinned-v5:https://game.test/engine/model.js');assert.equal(w.network.length,0);}
