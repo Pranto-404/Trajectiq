@@ -1,0 +1,1128 @@
+{
+ "schema": "trajectiq-bodies/1",
+ "generated": "2026-11-05",
+ "note": "surface_gravity_derived_ms2, escape_velocity_derived_kms, light_time_*_s and orbit_check are derived by the plan author (GM/R^2 etc.). Every other numeric field cites sources[...]. Fields marked UNVERIFIED have no NASA source in this snapshot. Horizons ranges are sampled min/max over a 30-year window at 10-day step.",
+ "bodies": [
+  {
+   "id": "mercury",
+   "name": "Mercury",
+   "kind": "planet",
+   "radius_km": 2439.4,
+   "gm_km3s2": 22031.8686,
+   "surface_gravity_ms2": 3.7,
+   "heliocentric_distance_au": {
+    "semimajor": 0.38709893,
+    "perihelion_km": 46000000.0,
+    "aphelion_km": 69818000.0
+   },
+   "solar_irradiance_w_m2": 9082.7,
+   "solar_irradiance_basis": "NSSDC fact sheet single printed value (no perihelion/aphelion split on page)",
+   "earth_range_km": {
+    "min": 82743606,
+    "max": 217134678,
+    "basis": "JPL Horizons OBSERVER table, geocentric (500@399) range, 2026-11-05 to 2056-11-05, 10-day step; min/max of samples (true extremes can lie slightly outside)"
+   },
+   "earth_range_fact_sheet_km": {
+    "min": 77300000.0,
+    "max": 221900000.0
+   },
+   "rotation_notes": "Sidereal rotation 1407.6 h; solar day 4222.6 h (fact sheet). Orbital period 87.969 d.",
+   "hazards": {
+    "thermal": "Mean surface 440 K; 590-725 K on sunward side (fact sheet). Irradiance ~6.7x Earth (derived).",
+    "atmosphere": "Surface-bounded exosphere, ~5e-15 bar; no drag (fact sheet).",
+    "radiation": "unverified (no NASA figure fetched)"
+   },
+   "orbit_altitude_km": {
+    "min": 200,
+    "max": 2000,
+    "basis": "GAME ASSUMPTION for the circular range. Real reference: MESSENGER 200 km periapsis x 15,193 km apoapsis (altitude), 80 deg, 12 h (NSSDCA); later lowered to ~25 km (NASA Science MESSENGER page).",
+    "reference_mission": "messenger"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://ssd.jpl.nasa.gov/planets/phys_par.html",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "JPL/IAU 2439.4; the fact sheet prints 2439.7"
+    },
+    "gm_km3s2": {
+     "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/gm_de440.tpc",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "BODY199_GM"
+    },
+    "surface_gravity_ms2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "heliocentric_distance_au": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05",
+     "note": "Horizons query, see basis"
+    },
+    "orbit_altitude_km": {
+     "url": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2004-030A",
+     "kind": "mixed",
+     "verified": "2026-11-05",
+     "note": "Reference orbit is real; circular min/max is a game assumption"
+    },
+    "hazards": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 3.7024,
+   "escape_velocity_derived_kms": 4.2501,
+   "light_time_min_s": 276.0,
+   "light_time_max_s": 724.28,
+   "orbit_check": {
+    "at_min": {
+     "altitude_km": 200,
+     "period_min": 95.667,
+     "central_shadow_min": 35.903
+    },
+    "at_max": {
+     "altitude_km": 2000,
+     "period_min": 208.684,
+     "central_shadow_min": 38.644
+    },
+    "note": "Circular two-body period and central cylindrical-shadow minutes using the same formulas as dist/data/catalog.js (orbitPeriodMinutes, shadowMinutes). Derived by plan author, not a source value."
+   },
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "venus",
+   "name": "Venus",
+   "kind": "planet",
+   "radius_km": 6051.8,
+   "gm_km3s2": 324858.592,
+   "surface_gravity_ms2": 8.87,
+   "heliocentric_distance_au": {
+    "semimajor": 0.72333199,
+    "perihelion_km": 107480000.0,
+    "aphelion_km": 108941000.0
+   },
+   "solar_irradiance_w_m2": 2601.3,
+   "solar_irradiance_basis": "NSSDC fact sheet",
+   "earth_range_km": {
+    "min": 39812857,
+    "max": 259533270,
+    "basis": "JPL Horizons OBSERVER table, geocentric (500@399) range, 2026-11-05 to 2056-11-05, 10-day step; min/max of samples (true extremes can lie slightly outside)"
+   },
+   "earth_range_fact_sheet_km": {
+    "min": 38200000.0,
+    "max": 261000000.0
+   },
+   "rotation_notes": "Retrograde sidereal rotation 5832.6 h (fact sheet prints -5832.6).",
+   "hazards": {
+    "thermal": "Mean surface 737 K, 92 bar (fact sheet); spacecraft stay in orbit.",
+    "atmosphere": "96.5% CO2 (fact sheet). Magellan aerobraked to a circular orbit in 1993 (NSSDC mission timeline).",
+    "radiation": "unverified"
+   },
+   "orbit_altitude_km": {
+    "min": 300,
+    "max": 2000,
+    "basis": "GAME ASSUMPTION. Real reference: Magellan 294 km periapsis (NSSDC) / 297 x 8,463 km at 85.5 deg (NASA Science).",
+    "reference_mission": "magellan"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "gm_km3s2": {
+     "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/gm_de440.tpc",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "BODY299_GM"
+    },
+    "surface_gravity_ms2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "orbit_altitude_km": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/magellan.html",
+     "kind": "mixed",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 8.87,
+   "escape_velocity_derived_kms": 10.3614,
+   "light_time_min_s": 132.8,
+   "light_time_max_s": 865.71,
+   "orbit_check": {
+    "at_min": {
+     "altitude_km": 300,
+     "period_min": 93.009,
+     "central_shadow_min": 37.369
+    },
+    "at_max": {
+     "altitude_km": 2000,
+     "period_min": 132.746,
+     "central_shadow_min": 35.937
+    },
+    "note": "Circular two-body period and central cylindrical-shadow minutes using the same formulas as dist/data/catalog.js (orbitPeriodMinutes, shadowMinutes). Derived by plan author, not a source value."
+   },
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "earth",
+   "name": "Earth",
+   "kind": "planet",
+   "radius_km": 6371.0,
+   "gm_km3s2": 398600.4355,
+   "surface_gravity_ms2": 9.82,
+   "surface_gravity_note": "Fact sheet prints mean 9.820; CODATA 2018 standard gravity 9.80665 (fact sheet note).",
+   "heliocentric_distance_au": {
+    "semimajor": 1.00000011
+   },
+   "solar_irradiance_w_m2": 1361.0,
+   "solar_irradiance_basis": "NSSDC fact sheet (solar constant)",
+   "earth_range_km": {
+    "min": 0,
+    "max": 0,
+    "basis": "Not applicable: spacecraft in Earth orbit. Use ground-station slant range and relay (TDRS) in the comm model; deep-space signal delay ~0."
+   },
+   "rotation_notes": "Sidereal rotation 23.9345 h (fact sheet).",
+   "hazards": {
+    "atmosphere": "Surface pressure 1014 mb, scale height 8.5 km (fact sheet); drag decays low orbits.",
+    "radiation": "Van Allen belts: unverified (no NASA figure fetched).",
+    "thermal": "unverified"
+   },
+   "orbit_altitude_km": {
+    "min": 400,
+    "max": 1000,
+    "basis": "GAME ASSUMPTION. Real references: Landsat 9 705 km / 98.2 deg / 99 min (USGS FS 2019-3008), PACE 676.5 km / 98 deg / 13:00 LTAN (NTRS 20190030760).",
+    "reference_mission": "landsat-9"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "gm_km3s2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "0.39860e6 km3/s2 printed; NAIF gm_de440 gives 398600.4355"
+    },
+    "surface_gravity_ms2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "orbit_altitude_km": {
+     "url": "https://pubs.usgs.gov/fs/2019/3008/fs20193008.pdf",
+     "kind": "mixed",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 9.8203,
+   "escape_velocity_derived_kms": 11.1861,
+   "light_time_min_s": 0.0,
+   "light_time_max_s": 0.0,
+   "orbit_check": {
+    "at_min": {
+     "altitude_km": 400,
+     "period_min": 92.414,
+     "central_shadow_min": 36.045
+    },
+    "at_max": {
+     "altitude_km": 1000,
+     "period_min": 104.966,
+     "central_shadow_min": 34.876
+    },
+    "note": "Circular two-body period and central cylindrical-shadow minutes using the same formulas as dist/data/catalog.js (orbitPeriodMinutes, shadowMinutes). Derived by plan author, not a source value."
+   },
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "moon",
+   "name": "Moon",
+   "kind": "moon",
+   "host": "earth",
+   "radius_km": 1737.4,
+   "gm_km3s2": 4902.8,
+   "surface_gravity_ms2": 1.62,
+   "heliocentric_distance_au": {
+    "semimajor": 1.0,
+    "note": "Orbits Earth at 384,400 km semimajor axis (fact sheet / SSD elements)"
+   },
+   "solar_irradiance_w_m2": 1361.0,
+   "solar_irradiance_basis": "NSSDC Moon fact sheet (Earth solar constant)",
+   "earth_range_km": {
+    "min": 356740,
+    "max": 406663,
+    "basis": "JPL Horizons geocentric range 2026-11-05..2056-11-05, 10-day step (sampled). Fact sheet mean perigee/apogee 363,300 / 405,500 km are what dist/data/nasa.js already uses."
+   },
+   "earth_range_fact_sheet_km": {
+    "min": 363300,
+    "max": 405500
+   },
+   "rotation_notes": "Sidereal 655.720 h, synodic month 29.53 d, tidally locked (fact sheet).",
+   "hazards": {
+    "thermal": "Equatorial diurnal range 95 K to 390 K (fact sheet).",
+    "atmosphere": "none (no drag)",
+    "radiation": "Solar particle events apply; no body-specific figure fetched. See DONKI summary in NASA_DATA_PLAN.md.",
+    "gravity_field": "Mascons make low circular orbits unstable (GRAIL results, NASA Science GRAIL page)."
+   },
+   "orbit_altitude_km": {
+    "min": 50,
+    "max": 200,
+    "basis": "Existing game range. Real references: LRO ~30 x 180 km science phase / 30-70 km exploration phase (NSSDCA); GRAIL ~55 km (JPL) / 50 km (NSSDCA).",
+    "reference_mission": "lro"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://ssd.jpl.nasa.gov/sats/phys_par/",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "gm_km3s2": {
+     "url": "https://ssd.jpl.nasa.gov/sats/phys_par/",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "surface_gravity_ms2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05",
+     "note": "Also fact sheet: https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html"
+    },
+    "orbit_altitude_km": {
+     "url": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2009-031A",
+     "kind": "mixed",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 1.6242,
+   "escape_velocity_derived_kms": 2.3757,
+   "light_time_min_s": 1.19,
+   "light_time_max_s": 1.36,
+   "orbit_check": {
+    "at_min": {
+     "altitude_km": 50,
+     "period_min": 113.016,
+     "central_shadow_min": 47.979
+    },
+    "at_max": {
+     "altitude_km": 200,
+     "period_min": 127.537,
+     "central_shadow_min": 45.16
+    },
+    "note": "Circular two-body period and central cylindrical-shadow minutes using the same formulas as dist/data/catalog.js (orbitPeriodMinutes, shadowMinutes). Derived by plan author, not a source value."
+   },
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "mars",
+   "name": "Mars",
+   "kind": "planet",
+   "radius_km": 3389.5,
+   "gm_km3s2": 42828.3736,
+   "surface_gravity_ms2": 3.73,
+   "heliocentric_distance_au": {
+    "semimajor": 1.52366231,
+    "perihelion_km": 206650000.0,
+    "aphelion_km": 249261000.0
+   },
+   "solar_irradiance_w_m2": 586.2,
+   "solar_irradiance_basis": "NSSDC fact sheet mean (no perihelion/aphelion split on page)",
+   "earth_range_km": {
+    "min": 56175217,
+    "max": 400078568,
+    "basis": "JPL Horizons OBSERVER table, geocentric (500@399) range, 2026-11-05 to 2056-11-05, 10-day step; min/max of samples (true extremes can lie slightly outside)"
+   },
+   "earth_range_fact_sheet_km": {
+    "min": 54600000.0,
+    "max": 401400000.0
+   },
+   "earth_range_note": "Game currently uses 54.6e6..400.2e6 (NASA relay page). Fact sheet prints 54.6e6..401.4e6 (all-time bounds); Horizons 30-yr window 56.2e6..400.1e6.",
+   "rotation_notes": "Sidereal 24.6229 h (fact sheet).",
+   "hazards": {
+    "atmosphere": "6.36 mb mean surface pressure (4.0-8.7 seasonal), scale height 11 km (fact sheet). Drag matters near ~125-150 km (MAVEN deep dip / periapsis).",
+    "dust": "Regional dust storms reduce solar power (game already models). NASA opacity statistics not fetched: unverified.",
+    "thermal": "Mean ~214 K; Viking 1 diurnal 184-242 K (fact sheet).",
+    "radiation": "unverified"
+   },
+   "orbit_altitude_km": {
+    "min": 200,
+    "max": 1000,
+    "basis": "Existing game range. Real references: MRO 255 x 320 km (NASA Facts), Odyssey ~400 x 400 km (NSSDCA), MAVEN 150 km periapsis with deep dips to ~125 km (NASA Facts / NSSDCA).",
+    "reference_mission": "mro"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "gm_km3s2": {
+     "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/gm_de440.tpc",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "BODY499_GM = 42828.37362 (already in game)"
+    },
+    "surface_gravity_ms2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "orbit_altitude_km": {
+     "url": "https://mars.nasa.gov/files/mro/MRO-060303.pdf",
+     "kind": "mixed",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 3.7279,
+   "escape_velocity_derived_kms": 5.027,
+   "light_time_min_s": 187.38,
+   "light_time_max_s": 1334.52,
+   "orbit_check": {
+    "at_min": {
+     "altitude_km": 200,
+     "period_min": 108.821,
+     "central_shadow_min": 42.793
+    },
+    "at_max": {
+     "altitude_km": 1000,
+     "period_min": 147.159,
+     "central_shadow_min": 41.327
+    },
+    "note": "Circular two-body period and central cylindrical-shadow minutes using the same formulas as dist/data/catalog.js (orbitPeriodMinutes, shadowMinutes). Derived by plan author, not a source value."
+   },
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "phobos",
+   "name": "Phobos",
+   "kind": "moon",
+   "host": "mars",
+   "radius_km": 11.08,
+   "gm_km3s2": 0.0007087,
+   "surface_gravity_ms2": null,
+   "surface_gravity_note": "No NASA printed value fetched; derived value below.",
+   "heliocentric_distance_au": {
+    "host": "mars",
+    "semimajor_km_about_host": 9375,
+    "period_days": 0.3187,
+    "eccentricity": 0.015
+   },
+   "solar_irradiance_w_m2": 586.2,
+   "solar_irradiance_basis": "Host (Mars) fact sheet value",
+   "earth_range_km": {
+    "min": 56172469,
+    "max": 400071798,
+    "basis": "JPL Horizons OBSERVER table, geocentric (500@399) range, 2026-11-05 to 2056-11-05, 10-day step; min/max of samples (true extremes can lie slightly outside)"
+   },
+   "rotation_notes": "Shape 27 x 22 x 18 km. Orbits Mars about three times a day; nearing Mars 1.8 m per century (NASA Science Phobos page).",
+   "hazards": {
+    "gravity": "Mars perturbation and irregular shape make Keplerian circular orbits a poor approximation (plan author reasoning, not a NASA quote).",
+    "radiation": "unverified",
+    "thermal": "unverified"
+   },
+   "orbit_altitude_km": {
+    "min": null,
+    "max": null,
+    "basis": "UNVERIFIED. No NASA orbiter has orbited Phobos; any game altitude is a pure assumption (prefer hover/proximity-ops or flyby mode)."
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://ssd.jpl.nasa.gov/sats/phys_par/",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "gm_km3s2": {
+     "url": "https://ssd.jpl.nasa.gov/sats/phys_par/",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "MAR097"
+    },
+    "heliocentric_distance_au": {
+     "url": "https://ssd.jpl.nasa.gov/sats/elem/",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "rotation_notes": {
+     "url": "https://science.nasa.gov/mars/moons/phobos/",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 0.0058,
+   "escape_velocity_derived_kms": 0.0113,
+   "light_time_min_s": 187.37,
+   "light_time_max_s": 1334.5,
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "ceres",
+   "name": "Ceres",
+   "kind": "dwarf_planet",
+   "radius_km": 469.7,
+   "radius_note": "Derived: SBDB diameter 939.4 km / 2. NASA Science prints radius 476 km; SBDB extent 964.4 x 964.2 x 891.8 km.",
+   "gm_km3s2": 62.6284,
+   "surface_gravity_ms2": null,
+   "heliocentric_distance_au": {
+    "semimajor": 2.765552595034094,
+    "perihelion": 2.545159361382861,
+    "aphelion": 2.985945828685327,
+    "orbit_period_days": 1679.853
+   },
+   "solar_irradiance_w_m2": 177.9,
+   "solar_irradiance_basis": "DERIVED 1361/a^2 at a=2.7656 AU (perihelion 210.1, aphelion 152.6 W/m2); no NASA printed value fetched",
+   "earth_range_km": {
+    "min": 237166778,
+    "max": 591805255,
+    "basis": "JPL Horizons OBSERVER table, geocentric (500@399) range, 2026-11-05 to 2056-11-05, 10-day step; min/max of samples (true extremes can lie slightly outside)"
+   },
+   "rotation_notes": "Rotation 9.07417 h (SBDB).",
+   "hazards": {
+    "power": "Solar arrays must be sized for ~178 W/m2 (derived); Dawn arrays gave 1.3 kW EOL at 3 AU (NSSDCA).",
+    "radiation": "unverified",
+    "thermal": "unverified"
+   },
+   "orbit_altitude_km": {
+    "min": 375,
+    "max": 13500,
+    "basis": "Real: Dawn first science orbit 13,500 km, final circular 375 km (NSSDCA).",
+    "reference_mission": "dawn"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=1&phys-par=1&full-prec=1",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "gm_km3s2": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=1&phys-par=1&full-prec=1",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "Nature 537:515 (2016) via SBDB; NAIF gm_de440 prints 62.6289"
+    },
+    "heliocentric_distance_au": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=1&phys-par=1&full-prec=1",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=1&phys-par=1&full-prec=1",
+     "kind": "derived",
+     "verified": "2026-11-05",
+     "note": "1361 W/m2 from earthfact.html"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "rotation_notes": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=1&phys-par=1&full-prec=1",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "orbit_altitude_km": {
+     "url": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2007-043A",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 0.2839,
+   "escape_velocity_derived_kms": 0.5164,
+   "light_time_min_s": 791.1,
+   "light_time_max_s": 1974.05,
+   "orbit_check": {
+    "at_min": {
+     "altitude_km": 375,
+     "period_min": 324.86,
+     "central_shadow_min": 60.972
+    },
+    "at_max": {
+     "altitude_km": 13500,
+     "period_min": 21848.598,
+     "central_shadow_min": 233.878
+    },
+    "note": "Circular two-body period and central cylindrical-shadow minutes using the same formulas as dist/data/catalog.js (orbitPeriodMinutes, shadowMinutes). Derived by plan author, not a source value."
+   },
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "vesta",
+   "name": "Vesta",
+   "kind": "asteroid",
+   "radius_km": 261.385,
+   "radius_note": "Derived: SBDB diameter 522.77 km / 2 (Park et al. 2025 via SBDB); extent 569.24 x 554.48 x 452.66 km.",
+   "gm_km3s2": 17.2882844,
+   "surface_gravity_ms2": null,
+   "heliocentric_distance_au": {
+    "semimajor": 2.361365965127599,
+    "perihelion": 2.148361914524259,
+    "aphelion": 2.574370015730939,
+    "orbit_period_days": 1325.389
+   },
+   "solar_irradiance_w_m2": 244.1,
+   "solar_irradiance_basis": "DERIVED 1361/a^2 at a=2.3614 AU (perihelion 294.9, aphelion 205.4 W/m2)",
+   "earth_range_km": {
+    "min": 170474768,
+    "max": 536502988,
+    "basis": "JPL Horizons OBSERVER table, geocentric (500@399) range, 2026-11-05 to 2056-11-05, 10-day step; min/max of samples (true extremes can lie slightly outside)"
+   },
+   "rotation_notes": "Rotation 5.3421276 h (SBDB).",
+   "hazards": {
+    "gravity": "Irregular figure (569 x 554 x 453 km) perturbs orbits (plan author reasoning).",
+    "radiation": "unverified",
+    "thermal": "unverified"
+   },
+   "orbit_altitude_km": {
+    "min": 210,
+    "max": 2750,
+    "basis": "Real: Dawn survey 2,750 km (69 h), 680 km (12.3 h), 210 km (4.3 h) (NSSDCA).",
+    "reference_mission": "dawn"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=4&phys-par=1&full-prec=1",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "gm_km3s2": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=4&phys-par=1&full-prec=1",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "NAIF gm_de440 prints 17.2882329; SBDB 2025 value used"
+    },
+    "heliocentric_distance_au": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=4&phys-par=1&full-prec=1",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=4&phys-par=1&full-prec=1",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "orbit_altitude_km": {
+     "url": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2007-043A",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 0.253,
+   "escape_velocity_derived_kms": 0.3637,
+   "light_time_min_s": 568.64,
+   "light_time_max_s": 1789.58,
+   "orbit_check": {
+    "at_min": {
+     "altitude_km": 210,
+     "period_min": 257.76,
+     "central_shadow_min": 48.225
+    },
+    "at_max": {
+     "altitude_km": 2750,
+     "period_min": 4162.0,
+     "central_shadow_min": 115.137
+    },
+    "note": "Circular two-body period and central cylindrical-shadow minutes using the same formulas as dist/data/catalog.js (orbitPeriodMinutes, shadowMinutes). Derived by plan author, not a source value."
+   },
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "bennu",
+   "name": "Bennu (101955)",
+   "kind": "asteroid",
+   "radius_km": 0.24222,
+   "radius_note": "Derived: SBDB diameter 0.48444 km / 2; extent 0.5047 x 0.4918 x 0.4567 km (Daly et al. 2020).",
+   "gm_km3s2": 4.8904e-09,
+   "surface_gravity_ms2": null,
+   "heliocentric_distance_au": {
+    "semimajor": 1.126391025894812,
+    "perihelion": 0.8968944004459729,
+    "aphelion": 1.355887651343651,
+    "orbit_period_days": 436.6487
+   },
+   "solar_irradiance_w_m2": 1072.7,
+   "solar_irradiance_basis": "DERIVED 1361/a^2 at a=1.1264 AU (perihelion 1691.9, aphelion 740.3 W/m2)",
+   "earth_range_km": {
+    "min": 5896586,
+    "max": 350066389,
+    "basis": "JPL Horizons OBSERVER table, geocentric (500@399) range, 2026-11-05 to 2056-11-05, 10-day step; min/max of samples (true extremes can lie slightly outside)",
+    "press_kit_all_time_bounds": "0.003 AU to 2.3 AU (OSIRIS-REx press kit 2016)"
+   },
+   "rotation_notes": "Synodic rotation 4.296061 h (SBDB); 4.288 h (press kit). One-way light time to spacecraft at Bennu 4.4-18 min (press kit).",
+   "hazards": {
+    "gravity": "GM ~4.9e-9 km3/s2: circular speed at 1 km altitude ~6 cm/s (derived). Non-gravitational forces dominate; NASA-authored papers exist but were not fetched: unverified.",
+    "thermal": "unverified",
+    "radiation": "unverified"
+   },
+   "orbit_altitude_km": {
+    "min": 0.75,
+    "max": 3.0,
+    "basis": "GAME ASSUMPTION. Real: OSIRIS-REx 1.75 km orbit then nominal 1 km circular (NSSDCA; page does not say radius-from-center vs altitude); recon flyovers ~240 m (press kit).",
+    "reference_mission": "osiris-rex"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=2101955&phys-par=1&full-prec=1",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "gm_km3s2": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=2101955&phys-par=1&full-prec=1",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "Chesley et al. 2020 via SBDB"
+    },
+    "heliocentric_distance_au": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=2101955&phys-par=1&full-prec=1",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=2101955&phys-par=1&full-prec=1",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "rotation_notes": {
+     "url": "https://www.nasa.gov/wp-content/uploads/2016/06/osiris-rex_press_kit_0.pdf",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "orbit_altitude_km": {
+     "url": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2016-055A",
+     "kind": "mixed",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 0.0001,
+   "escape_velocity_derived_kms": 0.0002,
+   "light_time_min_s": 19.67,
+   "light_time_max_s": 1167.7,
+   "orbit_check": {
+    "at_min": {
+     "altitude_km": 0.75,
+     "period_min": 1480.023,
+     "central_shadow_min": 116.18
+    },
+    "at_max": {
+     "altitude_km": 3.0,
+     "period_min": 8742.188,
+     "central_shadow_min": 208.086
+    },
+    "note": "Circular two-body period and central cylindrical-shadow minutes using the same formulas as dist/data/catalog.js (orbitPeriodMinutes, shadowMinutes). Derived by plan author, not a source value."
+   },
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "europa",
+   "name": "Europa",
+   "kind": "moon",
+   "host": "jupiter",
+   "radius_km": 1560.8,
+   "gm_km3s2": 3202.7121,
+   "surface_gravity_ms2": 1.31,
+   "heliocentric_distance_au": {
+    "host": "jupiter",
+    "host_semimajor_au": 5.20336301,
+    "semimajor_km_about_host": 671100,
+    "period_days": 3.525463
+   },
+   "solar_irradiance_w_m2": 50.26,
+   "solar_irradiance_basis": "Host (Jupiter) fact sheet value",
+   "earth_range_km": {
+    "min": 591393871,
+    "max": 965457448,
+    "basis": "JPL Horizons OBSERVER table, geocentric (500@399) range, 2026-11-05 to 2056-11-05, 10-day step; min/max of samples (true extremes can lie slightly outside)"
+   },
+   "rotation_notes": "Rotation 85.2 h; mean temperature -170 C (Galilean satellite fact table).",
+   "hazards": {
+    "radiation": "Europa is bathed in radiation trapped in Jupiter magnetic field. Clipper electronics expect an average of a few thousand to tens of thousands of rads per flyby even with mitigation (JPL press kit); vault walls up to 9.2 mm Al-Zn.",
+    "thermal": "Mean -170 C (fact table).",
+    "power": "Solar 50.26 W/m2 at Jupiter; Clipper arrays at least 700 W through prime mission; Juno about 400 W at Jupiter."
+   },
+   "orbit_altitude_km": {
+    "min": 25,
+    "max": null,
+    "basis": "Real: Clipper flyby altitude as low as 25 km, nearly 50 flybys (NASA Science). Orbiting Europa is not planned by NASA; maximum flyby altitude UNVERIFIED.",
+    "reference_mission": "europa-clipper",
+    "mode": "flyby"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://ssd.jpl.nasa.gov/sats/phys_par/",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "gm_km3s2": {
+     "url": "https://ssd.jpl.nasa.gov/sats/phys_par/",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "JUP365"
+    },
+    "surface_gravity_ms2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/galileanfact_table.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "hazards": {
+     "url": "https://www.jpl.nasa.gov/press-kits/europa-clipper/",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "orbit_altitude_km": {
+     "url": "https://science.nasa.gov/mission/europa-clipper/mission-overview/",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 1.3147,
+   "escape_velocity_derived_kms": 2.0258,
+   "light_time_min_s": 1972.68,
+   "light_time_max_s": 3220.42,
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "ganymede",
+   "name": "Ganymede",
+   "kind": "moon",
+   "host": "jupiter",
+   "radius_km": 2631.2,
+   "gm_km3s2": 9887.83275,
+   "surface_gravity_ms2": 1.43,
+   "heliocentric_distance_au": {
+    "host": "jupiter",
+    "host_semimajor_au": 5.20336301,
+    "semimajor_km_about_host": 1070400,
+    "period_days": 7.155588
+   },
+   "solar_irradiance_w_m2": 50.26,
+   "solar_irradiance_basis": "Host (Jupiter) fact sheet value",
+   "earth_range_km": {
+    "min": 590997210,
+    "max": 966146329,
+    "basis": "JPL Horizons OBSERVER table, geocentric (500@399) range, 2026-11-05 to 2056-11-05, 10-day step; min/max of samples (true extremes can lie slightly outside)"
+   },
+   "rotation_notes": "Rotation 171.7 h; mean temperature -160 C (Galilean satellite fact table).",
+   "hazards": {
+    "radiation": "Inside Jupiter magnetosphere; NASA figure not fetched: unverified.",
+    "thermal": "Mean -160 C (fact table)."
+   },
+   "orbit_altitude_km": {
+    "min": null,
+    "max": null,
+    "basis": "UNVERIFIED. No NASA Ganymede orbiter in sources fetched; ESA JUICE is the orbiter (ESA source needed, not fetched).",
+    "mode": "flyby or game-only"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://ssd.jpl.nasa.gov/sats/phys_par/",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "gm_km3s2": {
+     "url": "https://ssd.jpl.nasa.gov/sats/phys_par/",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "JUP365"
+    },
+    "surface_gravity_ms2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/galileanfact_table.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 1.4282,
+   "escape_velocity_derived_kms": 2.7415,
+   "light_time_min_s": 1971.35,
+   "light_time_max_s": 3222.72,
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "titan",
+   "name": "Titan",
+   "kind": "moon",
+   "host": "saturn",
+   "radius_km": 2574.76,
+   "gm_km3s2": 8978.1371,
+   "surface_gravity_ms2": null,
+   "surface_gravity_note": "No NASA printed value fetched; derived below.",
+   "heliocentric_distance_au": {
+    "host": "saturn",
+    "semimajor_km_about_host": 1221900,
+    "period_days": 15.945448
+   },
+   "solar_irradiance_w_m2": 14.82,
+   "solar_irradiance_basis": "Host (Saturn) fact sheet value",
+   "earth_range_km": {
+    "min": 1200519844,
+    "max": 1649110301,
+    "basis": "JPL Horizons OBSERVER table, geocentric (500@399) range, 2026-11-05 to 2056-11-05, 10-day step; min/max of samples (true extremes can lie slightly outside)"
+   },
+   "rotation_notes": "Tidally locked, synchronous with Saturn; orbits Saturn in 15 d 22 h (NASA Science).",
+   "hazards": {
+    "atmosphere": "About 95% N2 and 5% CH4; surface pressure about 60% greater than Earth; surface -179 C (NASA Science Titan facts). Haze blocks visible imaging from orbit; Cassini used radar and IR.",
+    "radiation": "unverified",
+    "power": "14.82 W/m2 at Saturn: RTG required (Cassini 885 W BOL)."
+   },
+   "orbit_altitude_km": {
+    "min": null,
+    "max": null,
+    "basis": "UNVERIFIED. Thick atmosphere; Cassini studied Titan via 127 targeted flybys (NASA Science), minimum flyby altitude not verified here. Dragonfly rotorcraft scheduled for 2028 launch (NASA Science).",
+    "mode": "flyby / relay"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://ssd.jpl.nasa.gov/sats/phys_par/",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "gm_km3s2": {
+     "url": "https://ssd.jpl.nasa.gov/sats/phys_par/",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "SAT441"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/saturnfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "hazards": {
+     "url": "https://science.nasa.gov/saturn/moons/titan/facts/",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 1.3543,
+   "escape_velocity_derived_kms": 2.6408,
+   "light_time_min_s": 4004.5,
+   "light_time_max_s": 5500.84,
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "jupiter",
+   "name": "Jupiter",
+   "kind": "planet",
+   "radius_km": 69911,
+   "gm_km3s2": 126686531.9,
+   "surface_gravity_ms2": null,
+   "surface_gravity_note": "Fact sheet gives gravity at 1 bar; not used. Gas giant: no surface.",
+   "heliocentric_distance_au": {
+    "semimajor": 5.20336301,
+    "semimajor_km": 778479000.0
+   },
+   "solar_irradiance_w_m2": 50.26,
+   "solar_irradiance_basis": "NSSDC fact sheet",
+   "earth_range_km": {
+    "min": 591542008,
+    "max": 965242865,
+    "basis": "JPL Horizons OBSERVER table, geocentric (500@399) range, 2026-11-05 to 2056-11-05, 10-day step; min/max of samples (true extremes can lie slightly outside)"
+   },
+   "earth_range_fact_sheet_km": {
+    "min": 588500000.0,
+    "max": 968500000.0
+   },
+   "rotation_notes": "Not fetched for this pass: unverified.",
+   "hazards": {
+    "radiation": "Dipole field 4.30 Gauss-Rj^3 tilted 9.4 deg; 1 Rj field 4.0-13.0 Gauss (GSFC-O6 model, fact sheet; Rj = 71,398 km). Juno titanium vault and Europa Clipper Al-Zn vault exist because of this. Absolute dose figures: unverified.",
+    "power": "50.26 W/m2: Juno 60 m2 arrays yield ~400 W (JPL press kit)"
+   },
+   "orbit_altitude_km": {
+    "min": 4200,
+    "max": null,
+    "basis": "Real: Juno perijove about 4,200 km above cloud tops, 14-day science orbit (NSSDCA); polar. Maximum UNVERIFIED (53.5-day capture orbit).",
+    "reference_mission": "juno"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "69,911 km volumetric mean; JPL phys_par identical"
+    },
+    "gm_km3s2": {
+     "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/gm_de440.tpc",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "BODY599_GM Jupiter body only; system barycenter 126712764.1"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    },
+    "hazards": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "orbit_altitude_km": {
+     "url": "https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2011-040A",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 25.9203,
+   "escape_velocity_derived_kms": 60.2015,
+   "light_time_min_s": 1973.17,
+   "light_time_max_s": 3219.7,
+   "verified": "2026-11-05"
+  },
+  {
+   "id": "saturn",
+   "name": "Saturn",
+   "kind": "planet",
+   "radius_km": 58232,
+   "gm_km3s2": 37931206.23,
+   "surface_gravity_ms2": null,
+   "heliocentric_distance_au": {
+    "semimajor_km": 1432041000.0
+   },
+   "solar_irradiance_w_m2": 14.82,
+   "solar_irradiance_basis": "NSSDC fact sheet",
+   "earth_range_km": {
+    "min": 1201586799,
+    "max": 1649422736,
+    "basis": "JPL Horizons OBSERVER table, geocentric (500@399) range, 2026-11-05 to 2056-11-05, 10-day step; min/max of samples (true extremes can lie slightly outside)"
+   },
+   "earth_range_fact_sheet_km": {
+    "min": 1205500000.0,
+    "max": 1658600000.0
+   },
+   "rotation_notes": "Interior rotates once in 10 h 39.4 min (Cassini press kit).",
+   "hazards": {
+    "power": "14.82 W/m2: Cassini used 3 RTGs, 885 W at launch, 633 W at end of mission (NASA Science quick facts).",
+    "radiation": "unverified"
+   },
+   "orbit_altitude_km": {
+    "min": null,
+    "max": null,
+    "basis": "UNVERIFIED for circular orbits; Cassini flew 294 orbits with inclination changes (NASA Science).",
+    "reference_mission": "cassini"
+   },
+   "sources": {
+    "radius_km": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/saturnfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "gm_km3s2": {
+     "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/gm_de440.tpc",
+     "kind": "direct",
+     "verified": "2026-11-05",
+     "note": "BODY699_GM Saturn body only"
+    },
+    "solar_irradiance_w_m2": {
+     "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/saturnfact.html",
+     "kind": "direct",
+     "verified": "2026-11-05"
+    },
+    "earth_range_km": {
+     "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+     "kind": "derived",
+     "verified": "2026-11-05"
+    }
+   },
+   "surface_gravity_derived_ms2": 11.186,
+   "escape_velocity_derived_kms": 36.0938,
+   "light_time_min_s": 4008.06,
+   "light_time_max_s": 5501.88,
+   "verified": "2026-11-05"
+  }
+ ]
+}
