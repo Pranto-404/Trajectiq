@@ -101,7 +101,7 @@ test('Assistant explanations remain honest for saves, certification, multiplayer
 test('Assistant state snapshots and crisis previews are side-effect free',()=>{
  let run=newRun(PRESETS.fragile);run.mode='aggressive';while(!run.crisis&&!run.done)run=advance(run);
  const before=JSON.stringify(run),a=answerQuestion('Compare crisis choices',{run});
- assert.ok(a.comparisons.length);assert.equal(JSON.stringify(run),before);assert.equal(a.proposal,undefined);
+ assert.ok(a.directions.length);assert.equal(JSON.stringify(run),before);assert.equal(a.proposal,undefined);
  const complete=runToEnd(PRESETS.balanced);assert.ok(answerQuestion('Why did my mission fail?',{run:complete}).text.includes(complete.science.toLocaleString('en-US',{maximumFractionDigits:1})));
  const live=answerQuestion('Why is my battery dropping?',{run});assert.ok(live.text.includes(Number(run.battery).toLocaleString('en-US',{maximumFractionDigits:1})));
 });

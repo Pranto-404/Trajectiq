@@ -289,3 +289,32 @@ test('V6 state: runs record decisions with replayable snapshots and link metrics
   assert.ok(JSON.stringify(r).length < 120000);
   const copy = clone(r); assert.deepEqual(reviewDecisions(copy).map(x => x.id), reviewDecisions(r).map(x => x.id));
 });
+
+// ---- Item 3: the assistant explains the decision the player just made ---------------------------------------------------------------
+import {answerQuestion} from '../dist/engine/assistant.js';
+test('V6 #3: the assistant answers “why did prioritizing return score lower?” from the replay', () => {
+  const run = play(presetFor('moon', 'resilient'), {storage: 'downlink'});
+  for (const q of ['Why did prioritizing return score lower?', 'why did prioritizing return of data give me a lower score', 'Explain why my return priority choice was worse', 'Why did my decision to prioritize downlink cost me science?']) {
+    const a = answerQuestion(q, {run});
+    assert.equal(a.known, true, q);
+    assert.equal(a.topic, 'decision', q);
+    assert.match(a.text, /Prioritize return of data/);
+    assert.match(a.text, /Keep mapping/);
+    assert.match(a.text, /paused for \d+ more minutes/);
+    assert.notMatch?.(a.text, /can’t answer/);
+  }
+  assert.equal(answerQuestion('Why did prioritizing return score lower?', {run}).title.startsWith('Decision review'), true);
+});
+test('V6 #3: during a live crisis the assistant shows direction, and before any mission it says what it can do', () => {
+  let s = newRun(presetFor('moon', 'resilient')); while (!s.crisis) s = advance(s);
+  const live = answerQuestion('Why would prioritizing return be worse than keep mapping?', {run: s});
+  assert.equal(live.known, true); assert.ok(live.directions.length >= 2); assert.doesNotMatch(live.text, /\d{3}/);
+  const none = answerQuestion('Why did my decision score lower?', {});
+  assert.equal(none.known, true); assert.match(none.text, /Finish a mission/);
+});
+test('V6 #3: unrelated or adversarial questions still get an honest “cannot answer”', () => {
+  for (const q of ['Why is the stock price lower today?', 'Why did the football score drop?', 'Why is my moon night temperature worse?']) {
+    const a = answerQuestion(q, {run: play(presetFor('moon', 'resilient'), {storage: 'downlink'})});
+    assert.equal(a.known, false, q);
+  }
+});
