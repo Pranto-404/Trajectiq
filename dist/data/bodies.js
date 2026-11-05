@@ -125,7 +125,7 @@ export const BODIES = {
     launchAltMax: {rideshare: 1000, dedicated: 2000},
     heliocentricAu: 0.38709893,
     colors: {surface: '#8f8a85', accent: '#c9c2b8', atmosphere: null},
-    directorWeather: {kind: 'thermal', title: 'Sunward heat load', solar: 0.7, quality: 0.85, duration: 100, from: 60, span: 80},
+    directorWeather: {kind: 'thermal', title: 'Sunward heat load', solar: 0.7, quality: 0.85, duration: 100, from: 60, span: 80, aftermath: 0.95},
     hazards: {
       thermal: 'Mean surface 440 K; 590-725 K on the sunward side (fact sheet). Irradiance is about 6.7 times Earth (derived).',
       atmosphere: 'Surface-bounded exosphere, no drag (fact sheet).',
@@ -233,7 +233,7 @@ export const BODIES = {
     launchAltMax: {rideshare: 100, dedicated: 200},
     heliocentricAu: 5.20336301,
     colors: {surface: '#d8cdb8', accent: '#9a6b4f', atmosphere: null},
-    directorWeather: {kind: 'radiation', title: 'Jupiter radiation belt pass', solar: 1, quality: 0.4, duration: 60, from: 50, span: 90},
+    directorWeather: {kind: 'radiation', title: 'Jupiter radiation belt pass', solar: 1, quality: 0.4, duration: 60, from: 50, span: 90, aftermath: 0.85},
     hazards: {
       radiation: 'Europa is bathed in radiation trapped in Jupiter\'s magnetic field; Europa Clipper electronics expect a few thousand to tens of thousands of rads per flyby even with a vault of aluminum-zinc up to 9.2 mm (JPL press kit). The game uses a relative event, not a dose.',
       thermal: 'Mean -170 C (Galilean fact table).',

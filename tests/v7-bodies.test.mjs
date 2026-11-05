@@ -190,3 +190,113 @@ test('V7 physics: scenario array limits and efficiency are explicit, bounded and
     assert.equal(d.arrayScale, m.arrayScaleMax);
   }
 });
+
+// ---- Normalisation and API ---------------------------------------------------------------------------------------------------------------------------
+function realMissionOrNull(id) { return id === null ? true : getRealMission(id); }
+test('V7 normalize: destination is validated against the registry and bad input falls back safely', () => {
+  for (const id of BODY_IDS) { const d = normalize({destination: id}); assert.equal(d.destination, id); assert.ok(SCENARIOS[d.scenario].destination === id); const m = missionFor(d); assert.ok(d.altitude >= m.altitudeMin && d.altitude <= m.altitudeMax); }
+  for (const bad of ['jupiter', '__proto__', 'constructor', 'MARS', ' moon', 42, null, {}, [], 'titan', 'phobos']) assert.equal(normalize({destination: bad}).destination, 'moon', String(bad));
+  const crossed = normalize({destination: 'venus', scenario: 'lunar-polar'}); assert.equal(crossed.scenario, DEFAULT_SCENARIO.venus);
+  assert.equal(normalize({destination: 'moon', scenario: 'dawn-vesta'}).scenario, 'lunar-polar');
+  for (const s of Object.values(SCENARIOS)) { const d = normalize({destination: s.destination, scenario: s.id}); assert.equal(d.scenario, s.id); }
+});
+test('V7 API: scenario cards, body mapping and preset factories are complete and consistent', () => {
+  const cards = api.listScenarios();
+  assert.equal(cards.length, Object.keys(SCENARIOS).length); assert.ok(cards.length >= 10);
+  for (const c of cards) {
+    assert.equal(api.bodyForScenario(c.id).id, c.destination); assert.ok(api.scenariosForBody(c.destination).includes(c.id));
+    assert.ok(c.title && c.summary && c.why && c.tag); assert.ok(c.body.colors.surface); assert.ok(c.scienceNeeded > 0 && c.scienceNeeded <= c.scienceTarget); assert.ok(c.budget > 0);
+    const presets = api.presetsForScenario(c.id);
+    assert.deepEqual(Object.keys(presets), ['balanced', 'resilient', 'fragile']);
+    for (const p of Object.values(presets)) { assert.equal(p.destination, c.destination); assert.deepEqual(normalize(p), normalize(normalize(p))); assert.equal(normalize(p).scenario, c.id); }
+    assert.ok(realMissionOrNull(c.realMission), `${c.id} real mission ${c.realMission}`);
+  }
+  assert.equal(api.bodyForScenario('nope'), null); assert.equal(api.presetsForScenario('nope'), null);
+  assert.deepEqual(cards.filter(c => c.isDefaultForBody).map(c => c.destination).sort(), [...BODY_IDS].sort());
+  for (const name of ['BODIES', 'getBody', 'listScenarios', 'REAL_MISSIONS', 'ATTRIBUTION', 'calculate', 'newRun', 'advance', 'resolve', 'runToEnd', 'reviewDecisions', 'missionScore', 'encodeDesign', 'decodeDesign', 'datasetCSV', 'sourcesFor']) assert.ok(name in api, name);
+});
+
+// ---- Share codes ------------------------------------------------------------------------------------------------------------------------------------------
+const enc = o => 'TQ6.' + Buffer.from(JSON.stringify(o)).toString('base64url');
+test('V7 share: old TQ6 codes still decode and Moon or Mars codes keep format v1', () => {
+  const old = enc({v: 1, d: {bus: 'precision', payload: 'survey', power: 'endurance', propulsion: 'standard', comms: 'highgain', storage: 'standard', launch: 'rideshare', fuel: 55, altitude: 100, inclination: 90, arrayScale: 1, batteryScale: 1, duty: 1, distance: 'mean', destination: 'moon', scenario: 'lunar-polar', difficulty: 'engineer', name: 'Old', livery: 'gold'}, s: 700, t: 'Old team'});
+  const r = decodeDesign(old); assert.equal(r.ok, true); assert.equal(r.design.destination, 'moon'); assert.equal(r.claimedScore, 700); assert.equal(r.team, 'Old team');
+  const payloadOf = code => JSON.parse(Buffer.from(code.slice(4), 'base64url').toString());
+  assert.equal(payloadOf(encodeDesign(presetFor('moon'))).v, 1); assert.equal(payloadOf(encodeDesign(presetFor('mars'))).v, 1);
+  assert.equal(payloadOf(encodeDesign(presetFor('venus'))).v, 2);
+});
+test('V7 share: every scenario and preset round-trips through a code and verifies deterministically', () => {
+  for (const s of Object.values(SCENARIOS)) for (const key of ['balanced', 'resilient', 'fragile']) {
+    const d = normalize({...api.presetsForScenario(s.id)[key], name: 'Crew ✦'}), code = encodeDesign(d, {score: 640, team: 'T'});
+    assert.match(code, /^TQ6\.[A-Za-z0-9_-]+$/);
+    const back = decodeDesign(code); assert.equal(back.ok, true, `${s.id} ${key}: ${back.error}`); assert.deepEqual(back.design, d);
+  }
+  const d = presetFor('europa'); assert.deepEqual(verifyDesign(decodeDesign(encodeDesign(d)).design), verifyDesign(d));
+});
+test('V7 share security: new bodies are validated strictly; hostile input is rejected, never repaired into another body', () => {
+  const good = {...normalize(presetFor('vesta'))};
+  const mutate = patch => decodeDesign(enc({v: 2, d: {...good, ...patch}}));
+  assert.equal(mutate({}).ok, true);
+  const rejects = [{destination: 'pluto'}, {destination: '__proto__'}, {destination: ['vesta']}, {destination: 7}, {destination: null}, {scenario: 'lunar-polar'}, {scenario: 'nope'}, {scenario: '__proto__'}, {difficulty: 'god'}, {bus: 'turbo'}, {payload: 5}, {altitude: 99999}, {altitude: 1}, {altitude: 'x'}, {altitude: null}, {fuel: -1}, {fuel: 1e9}, {fuel: '55'}, {arrayScale: 99}, {arrayScale: null}, {batteryScale: 9}, {duty: 0}, {inclination: 120}];
+  for (const r of rejects) assert.equal(mutate(r).ok, false, JSON.stringify(r));
+  const noDest = {...good}; delete noDest.destination;
+  assert.equal(decodeDesign(enc({v: 2, d: noDest})).ok, false, 'v2 must name a destination');
+  assert.equal(decodeDesign(enc({v: 2, d: {name: 'x'}})).ok, false);
+  assert.equal(decodeDesign(enc({v: 3, d: good})).ok, false);
+  // v1 may only name the Moon or Mars, and an unknown destination is never turned into the Moon.
+  assert.equal(decodeDesign(enc({v: 1, d: {...good, destination: 'vesta'}})).ok, false);
+  assert.equal(decodeDesign(enc({v: 1, d: {destination: 'jupiter'}})).ok, false);
+  assert.equal(decodeDesign(enc({v: 1, d: {destination: 'mars', name: 'ok'}})).design.destination, 'mars');
+  // markup in the name never survives, prototype pollution does not occur.
+  const evil = decodeDesign(enc({v: 2, d: {...good, name: '<img src=x onerror=alert(1)>', __proto__: {polluted: 1}, constructor: {prototype: {polluted: 1}}}}));
+  assert.equal(evil.ok, true); assert.doesNotMatch(evil.design.name, /[<>]/); assert.equal({}.polluted, undefined);
+});
+test('V7 share security: fuzzing v1 and v2 payloads never throws and never yields an unknown body', () => {
+  let seed = 11; const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+  const values = [null, undefined, true, false, 0, -1, 1e308, NaN, Infinity, '', 'moon', 'mars', 'vesta', 'europa', '__proto__', 'x'.repeat(50), [], {}, [1], {a: 1}, '<b>', -0, 1e-9, 'constructor'];
+  const keys = ['bus', 'payload', 'power', 'propulsion', 'comms', 'storage', 'launch', 'fuel', 'altitude', 'inclination', 'arrayScale', 'batteryScale', 'duty', 'distance', 'destination', 'scenario', 'difficulty', 'name', 'livery', 'sandbox', 'zzz'];
+  let accepted = 0;
+  for (let i = 0; i < 1500; i++) {
+    const d = {}; for (const k of keys) if (rnd() < 0.55) d[k] = values[Math.floor(rnd() * values.length)];
+    const code = enc({v: rnd() < 0.5 ? 1 : 2, d});
+    let r; assert.doesNotThrow(() => { r = decodeDesign(code); });
+    if (r.ok) { accepted++; assert.ok(isBodyId(r.design.destination)); const c = calculate(r.design); assert.ok(Number.isFinite(c.cost) && Number.isFinite(c.period) && c.period > 0); }
+  }
+  assert.ok(accepted > 0);
+});
+
+// ---- Assistant honesty -------------------------------------------------------------------------------------------------------------------------------------------
+test('V7 assistant: NASA data answers name the body, list game assumptions and link sources for every body', () => {
+  for (const id of BODY_IDS) {
+    const design = presetFor(id), a = answerQuestion('Which NASA data is actually used?', {design}), name = BODIES[id].name.split(' ')[0];
+    assert.equal(a.known, true, id); assert.match(a.text, new RegExp(name)); assert.ok(a.sources.length >= 1 && a.sources.every(s => /^https:\/\//.test(s.url)));
+    assert.match(a.text, /Game assumptions in the data panel/); assert.match(a.text, /no NASA source\): [A-Z]/);
+    for (const q of ['What is altitude?', 'How does distance affect the link?', 'Which values are game assumptions?', 'How do I play?']) assert.equal(answerQuestion(q, {design}).known, true, `${id}: ${q}`);
+  }
+  assert.match(answerQuestion('Which NASA data is actually used?', {design: presetFor('mars')}).text, /Earth range, reference/);
+});
+test('V7 assistant: heat and radiation are answered only where the scenario has them, labelled as game assumptions', () => {
+  for (const [id, q] of [['mercury', 'What is the thermal heat load event?'], ['europa', 'What is the radiation event?']]) {
+    const a = answerQuestion(q, {design: presetFor(id)});
+    assert.equal(a.known, true, id); assert.equal(a.topic, 'hazard'); assert.match(a.text, /GAME ASSUMPTION/); assert.match(a.text, /will not quote one/);
+    assert.match(a.evidence, /GAME ASSUMPTION/); assert.doesNotMatch(a.text, /\b\d+ ?krad\b|\b\d+ rads\b/i);
+  }
+  for (const q of ['Tell me about Moon radiation shielding', 'Tell me about Moon thermal analysis', 'night temperature']) assert.equal(answerQuestion(q, {design: presetFor('moon')}).known, false, q);
+  assert.equal(answerQuestion('Tell me about Mars thermal analysis', {design: presetFor('mars')}).known, false);
+  assert.equal(answerQuestion('Is the stock radiation forecast good?', {design: presetFor('europa')}).known, false);
+});
+test('V7 assistant: real-mission answers cite sources and list the fields NASA pages did not give', () => {
+  const a = answerQuestion('Which real mission is this based on?', {design: presetFor('vesta')});
+  assert.equal(a.known, true); assert.equal(a.topic, 'realmission'); assert.match(a.text, /Dawn/); assert.match(a.text, /fictional small orbiter/); assert.match(a.text, /Fields NASA pages did not give/);
+  assert.ok(a.sources.some(s => /nssdc\.gsfc\.nasa\.gov/.test(s.url)));
+  assert.match(answerQuestion('How does this compare with real missions?', {design: presetFor('moon')}).text, /Lunar Reconnaissance Orbiter/);
+  assert.equal(answerQuestion('Which real mission is the stock price based on?', {design: presetFor('moon')}).known, false);
+});
+test('V7 hints: readiness hints cite real propellant fractions and GOLD margins without blocking launch', () => {
+  for (const id of BODY_IDS) {
+    const a = calculate(presetFor(id)); assert.equal(a.hints.length, 3);
+    for (const h of a.hints) { assert.ok(h.text.length > 40 && /^https:\/\//.test(h.source) && h.basis); assert.ok(['ok', 'note'].includes(h.status)); }
+    assert.match(a.hints[0].text, /Odyssey 48%/); assert.match(a.hints[1].text, /GOLD Rules|GSFC-STD-1000/);
+    assert.equal(a.checks.some(c => c.id === 'hints'), false);
+  }
+});
