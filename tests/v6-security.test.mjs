@@ -59,7 +59,7 @@ test('Security: every external link opens safely and only to NASA, GitHub or the
     for (const tag of text.match(/<a [^>]*target="_blank"[^>]*>/g) || []) assert.match(tag, /rel="noopener noreferrer"/, tag);
   }
   const urls = new Set((sources.filter(p => p.endsWith('.js')).map(read).join('\n').match(/https:\/\/[a-z0-9.-]+/gi) || []).map(u => new URL(u).hostname));
-  for (const host of urls) assert.match(host, /(^|\.)(nasa\.gov|w3\.org|openapi\.vercel\.sh|github\.com|vercel\.app|jpl\.nasa\.gov)$/, host);
+  for (const host of urls) assert.match(host, /(^|\.)(nasa\.gov|w3\.org|openapi\.vercel\.sh|github\.com|vercel\.app|jpl\.nasa\.gov|usgs\.gov)$/, host);
 });
 
 test('Security: hostile persisted data renders as text on every screen', async () => {

@@ -8,7 +8,7 @@ const DEFAULT_POLICY = {propulsion: 'nominal', eclipse: 'continue', storage: 'co
 
 function finishFrom(state, policy) {
   let r = clone(state);
-  for (let i = 0; i < 260 && !r.done; i++) {
+  for (let i = 0; i < 600 && !r.done; i++) {
     if (r.crisis) {
       const open = r.crisis.actions.filter(x => !x.disabled);
       const pick = open.find(x => x.id === policy[r.crisis.id]) || open[0];
