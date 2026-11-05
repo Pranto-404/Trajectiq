@@ -13,7 +13,7 @@ export const EXPERIMENT_FIELDS=[
 export function continuePreview(input,firstAction=null){
  let r=clone(input);
  if(firstAction)r=resolve(r,firstAction);
- for(let i=0;i<180&&!r.done;i++){
+ for(let i=0;i<600&&!r.done;i++){
   if(r.crisis){const options=r.crisis.actions.filter(x=>!x.disabled);const chosen=options.find(x=>x.id===cpPolicy[r.crisis.id])||options[0];if(!chosen)throw new Error('No valid recovery option');r=resolve(r,chosen.id);}
   else r=advance(r);
  }
@@ -33,7 +33,7 @@ const cpRank=(a,b)=>a.failures-b.failures||Number(b.achieved)-Number(a.achieved)
 export function reviewDesign(raw){
  const d=normalize(raw),m=calculate(d).m,base=designPreview(d,'Current design'),candidates=[];
  for(const [key,parts] of Object.entries(CATALOG))for(const part of parts)if(part.id!==d[key])candidates.push({patch:{[key]:part.id},label:part.name});
- for(const [key,values]of Object.entries({fuel:[35,45,55,65],altitude:[m.altitudeMin,m.referenceAltitude,(m.altitudeMin+m.altitudeMax)/2],inclination:[85,90],arrayScale:[1,1.25,1.5],batteryScale:[1,1.25,1.5],duty:[.5,.75,1]}))
+ for(const [key,values]of Object.entries({fuel:[35,45,55,65],altitude:[m.altitudeMin,m.referenceAltitude,(m.altitudeMin+m.altitudeMax)/2],inclination:[85,90],arrayScale:[1,1.25,1.5,...(m.arrayScaleMax>1.5?[m.arrayScaleMax/2,m.arrayScaleMax]:[])],batteryScale:[1,1.25,1.5],duty:[.5,.75,1]}))
   for(const value of values)if(value!==d[key])candidates.push({patch:{[key]:value},label:`${key} = ${value}`});
  const trials=candidates.map(c=>({...designPreview({...d,...c.patch},c.label),patch:c.patch}));
  const better=trials.filter(c=>cpRank(c,base)<0).sort(cpRank);
@@ -62,7 +62,7 @@ function cpPatch(q,d){
   const key=fields[0][0],f=EXPERIMENT_FIELDS.find(x=>x[0]===key);let value=Number(numbers[0]);if(['duty','arrayScale','batteryScale'].includes(key)&&/%|percent|শতাংশ/.test(clean))value/=100;
   if(/%|percent|শতাংশ/.test(clean)&&!['duty','arrayScale','batteryScale'].includes(key))return {error:'Percent units are supported only for battery size, array size and instrument duty.'};
   if(/\bkm\b/.test(clean)&&key!=='altitude'||/\bkg\b/.test(clean)&&key!=='fuel'||/\bdegrees?\b/.test(clean)&&key!=='inclination')return {error:'That unit does not match the selected field.'};
-  const assessment=calculate(d),min=key==='altitude'?assessment.m.altitudeMin:f[2],max=key==='fuel'?assessment.c.propulsion.maxFuel:key==='altitude'?assessment.m.altitudeMax:f[3];
+  const assessment=calculate(d),min=key==='altitude'?assessment.m.altitudeMin:f[2],max=key==='fuel'?assessment.c.propulsion.maxFuel:key==='altitude'?assessment.m.altitudeMax:key==='arrayScale'?assessment.m.arrayScaleMax:f[3];
   if(!Number.isFinite(value)||value<min||value>max)return {error:`${f[1]} must be between ${min} and ${max}. No value was changed.`};
   return {patch:{[key]:value},label:`${f[1]} = ${value}${['arrayScale','batteryScale'].includes(key)?` (${cpNum(value*100)}%)`:''}`};
  }

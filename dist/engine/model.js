@@ -68,8 +68,9 @@ export function calculate(raw) {
 }
 function log(s,type,title,detail){s.logs.push({minute:s.minute,type,title,detail});}
 let probing=false;
+const particleKind=k=>k==='particle'||k==='radiation';
 // Replay a paused state under every available response with the default policy: used only to judge whether a decision matters.
-function quickFinish(state){let r=state;for(let i=0;i<260&&!r.done;i++){if(r.crisis){const open=r.crisis.actions.filter(x=>!x.disabled),pick=open.find(x=>x.id==='ride')||open.find(x=>x.id==='continue')||open.find(x=>x.id==='wait')||open[0];r=resolve(r,pick.id);}else r=advance(r);}return r;}
+function quickFinish(state){let r=state;for(let i=0;i<600&&!r.done;i++){if(r.crisis){const open=r.crisis.actions.filter(x=>!x.disabled),pick=open.find(x=>x.id==='ride')||open.find(x=>x.id==='continue')||open.find(x=>x.id==='wait')||open[0];r=resolve(r,pick.id);}else r=advance(r);}return r;}
 function decisionMatters(s){
   if(probing||!s.crisis)return true;probing=true;
   try{const open=s.crisis.actions.filter(x=>!x.disabled);if(open.length<2)return false;
@@ -143,7 +144,7 @@ function advanceSlice(input,dt,copy=true,calculation=null) {
   const wasSafe=s.safe,net=(generatedPower-load)*dt/60;s.battery=clamp(s.battery+net,0,c.power.battery);
   if(wasSafe)s.safeSteps+=dt/M.step;
   if(activeScience){
-    const bytes=effectiveRate*dt*60/8;const value=c.payload.value*clamp(c.payload.pointingMax/(c.bus.pointing*s.factors.pointing),0.15,1)*a.polarFactor*a.altitudeFactor*s.orbitPenalty*s.qualityHit*(wx?.choice==='ride'?wx.quality:wx?.choice==='reduce'&&wx.kind==='particle'?0.8:1);
+    const bytes=effectiveRate*dt*60/8;const value=c.payload.value*clamp(c.payload.pointingMax/(c.bus.pointing*s.factors.pointing),0.15,1)*a.polarFactor*a.altitudeFactor*s.orbitPenalty*s.qualityHit*(wx?.choice==='ride'?wx.quality:wx?.choice==='reduce'&&particleKind(wx.kind)?0.8:1);
     const science=dt*10*value*thr;const room=Math.max(0,c.storage.capacity-s.backlog),kept=Math.min(room,bytes),ratio=bytes?kept/bytes:0;
     s.generatedScience+=science;s.generated+=bytes;s.backlog+=kept;s.qualityBacklog+=science*ratio;s.lostMB+=bytes-kept;s.lostScience+=science*(1-ratio);
   }
@@ -172,11 +173,11 @@ function advanceSlice(input,dt,copy=true,calculation=null) {
     {id:'pause',name:'Pause collection',effect:'Drain the recorder before collecting new observations. Saves battery; science only grows if the recorder was the limit.',disabled:false}
   ]);}
   else if(M.weather&&s.weatherAt!==null&&s.minute>=s.weatherAt&&!s.seen.includes('weather')){
-    const W=M.weather,dust=W.kind==='dust';
-    crisis(s,'weather',W.title,dust?`A regional dust storm will cut solar output to ${Math.round(W.solar*100)}% for ${W.duration} minutes. Battery is ${Math.round(s.battery/c.power.battery*100)}%. Sunlight alone may not cover the operating load.`:`Energetic particles will corrupt measurements for ${W.duration} minutes. Observations collected during the event are only ${Math.round(W.quality*100)}% as useful.`,dust?['Dust in the atmosphere','Solar generation falls',`${c.power.name}: ${Math.round(c.power.solar*0.85*s.factors.solar*W.solar)} W available`,'Battery drains faster than it charges']:['Solar particle event','Detector noise rises','Observations lose quality','Science per minute drops'],[
+    const W=M.weather,dust=!particleKind(W.kind),heat=W.kind==='thermal',pct=v=>Math.round(v*100);
+    crisis(s,'weather',W.title,heat?`A sunward heat load will cut solar output to ${pct(W.solar)}% and make observations ${pct(W.quality)}% as useful for ${W.duration} minutes (a game assumption: arrays are turned away from the Sun and instruments run hot). Battery is ${Math.round(s.battery/c.power.battery*100)}%.`:dust?`A regional dust storm will cut solar output to ${Math.round(W.solar*100)}% for ${W.duration} minutes. Battery is ${Math.round(s.battery/c.power.battery*100)}%. Sunlight alone may not cover the operating load.`:W.kind==='radiation'?`Radiation trapped in the planet’s magnetic field will corrupt measurements and stored data for ${W.duration} minutes. Observations collected during the event are only ${Math.round(W.quality*100)}% as useful (a relative game assumption, not a dose in rads).`:`Energetic particles will corrupt measurements for ${W.duration} minutes. Observations collected during the event are only ${Math.round(W.quality*100)}% as useful.`,heat?['Heat load rises','Arrays are turned off the Sun and power falls',`${c.power.name}: ${Math.round(c.power.solar*0.85*s.factors.solar*W.solar)} W available`,'Instruments run hot and observations lose quality']:dust?['Dust in the atmosphere','Solar generation falls',`${c.power.name}: ${Math.round(c.power.solar*0.85*s.factors.solar*W.solar)} W available`,'Battery drains faster than it charges']:[W.kind==='radiation'?'Trapped radiation belt':'Solar particle event','Detector noise rises','Observations lose quality','Science per minute drops'],[
     {id:'shield',name:'Safe the instruments',effect:`Pause science and transmission for ${W.duration} minutes. Nothing is lost to the event, but the collection time is.`,disabled:false},
-    {id:'reduce',name:'Reduce instrument duty',effect:dust?'Halve instrument duty during the event. Cuts load, keeps part of the science.':'Halve duty and use a low-gain mode: half the observations, 80% as useful.',disabled:false},
-    {id:'ride',name:'Keep observing',effect:dust?'Full science through the storm. The battery may drain.':`Keep collecting. Observations during the event count only ${Math.round(W.quality*100)}%. Data already on the recorder can be corrupted.`,disabled:false}
+    {id:'reduce',name:'Reduce instrument duty',effect:dust?(heat?'Halve instrument duty during the heat load. Cuts load and heat, keeps part of the science.':'Halve instrument duty during the event. Cuts load, keeps part of the science.'):'Halve duty and use a low-gain mode: half the observations, 80% as useful.',disabled:false},
+    {id:'ride',name:'Keep observing',effect:dust?(heat?`Full science through the heat load. The battery may drain and observations count at ${pct(W.quality)}%.`:'Full science through the storm. The battery may drain.'):`Keep collecting. Observations during the event count only ${Math.round(W.quality*100)}%. Data already on the recorder can be corrupted.`,disabled:false}
   ]);
     if(!decisionMatters(s)){s.crisis=null;s.weather={kind:W.kind,solar:W.solar,quality:W.quality,start:s.minute,end:s.minute+W.duration,choice:'ride'};log(s,'info',`${W.title} passed`,`The ${c.power.name.toLowerCase()} and your margins absorbed it: every response would have ended about the same, so no decision was needed.`);}}
   if(s.mode==='downlink'&&s.backlog<c.storage.capacity*0.25)s.mode='science';
@@ -197,7 +198,7 @@ export function resolve(input,actionId){const s=clone(input);if(s.done||!s.crisi
   if(e.id==='storage'){if(actionId==='downlink')s.mode='downlink';if(actionId==='compress')s.throttle*=0.5;}
   if(e.id==='link'){if(actionId==='boost'){s.linkBoost=2;s.qualityHit=0.9;}if(actionId==='pause')s.mode='downlink';}
   if(e.id==='weather'){const W=M.weather;s.weather={kind:W.kind,solar:W.solar,quality:W.quality,start:s.minute,end:s.minute+W.duration,choice:actionId};
-    const hit=W.kind==='particle'?({ride:0.35,reduce:0.15,shield:0}[actionId]||0):0;
+    const hit=particleKind(W.kind)?({ride:0.35,reduce:0.15,shield:0}[actionId]||0):0;
     if(hit>0&&s.backlog>0){const mb=s.backlog*hit,q=s.qualityBacklog*hit;s.backlog-=mb;s.qualityBacklog-=q;s.lostMB+=mb;s.lostScience+=q;log(s,'warning','Recorder data corrupted',`${Math.round(mb)} MB of stored observations were corrupted by energetic particles.`);}}
   s.crisis=null;return s;
 }
