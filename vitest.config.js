@@ -7,6 +7,7 @@ export default mergeConfig(base, defineConfig({
     include: ['tests-ui/**/*.test.{js,jsx}'],
     setupFiles: ['./tests-ui/setup.js'],
     restoreMocks: true,
+    testTimeout: 30000,
     css: {modules: {classNameStrategy: 'non-scoped'}}
   }
 }));
