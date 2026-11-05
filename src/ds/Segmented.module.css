@@ -1,4 +1,4 @@
-.group { display: inline-flex; padding: 3px; gap: 2px; border: 1px solid var(--line-1); border-radius: var(--radius-control); background: var(--surface-1); max-width: 100%; }
+.group { display: inline-flex; padding: 3px; gap: 2px; border: 1px solid var(--line-1); border-radius: var(--radius-control); background: var(--surface-1); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
 .full { display: flex; width: 100%; }
 .full .option { flex: 1; }
 .option {

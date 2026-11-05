@@ -24,7 +24,7 @@
 .tick { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--text-1); opacity: .75; transform: translateX(-1px); }
 .limit { position: absolute; right: 0; top: -2px; bottom: -2px; width: 2px; background: var(--text-2); }
 
-.segments { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; height: 14px; }
+.cells { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; height: 14px; }
 .cell { border-radius: 3px; background: var(--surface-3); border: 1px solid var(--line-1); transition: opacity var(--dur-fast); }
 .on { background: var(--tone); border-color: var(--tone); }
 .ghostUp { background: repeating-linear-gradient(135deg, var(--lime-500) 0 3px, transparent 3px 6px); border-color: var(--lime-500); }

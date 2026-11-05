@@ -6,6 +6,7 @@ import {useT} from '../i18n/index.js';
 import {loadFeatures, getScreen} from './features.js';
 import {SheetHost} from './SheetHost.jsx';
 import {useDocumentLanguage, useDensity, useHistorySync} from './hooks.js';
+import iconUrl from '../assets/icon.svg';
 import s from './shell.module.css';
 
 const NAV = [['board', 'Board'], ['hangar', 'Hangar'], ['flight', 'Flight'], ['report', 'Report']];
@@ -17,7 +18,7 @@ function Header() {
   const reason = {flight: run && !run.done ? '' : t('Launch a mission first'), report: run?.done || runs.length ? '' : t('Finish a mission first')};
   return (
     <header className={s.header}>
-      <button type="button" className={s.brand} onClick={() => a.home()} aria-label="TRAJECTIQ"><img src="./icon.svg" alt="" width="28" height="28" /><span className={s.brandText}>TRAJECTIQ</span></button>
+      <button type="button" className={s.brand} onClick={() => a.home()} aria-label="TRAJECTIQ"><img src={iconUrl} alt="" width="28" height="28" /><span className={s.brandText}>TRAJECTIQ</span></button>
       <nav className={s.nav} aria-label={t('Mission screens')}>
         {NAV.map(([id, label]) => {
           const why = reason[id]; const here = screen === id;

@@ -77,7 +77,7 @@ export function Gauge({kind = 'linear', label, value, max = 100, min = 0, unit =
             <motion.g style={{rotate: angle, transformOrigin: '60px 60px'}}><line className={s.needle} x1="60" y1="60" x2="60" y2="16" /><circle className={s.hub} cx="60" cy="60" r="4" /></motion.g>
           </svg>
         ) : kind === 'segments' ? (
-          <div className={s.segments} aria-hidden="true">
+          <div className={s.cells} aria-hidden="true">
             {Array.from({length: segments}, (_, i) => {
               const on = i < Math.ceil(frac * segments - 1e-9), ghost = previewFrac != null && (ghostUp ? i >= Math.ceil(frac * segments - 1e-9) && i < Math.ceil(previewFrac * segments - 1e-9) : i < Math.ceil(frac * segments - 1e-9) && i >= Math.ceil(previewFrac * segments - 1e-9));
               return <span key={i} className={`${s.cell} ${on ? s.on : ''} ${ghost ? (ghostUp ? s.ghostUp : s.ghostDown) : ''}`} data-on={on || undefined} data-ghost={ghost || undefined} />;
