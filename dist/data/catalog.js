@@ -122,5 +122,5 @@ export function presetFor(destination='moon',key='balanced',scenarioId=null){
  if(destination==='mars')return {...base,destination:'mars',altitude:400,arrayScale:1.5,batteryScale:1.5,duty:1,name:'Mars Polar Mapper'};
  const scenario=SCENARIOS[scenarioId]?.destination===destination?SCENARIOS[scenarioId]:SCENARIOS[DEFAULT_SCENARIO[destination]];
  const tuned=scenario.presets?.[key]||scenario.presets?.balanced||{};
- return {...base,destination,scenario:scenario.id,altitude:body.defaultAltitude,arrayScale:1.5,batteryScale:1.5,duty:1,name:scenario.title,...tuned};
+ return {...base,destination,scenario:scenario.id,altitude:Math.min(body.altitudeMax,Math.max(body.altitudeMin,scenario.referenceAltitude??body.defaultAltitude)),arrayScale:1.5,batteryScale:1.5,duty:1,name:scenario.title,...tuned};
 }

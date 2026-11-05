@@ -300,3 +300,136 @@ test('V7 hints: readiness hints cite real propellant fractions and GOLD margins 
     assert.equal(a.checks.some(c => c.id === 'hints'), false);
   }
 });
+
+// ---- Scenarios: launchable, balanced, deterministic, conserving -----------------------------------------------------------------------------------
+const NEW_SCENARIOS = Object.values(SCENARIOS).filter(s => !LEGACY_BODY_IDS.includes(s.destination));
+const policyPick = {propulsion: 'nominal', eclipse: 'continue', storage: 'continue', link: 'wait', weather: 'ride'};
+function play(design, pick = policyPick, seed) {
+  let s = newRun(design, seed);
+  for (let i = 0; i < 600 && !s.done; i++) {
+    if (s.crisis) { const open = s.crisis.actions.filter(x => !x.disabled); s = resolve(s, (open.find(x => x.id === pick[s.crisis.id]) || open[0]).id); } else s = advance(s);
+  }
+  assert.ok(s.done); return s;
+}
+test('V7 scenarios: 6 or more new real-mission scenarios on 6 new bodies, each with the required fields and honest text', () => {
+  assert.ok(NEW_SCENARIOS.length >= 6);
+  assert.deepEqual([...new Set(NEW_SCENARIOS.map(s => s.destination))].sort(), ['ceres', 'earth', 'europa', 'mercury', 'venus', 'vesta']);
+  for (const s of NEW_SCENARIOS) {
+    for (const k of ['id', 'title', 'tag', 'summary', 'subtitle', 'why', 'assumptions', 'realMission']) assert.equal(typeof s[k], 'string', `${s.id}.${k}`);
+    assert.ok(['data', 'mass', 'comms', 'power', 'budget', 'time'].includes(s.critical));
+    assert.ok(getRealMission(s.realMission), s.id); assert.ok(s.realNumbers.length >= 2);
+    for (const r of s.realNumbers) assert.match(r.source, /^https:\/\//);
+    assert.match(s.assumptions, /game assumption|assumptions?/i);
+    assert.deepEqual(Object.keys(s.presets).sort(), ['balanced', 'fragile', 'resilient']);
+    assert.ok(s.scienceTarget > 0 && s.budget >= 100 && s.referenceAltitude >= BODIES[s.destination].altitudeMin && s.referenceAltitude <= BODIES[s.destination].altitudeMax);
+  }
+  assert.match(SCENARIOS['europa-flyby'].assumptions, /never orbits Europa/); assert.match(SCENARIOS['mercury-thermal'].assumptions, /game assumption/);
+  assert.equal(SCENARIOS['europa-flyby'].weather.kind, 'radiation'); assert.equal(SCENARIOS['mercury-thermal'].weather.kind, 'thermal');
+});
+test('V7 balance: at Engineer level the balanced and resilient presets meet the objective and the fragile preset does not, on every new scenario', () => {
+  for (const s of NEW_SCENARIOS) {
+    const presets = api.presetsForScenario(s.id);
+    const results = {};
+    for (const key of ['balanced', 'resilient', 'fragile']) {
+      const a = calculate(presets[key]); assert.equal(a.launchable, true, `${s.id} ${key} launchable: ${a.checks.filter(c => c.status === 'fail').map(c => c.name + ' ' + c.value)}`);
+      const r = play(a.d); results[key] = r;
+      assert.equal(r.outcome.achieved, key !== 'fragile', `${s.id} ${key}: ${r.science.toFixed(0)} of ${neededScience(a.m)} (${r.outcome.status})`);
+    }
+    assert.ok(results.balanced.science >= neededScience(calculate(presets.balanced).m) * 1.05, `${s.id}: balanced has at least 5% margin`);
+    assert.ok(results.fragile.science < neededScience(calculate(presets.fragile).m) * 0.4, `${s.id}: fragile fails clearly`);
+    // The fragile preset carries visible warnings; the balanced preset carries fewer.
+    assert.ok(calculate(presets.fragile).risk >= calculate(presets.balanced).risk, s.id);
+  }
+});
+test('V7 balance: careless design choices fail on every new scenario (underpowered arrays, no recorder headroom)', () => {
+  for (const s of NEW_SCENARIOS) {
+    const base = api.presetsForScenario(s.id).balanced, m = missionFor(base);
+    const lowPower = calculate({...base, power: 'compact', arrayScale: 0.75, batteryScale: 0.75});
+    if (lowPower.launchable && m.solarIrradiance < 700) assert.equal(play(lowPower.d).outcome.achieved, false, `${s.id} underpowered`);
+    const noRecorder = calculate({...base, storage: 'standard', payload: 'hires', comms: 'compact'});
+    if (noRecorder.launchable) assert.equal(play(noRecorder.d).outcome.achieved, false, `${s.id} data-starved`);
+  }
+});
+test('V7 balance: weak sunlight is real: the same standard kit at Vesta, Ceres and Europa runs out of power', () => {
+  for (const id of ['dawn-vesta', 'dawn-ceres', 'europa-flyby']) {
+    const d = {...api.presetsForScenario(id).balanced, arrayScale: 1, batteryScale: 1};
+    const a = calculate(d); if (!a.launchable) continue;
+    assert.ok(a.margins.power < 0, `${id} standard array cannot carry the peak load`);
+    assert.equal(play(a.d).outcome.achieved, false, id);
+  }
+  const moon = calculate({...presetFor('moon'), arrayScale: 1}), vesta = calculate({...presetFor('vesta'), arrayScale: 1});
+  assert.ok(vesta.c.power.solar < moon.c.power.solar * 0.2);
+});
+test('V7 weather: heat and radiation events arrive once, offer three responses, are labelled game assumptions and change the outcome', () => {
+  for (const id of ['mercury-thermal', 'europa-flyby']) {
+    const d = api.presetsForScenario(id).balanced;
+    let s = newRun(d);
+    for (let i = 0; i < 600 && !s.done && s.crisis?.id !== 'weather'; i++) { if (s.crisis) s = resolve(s, (s.crisis.actions.find(x => !x.disabled)).id); else s = advance(s); }
+    assert.equal(s.crisis?.id, 'weather', id);
+    assert.deepEqual(s.crisis.actions.map(a => a.id), ['shield', 'reduce', 'ride']);
+    assert.match(s.crisis.title, /heat|radiation/i);
+    const outcomes = ['shield', 'reduce', 'ride'].map(w => Math.round(play(d, {...policyPick, weather: w}).science));
+    assert.ok(new Set(outcomes).size >= 2, `${id} responses differ: ${outcomes}`);
+    const ride = play(d, {...policyPick, weather: 'ride'});
+    assert.ok(ride.qualityHit < 1, `${id}: riding it out leaves the instruments less sensitive`);
+    assert.equal(play(d, {...policyPick, weather: 'shield'}).qualityHit, 1);
+    assert.equal(ride.events.filter(e => e.id === 'weather').length + ride.logs.filter(l => /passed/.test(l.title)).length, 1);
+  }
+  const mer = newRun(api.presetsForScenario('mercury-thermal').balanced); let s = mer;
+  while (!s.crisis && !s.done) s = advance(s);
+  while (s.crisis && s.crisis.id !== 'weather') { s = resolve(s, s.crisis.actions.find(x => !x.disabled).id); while (!s.crisis && !s.done) s = advance(s); }
+  assert.match(s.crisis.body, /game assumption/);
+});
+test('V7 determinism: every scenario and preset replays identically from the same seed, and differs across seeds only through the model', () => {
+  for (const s of Object.values(SCENARIOS)) for (const key of ['balanced', 'fragile']) {
+    const d = api.presetsForScenario(s.id)[key]; if (!calculate(d).launchable) continue;
+    const a = runToEnd(d, {seed: 4385, policy: 'ordinary'}), b = runToEnd(d, {seed: 4385, policy: 'ordinary'});
+    assert.equal(JSON.stringify(a), JSON.stringify(b), `${s.id} ${key}`);
+    assert.deepEqual(JSON.parse(JSON.stringify(a)), a);
+  }
+});
+test('V7 checkpoint: a flight serialised mid-campaign resumes to exactly the same result on every scenario', () => {
+  for (const s of Object.values(SCENARIOS)) {
+    const d = api.presetsForScenario(s.id).balanced; if (!calculate(d).launchable) continue;
+    let live = newRun(d), saved = null;
+    const finish = state => { let r = state; for (let i = 0; i < 600 && !r.done; i++) { if (r.crisis) { const open = r.crisis.actions.filter(x => !x.disabled); r = resolve(r, (open.find(x => x.id === policyPick[r.crisis.id]) || open[0]).id); } else r = advance(r); } return r; };
+    for (let i = 0; i < 12 && !live.done && !live.crisis; i++) live = advance(live);
+    saved = JSON.parse(JSON.stringify(live));
+    assert.equal(JSON.stringify(finish(live)), JSON.stringify(finish(saved)), s.id);
+  }
+});
+test('V7 conservation: bytes, science, battery, fuel and recorder stay consistent across all bodies for random designs', () => {
+  let seed = 3; const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+  let flights = 0;
+  for (const s of Object.values(SCENARIOS)) for (let i = 0; i < 8; i++) {
+    const m = missionFor({destination: s.destination, scenario: s.id}), d = {...api.presetsForScenario(s.id).balanced, scenario: s.id, altitude: m.altitudeMin + (m.altitudeMax - m.altitudeMin) * rnd() * 0.3, fuel: 20 + 50 * rnd(), duty: 0.25 + 0.75 * rnd(), arrayScale: 0.75 + (m.arrayScaleMax - 0.75) * rnd(), batteryScale: 0.75 + 0.75 * rnd(), sandbox: true};
+    for (const k of Object.keys(CATALOG)) d[k] = CATALOG[k][Math.floor(rnd() * CATALOG[k].length)].id;
+    const a = calculate(d); if (!a.launchable) continue;
+    flights++;
+    let st = newRun(a.d); st.mode = i % 2 ? 'science' : 'aggressive';
+    for (let j = 0; j < 600 && !st.done; j++) {
+      if (st.crisis) st = resolve(st, (st.crisis.actions.find(x => x.id === 'continue' && !x.disabled) || st.crisis.actions.find(x => !x.disabled)).id); else st = advance(st);
+      near(st.generated, st.returned + st.backlog + st.lostMB, 1e-6); near(st.generatedScience, st.science + st.qualityBacklog + st.lostScience, 1e-6);
+      assert.ok(st.battery >= 0 && st.battery <= a.c.power.battery + 1e-9); assert.ok(st.fuel >= 0 && st.fuel <= a.d.fuel + 1e-9);
+      assert.ok(st.backlog >= -1e-8 && st.backlog <= a.c.storage.capacity + 1e-8); assert.ok(Number.isFinite(st.science) && Number.isFinite(st.minute));
+    }
+    assert.ok(st.done); assert.equal(new Set(st.events.map(x => x.id)).size, st.events.length);
+  }
+  assert.ok(flights >= 40, `only ${flights} random flights were launchable`);
+});
+test('V7 robustness and scoring work on new bodies (seeded, bounded)', () => {
+  for (const id of ['earth-observer', 'dawn-vesta']) {
+    const d = api.presetsForScenario(id).balanced, r = robustness(d, 4385, 6);
+    assert.ok(r.index >= 0 && r.index <= 100); assert.equal(r.samples, 6);
+    const run = play(d); run.review = api.reviewDecisions(run); const sc = api.missionScore(run);
+    assert.ok(sc.total >= 0 && sc.total <= 1000); assert.ok(sc.dims.every(x => x.value >= -1e-9 && x.value <= x.max + 1e-9));
+  }
+});
+test('V7 launch envelope: each body has its own rideshare and dedicated altitude ceiling', () => {
+  for (const b of Object.values(BODIES)) {
+    const hi = calculate({...presetFor(b.id), altitude: b.launchAltMax.rideshare + (b.launchAltMax.dedicated > b.launchAltMax.rideshare ? 1 : 0), launch: 'rideshare', inclination: 90});
+    if (b.launchAltMax.dedicated > b.launchAltMax.rideshare) assert.equal(hi.checks.find(c => c.id === 'launchOrbit').status, 'fail', b.id);
+    const ok = calculate({...presetFor(b.id), altitude: b.launchAltMax.rideshare, launch: 'rideshare', inclination: 90});
+    assert.equal(ok.checks.find(c => c.id === 'launchOrbit').status, 'pass', b.id);
+  }
+});
