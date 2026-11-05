@@ -1,6 +1,7 @@
 import {describe, it, expect, vi, beforeEach, afterEach} from 'vitest';
 import {render, screen, within, act, fireEvent, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {SCENARIOS} from '@data/scenarios.js';
 import App from '@/App.jsx';
 import {useGame} from '@/store/index.js';
 import * as selectors from '@/store/selectors.js';
@@ -22,7 +23,7 @@ describe('App shell', () => {
     expect(screen.getByRole('link', {name: 'Skip to content'})).toBeTruthy(); expect(screen.getByRole('main')).toBeTruthy();
     expect(nav('Board').getAttribute('aria-current')).toBe('step'); expect(nav('Flight').getAttribute('aria-disabled')).toBe('true'); expect(nav('Report').getAttribute('aria-disabled')).toBe('true');
     expect(screen.getByRole('button', {name: 'Menu'})).toBeTruthy(); expect(screen.getByRole('button', {name: /Assistant/})).toBeTruthy();
-    expect(screen.getByRole('radiogroup', {name: 'Mode'})).toBeTruthy(); expect(within(screen.getByRole('group', {name: 'Scenario'})).getAllByRole('button')).toHaveLength(4);
+    expect(screen.getByRole('radiogroup', {name: 'Mode'})).toBeTruthy(); expect(within(screen.getByRole('group', {name: 'Scenario'})).getAllByRole('button')).toHaveLength(Object.keys(SCENARIOS).length);
     await userEvent.setup().click(screen.getByRole('button', {name: /Accept mission/}));
     expect(await screen.findByRole('group', {name: 'Subsystem'})).toBeTruthy(); expect(nav('Hangar').getAttribute('aria-current')).toBe('step');
   });

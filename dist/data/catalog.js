@@ -1,5 +1,6 @@
-import {NASA_DATA,MARS_DATA,nasaValue} from './nasa.js';
+import {NASA_DATA,MARS_DATA,nasaValue,nasaDataset} from './nasa.js';
 import {SCENARIOS,DEFAULT_SCENARIO,DIFFICULTY} from './scenarios.js';
+import {BODIES,getBody} from './bodies.js';
 export const VERSION = '6.0.0';
 // One orbit model for every destination: circular two-body period, and the
 // central cylindrical-shadow bound for time in eclipse (zero solar beta angle).
@@ -16,6 +17,15 @@ export const SOURCES = [
   { id:'small', title:'NASA · State-of-the-Art of Small Spacecraft Technology', url:'https://www.nasa.gov/smallsat-institute/sst-soa/', use:'Subsystem framing: avionics, communications, pointing and launch. Fictional component classes and cost credits support learning; they are not flight hardware or market prices.', type:'Design reference' },
   { id:'se', title:'NASA · Systems Engineering Handbook appendix', url:'https://www.nasa.gov/reference/system-engineering-handbook-appendix/', use:'Trade studies, margins and technical performance measures inform readiness checks and comparison of alternative designs.', type:'Design reference' }
 ];
+// Sources for the Sources screen of any destination: the shared engineering references plus every distinct body URL
+// from the registry with its verified date and an unverified flag. For the Moon this is exactly SOURCES.
+export function sourcesFor(destination='moon'){
+ const id=getBody(destination)?destination:'moon';if(id==='moon')return SOURCES;
+ const b=BODIES[id],seen=new Map();
+ for(const [field,p] of Object.entries(b.provenance)){if(!p.url)continue;const e=seen.get(p.url)||{fields:[],unverified:true,verified:p.verified,kind:p.kind};e.fields.push(field);e.unverified=e.unverified&&p.unverified===true;seen.set(p.url,e);}
+ const own=[...seen].map(([url,e])=>({id:'body-'+id+'-'+e.fields[0],title:b.name+' · '+e.fields.join(', '),url,use:'Provenance of '+e.fields.join(', ')+' ('+e.kind+'). Verified '+e.verified+'.'+(e.unverified?' GAME ASSUMPTION: no NASA number behind this value.':''),type:e.unverified?'Game assumption':e.kind==='derived'?'Derived from NASA/JPL data':'NASA/JPL data',verified:e.verified,unverified:e.unverified}));
+ return [...own,...SOURCES.slice(1)];
+}
 const a = { source_type:'Educational assumption', source_note:'Fictional teaching component. Numerical values tuned for transparent trade-offs; NASA references inform the subsystem concepts, not these exact specifications.' };
 export const CATALOG = {
   bus: [
@@ -52,7 +62,8 @@ export const CATALOG = {
 };
 // Development lead time (months) and launch-orbit envelope: educational assumptions.
 const LEAD={bus:{compact:5,precision:8},payload:{survey:4,hires:9},power:{balanced:5,compact:3,endurance:6},propulsion:{standard:4,efficient:7},comms:{medium:4,compact:3,highgain:6},storage:{medium:2,standard:2,expanded:3},launch:{rideshare:2,dedicated:5}};
-const ENVELOPE={rideshare:{altMax:{moon:150,mars:600},incMin:45},dedicated:{altMax:{moon:200,mars:1000},incMin:0}};
+const altMaxFor=k=>Object.fromEntries(Object.values(BODIES).map(b=>[b.id,b.launchAltMax[k]]));
+const ENVELOPE={rideshare:{altMax:altMaxFor('rideshare'),incMin:45},dedicated:{altMax:altMaxFor('dedicated'),incMin:0}};
 for(const [k,list] of Object.entries(CATALOG))for(const c of list){c.lead=LEAD[k][c.id];if(k==='launch')c.envelope=ENVELOPE[c.id];}
 CATALOG.launch[0].note+=' Shared rides serve inclinations of 45° or more and orbits up to 150 km (Moon) or 600 km (Mars).';
 CATALOG.launch[1].note+=' Can fly any inclination and the full altitude range.';
@@ -74,27 +85,42 @@ export const PRESETS = {
 };
 export const UNCERTAINTY = {seed:4385,samples:200,solar:[0.8,1],link:[0.65,1],isp:[0.95,1],pointing:[1,1.25]};
 
+// Default array efficiency (cell efficiency x packing): a GAME ASSUMPTION. Real arrays deliver about 13-17% of
+// irradiance x gross area (Juno 17% at Earth, 13% at Jupiter; Europa Clipper 17% and 14%; derived from NASA press kits).
+// The game keeps 28% so Moon and Mars balance is unchanged; scenarios may set arrayEfficiency and say so.
+export const ARRAY_EFFICIENCY=0.28;
+export const ARRAY_SCALE_MAX=1.5;
 export function missionFor(d={}){
- const mars=d.destination==='mars',destination=mars?'mars':'moon';
+ const body=getBody(d.destination)||BODIES.moon,destination=body.id,mars=destination==='mars';
  const scenario=SCENARIOS[d.scenario]?.destination===destination?SCENARIOS[d.scenario]:SCENARIOS[DEFAULT_SCENARIO[destination]];
  const diff=DIFFICULTY[d.difficulty]||DIFFICULTY.engineer;
  const common={...MISSION,scenarioId:scenario.id,difficulty:diff.id,difficultyLabel:diff.label,sandbox:d.sandbox===true,
   budget:d.sandbox===true?999:Math.round(scenario.budget*diff.budgetScale),scienceTarget:scenario.scienceTarget,scienceSuccess:diff.success,
   referenceAltitude:scenario.referenceAltitude,polarExp:scenario.polarExp,altitudeExp:scenario.altitudeExp,
-  weather:scenario.weather||(diff.weather?(mars?{kind:'dust',title:'Regional dust storm',solar:.4,quality:1,duration:90,from:60,span:80}:{kind:'particle',title:'Solar particle event',solar:1,quality:.5,duration:45,from:70,span:90}):null),
-  factorScale:diff.factors,deadline:Math.round(22*diff.deadlineScale),critical:scenario.critical,title:scenario.title,scenarioTag:scenario.tag,scenarioSummary:scenario.summary};
+  duration:scenario.duration??MISSION.duration,contactMinutes:scenario.contactMinutes??MISSION.contactMinutes,maneuver:scenario.maneuver??MISSION.maneuver,thermalMass:scenario.thermalMass??MISSION.thermalMass,reserve:scenario.reserve??MISSION.reserve,
+  arrayScaleMax:scenario.arrayScaleMax??ARRAY_SCALE_MAX,arrayEfficiency:scenario.arrayEfficiency??ARRAY_EFFICIENCY,
+  weather:scenario.weather||(diff.weather&&body.directorWeather?{...body.directorWeather}:null),
+  factorScale:diff.factors,deadline:Math.round(22*diff.deadlineScale),critical:scenario.critical,title:scenario.title,scenarioTag:scenario.tag,scenarioSummary:scenario.summary,
+  bodyId:destination,hazards:body.hazards,simplification:body.simplification||null,realMission:scenario.realMission||body.realReference?.mission||null};
  const orbitAltitude=(lo,hi,fallback)=>Math.min(hi,Math.max(lo,Number.isFinite(Number(d.altitude))?Number(d.altitude):fallback));
- if(!mars){
-  const radius=nasaValue('radius'),mu=nasaValue('mu'),altitude=orbitAltitude(50,200,100);
-  return {...common,destination:'moon',bodyName:'Moon',radius,mu,solarIrradiance:nasaValue('solar'),referenceDistance:nasaValue('mean'),altitudeMin:50,altitudeMax:200,eclipseMinutes:shadowMinutes(radius,mu,altitude),eclipseModel:'Central cylindrical-shadow bound; zero solar beta angle',source:NASA_DATA,
+ const altitude=orbitAltitude(body.altitudeMin,body.altitudeMax,body.defaultAltitude);
+ const orbit={destination,bodyName:destination==='earth'?'Earth':body.name,radius:body.radius,mu:body.mu,solarIrradiance:body.solarIrradiance,referenceDistance:body.referenceDistance,altitudeMin:body.altitudeMin,altitudeMax:body.altitudeMax,
+  eclipseMinutes:shadowMinutes(body.radius,body.mu,altitude),eclipseModel:'Central cylindrical-shadow bound; zero solar beta angle',source:nasaDataset(d)};
+ if(destination==='moon')return {...common,...orbit,
    note:scenario.summary+' Educational mission: 4 hours of orbital operations after a compressed launch and capture phase. Return at least '+Math.round(scenario.scienceTarget*diff.success/100)+' of '+scenario.scienceTarget+' science units.'};
- }
- const radius=MARS_DATA.rows.find(r=>r.id==='radius').value,mu=MARS_DATA.rows.find(r=>r.id==='mu').value,altitude=orbitAltitude(200,1000,400);
- return {...common,id:'mars-polar-mapper',destination:'mars',bodyName:'Mars',subtitle:'Budget sunlight. Plan the return link.',radius,mu,solarIrradiance:MARS_DATA.rows.find(r=>r.id==='solar').value,referenceDistance:225000000,altitudeMin:200,altitudeMax:1000,eclipseMinutes:shadowMinutes(radius,mu,altitude),eclipseModel:'Central cylindrical-shadow bound; zero solar beta angle',source:MARS_DATA,
+ if(mars)return {...common,...orbit,id:'mars-polar-mapper',subtitle:'Budget sunlight. Plan the return link.',
  note:'Mars orbital-operations teaching scenario. Circular orbit uses NASA/JPL values; pre-arranged interplanetary transport and deep-space network support are assumed. No cruise, landing, launch window or n-body solution is calculated.',
  assumption:MISSION.assumption.replace(' Eclipse time is calculated from the orbit.','')+' Mars and Moon use the same central cylindrical-shadow bound for shadow duration. Contact remains an assumed 25-minute teaching window. A separately engineered fictional link is normalized at 225 million km, a game reference distance rather than a measured average; this is not the same Moon antenna maintaining its rate at Mars. Displayed light-time does not delay player controls.'};
+ const minutes=Math.round(common.duration/60*10)/10;
+ return {...common,...orbit,id:scenario.id,subtitle:scenario.subtitle||MISSION.subtitle,
+  note:scenario.summary+' Educational mission: '+minutes+' hours of orbital operations after a compressed launch and capture phase. Return at least '+Math.round(scenario.scienceTarget*diff.success/100)+' of '+scenario.scienceTarget+' science units.',
+  assumption:'Duration ('+common.duration+' minutes), the '+scenario.scienceTarget+' science-unit target, '+common.maneuver+' m/s capture/correction, '+common.reserve+' m/s reserve, '+common.contactMinutes+'-minute contact, costs, array efficiency ('+Math.round(common.arrayEfficiency*100)+'%) and component values are educational assumptions. '+(scenario.assumptions||'')+' Orbit uses a circular two-body model with the central cylindrical-shadow bound for eclipse. Circular orbit uses NASA/JPL body constants; pre-arranged transport is assumed. Link normalised to a game reference distance, not an observed average. Values flagged unverified in the data panel are game assumptions.'};
 }
-export function presetFor(destination='moon',key='balanced'){
- const base={...(PRESETS[key]||PRESETS.balanced)};
- return destination==='mars'?{...base,destination:'mars',altitude:400,arrayScale:1.5,batteryScale:1.5,duty:1,name:'Mars Polar Mapper'}:{...base,destination:'moon'};
+export function presetFor(destination='moon',key='balanced',scenarioId=null){
+ const base={...(PRESETS[key]||PRESETS.balanced)},body=getBody(destination);
+ if(!body||destination==='moon')return {...base,destination:'moon'};
+ if(destination==='mars')return {...base,destination:'mars',altitude:400,arrayScale:1.5,batteryScale:1.5,duty:1,name:'Mars Polar Mapper'};
+ const scenario=SCENARIOS[scenarioId]?.destination===destination?SCENARIOS[scenarioId]:SCENARIOS[DEFAULT_SCENARIO[destination]];
+ const tuned=scenario.presets?.[key]||scenario.presets?.balanced||{};
+ return {...base,destination,scenario:scenario.id,altitude:Math.min(body.altitudeMax,Math.max(body.altitudeMin,scenario.referenceAltitude??body.defaultAltitude)),arrayScale:1.5,batteryScale:1.5,duty:1,name:scenario.title,...tuned};
 }
