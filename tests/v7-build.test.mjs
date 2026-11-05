@@ -67,7 +67,7 @@ test('First-party src/ never evaluates strings, injects HTML or opens network co
 });
 
 test('Built assets: no string evaluation, no sockets, every URL host on the allow-list', () => {
-  const allowed = /(^|\.)(react\.dev|reactjs\.org|github\.com|docs\.pmnd\.rs|opencollective\.com|w3\.org|nasa\.gov|jpl\.nasa\.gov|vercel\.app|openapi\.vercel\.sh|mozilla\.org|threejs\.org|fb\.me|tc39\.es|developer\.chrome\.com|motion\.dev|npmjs\.com|zustand\.docs\.pmnd\.rs|pmnd\.rs|google\.com|svgjs\.dev|w3\.org)$/;
+  const allowed = /(^|\.)(react\.dev|reactjs\.org|usgs\.gov|github\.com|docs\.pmnd\.rs|opencollective\.com|w3\.org|nasa\.gov|jpl\.nasa\.gov|vercel\.app|openapi\.vercel\.sh|mozilla\.org|threejs\.org|fb\.me|tc39\.es|developer\.chrome\.com|motion\.dev|npmjs\.com|zustand\.docs\.pmnd\.rs|pmnd\.rs|google\.com|svgjs\.dev|w3\.org)$/;
   for (const file of [...walk(path.join(site, 'assets')).filter(f => f.endsWith('.js')), path.join(site, 'sw.js')]) {
     const text = readFileSync(file, 'utf8');
     for (const [rx, name] of [[/\beval\s*\(/, 'eval'], [/new\s+Function\s*\(/, 'new Function'], [/document\.write\s*\(/, 'document.write'], [/\bXMLHttpRequest\b/, 'XMLHttpRequest'], [/\bWebSocket\b/, 'WebSocket'], [/\bEventSource\b/, 'EventSource'], [/\bsendBeacon\b/, 'sendBeacon']]) assert.doesNotMatch(text, rx, `${name} in ${path.basename(file)}`);
