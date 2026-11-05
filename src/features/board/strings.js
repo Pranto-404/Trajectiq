@@ -1,0 +1,27 @@
+// Bengali strings for the board. Keys are the English source text (the project convention), so a missing key shows English.
+// Scenario titles and summaries are engine data and stay in English; every label around them is translated.
+export const BOARD_BN = {
+  'Step 1 / Define your mission': 'ধাপ ১ / আপনার মিশন ঠিক করুন',
+  'Plan your mission.': 'আপনার মিশন সাজান।',
+  'Pick how you play, choose an objective, then build the spacecraft that can reach it.': 'কীভাবে খেলবেন বাছুন, লক্ষ্য ঠিক করুন, তারপর সেই লক্ষ্যে পৌঁছানোর মহাকাশযান বানান।',
+  'Play mode': 'খেলার ধরন', 'How you play': 'কীভাবে খেলবেন', 'Mode': 'ধরন', 'Solo': 'একা', 'Crew': 'দল', 'Sandbox': 'স্যান্ডবক্স',
+  'You play every role': 'সব ভূমিকা আপনিই সামলাবেন', '2–4 players, shared decisions': '২–৪ জন, একসাথে সিদ্ধান্ত', 'No budget cap, unranked': 'বাজেটের সীমা নেই, র‍্যাংক হবে না',
+  'Objective': 'লক্ষ্য', 'Scenario': 'পরিস্থিতি', 'Difficulty': 'কঠিনতা', 'Selected': 'বাছাই করা', 'Critical': 'সবচেয়ে গুরুত্বপূর্ণ',
+  'units to return': 'একক ফেরত আনতে হবে', 'Simplified': 'সরলীকৃত', 'Game assumptions': 'খেলার অনুমান',
+  'Data & recorder': 'ডেটা ও রেকর্ডার', 'Mass': 'ভর', 'Communications': 'যোগাযোগ', 'Power': 'বিদ্যুৎ', 'Budget': 'বাজেট', 'Schedule': 'সময়সূচি',
+  'Mission charter': 'মিশনের সনদ', 'SANDBOX · UNRANKED': 'স্যান্ডবক্স · র‍্যাংকহীন', 'credits': 'ক্রেডিট', 'Science target': 'বিজ্ঞানের লক্ষ্য', 'of': 'এর মধ্যে', 'units returned': 'একক ফেরত',
+  'Campaign': 'অভিযান', 'minutes after capture': 'মিনিট (কক্ষপথে প্রবেশের পর)', 'ready within': 'প্রস্তুত হতে হবে', 'months': 'মাসের মধ্যে', 'Orbit': 'কক্ষপথ',
+  'Ground contact': 'ভূমির সাথে যোগাযোগ', 'minutes per orbit': 'মিনিট প্রতি কক্ষপথে', 'Array size': 'সোলার অ্যারের আকার', 'up to': 'সর্বোচ্চ', 'the standard array': 'সাধারণ অ্যারের',
+  'Most critical resource': 'সবচেয়ে গুরুত্বপূর্ণ সম্পদ', 'Expect the unexpected': 'অপ্রত্যাশিত কিছুর জন্য তৈরি থাকুন', 'a': 'একটি', 'can strike mid-campaign.': 'অভিযানের মাঝপথে আঘাত হানতে পারে।',
+  'Simplification': 'সরলীকরণ', 'Data notes and game assumptions': 'তথ্যের টীকা ও খেলার অনুমান', 'Real mission behind it': 'এর পেছনের আসল মিশন', 'source': 'সূত্র',
+  'values for this body have no NASA source and are game assumptions': 'টি মান নাসার কোনো সূত্র থেকে নেওয়া নয়, এগুলো খেলার অনুমান',
+  'Accept mission · enter hangar': 'মিশন গ্রহণ · যন্ত্রাংশ বাছাই', 'Quick launch': 'দ্রুত উৎক্ষেপণ', 'Quick launch: the Balanced build, straight to the launch check.': 'দ্রুত উৎক্ষেপণ: ভারসাম্যপূর্ণ নকশা নিয়ে সরাসরি উৎক্ষেপণের পরীক্ষায়।',
+  'Try the consequence demo': 'পরিণতির ডেমো দেখুন', 'Engineering lab': 'প্রকৌশল ল্যাব',
+  'Flight in progress': 'মিশন চলছে', 'Hardware is locked': 'যন্ত্রাংশ লক করা', 'Finish or discard the active flight to change the mission.': 'মিশন বদলাতে হলে চলমান মিশন শেষ করুন অথবা মুছে দিন।',
+  'Finish or discard the active flight first.': 'আগে চলমান মিশন শেষ করুন অথবা মুছে দিন।', 'Back to flight': 'মিশনে ফিরুন',
+  'Your crew': 'আপনার দল', 'Number of players': 'খেলোয়াড়ের সংখ্যা', 'players': 'জন', 'player': 'জন', 'Player': 'খেলোয়াড়',
+  'Pass the controls on one device. Each role owns different subsystems, so you will have to negotiate.': 'একটি ডিভাইসেই নিয়ন্ত্রণ হাতবদল করুন। প্রতিটি ভূমিকার আলাদা আলাদা অংশ আছে, তাই আলোচনা করতে হবে।',
+  'Launch': 'উৎক্ষেপণ', 'Bus': 'কাঠামো', 'Propulsion': 'প্রপালশন', 'Payload': 'যন্ত্রসম্ভার', 'Comms': 'যোগাযোগ', 'Recorder': 'রেকর্ডার',
+  '90-second pitch path': '৯০ সেকেন্ডের উপস্থাপনার পথ', 'Fragile design → launch → eclipse / backlog → explain why → upgrade power + comms → compare.': 'দুর্বল নকশা → উৎক্ষেপণ → গ্রহণ / জমে থাকা ডেটা → কারণ ব্যাখ্যা → বিদ্যুৎ ও যোগাযোগ উন্নত করা → তুলনা।',
+  'Fragile preset': 'দুর্বল নকশা', 'Redesign fix': 'নকশা ঠিক করা', 'Exit': 'বেরিয়ে আসুন'
+};
