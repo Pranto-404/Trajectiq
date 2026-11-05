@@ -1,0 +1,6 @@
+// The three-question learning check (data only; the sheet that renders it belongs to the sheets package).
+export const QUESTIONS = [
+  {q: 'Which observations count toward the mission objective?', opts: ['All data the instrument generates', 'Quality-weighted observations returned to Earth', 'Everything left in the recorder'], answer: 1, why: 'The science objective counts useful returned observations. Data onboard may never reach the scientists.'},
+  {q: 'Why can a spacecraft with strong solar panels fail in eclipse?', opts: ['Solar panels generate no power in shadow; battery energy must carry the loads', 'The instrument gets heavier in eclipse', 'Communication consumes propellant automatically'], answer: 0, why: 'Power is a rate (W). A battery stores energy (Wh). Enough solar power in daylight does not guarantee enough stored energy for darkness.'},
+  {q: 'What does the Educational Robustness Index mean?', opts: ['The real probability NASA will approve the mission', 'The modeled fraction meeting the objective under stated parameter variations', 'The percentage of hardware that cannot fail'], answer: 1, why: 'It is a sensitivity result for this simplified model and recovery policy, not a validated real-world reliability estimate.'}
+];
