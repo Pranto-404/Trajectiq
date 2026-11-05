@@ -34,7 +34,23 @@ export const MARS_DATA={
   {id:'apogee',label:'Far Earth–Mars range scenario',value:400200000,unit:'km',source:'relay',use:'Reference far separation and light-time'}
  ]
 };
-export const nasaDataset=d=>d?.destination==='mars'?MARS_DATA:NASA_DATA;
-export const distanceOptions=d=>d?.destination==='mars'?{
- near:{name:'Near · NASA reference',km:54600000},mean:{name:'Teaching reference · assumed',km:225000000},far:{name:'Far · NASA reference',km:400200000}
-}:DISTANCES;
+import {BODIES,getBody,bodyRows,isBodyId} from './bodies.js';
+// Dataset for the data panel of any body. Moon and Mars keep their original snapshot objects (rows, URLs, dates);
+// every other body is built from the registry in bodies.js with a per-row source URL, verified date and unverified flag.
+const GENERIC_DATASETS={};
+function bodyDataset(id){
+ if(GENERIC_DATASETS[id])return GENERIC_DATASETS[id];
+ const b=BODIES[id],rows=bodyRows(id),dates=rows.map(r=>r.verifiedOn).sort();
+ return GENERIC_DATASETS[id]={body:id,verified:dates.at(-1),factSheetUpdated:'Snapshot verified '+dates.at(-1),
+  factURL:rows.find(r=>r.id==='radius').url,jplURL:rows.find(r=>r.id==='mu').url,rows,
+  note:'Values marked unverified are game assumptions; they have no NASA source. Earth ranges are 2026-2056 Horizons minimum and maximum.'};
+}
+export const nasaDataset=d=>{const id=isBodyId(d?.destination)?d.destination:'moon';return id==='mars'?MARS_DATA:id==='moon'?NASA_DATA:bodyDataset(id);};
+const named=(id,kind)=>({near:'Near · Horizons minimum',mean:'Reference · derived midpoint, game assumption',far:'Far · Horizons maximum'}[kind]);
+export const distanceOptions=d=>{
+ const id=isBodyId(d?.destination)?d.destination:'moon';
+ if(id==='mars')return {near:{name:'Near · NASA reference',km:54600000},mean:{name:'Teaching reference · assumed',km:225000000},far:{name:'Far · NASA reference',km:400200000}};
+ if(id==='moon')return DISTANCES;
+ const r=BODIES[id].earthRange,earth=id==='earth';
+ return {near:{name:earth?'Overhead pass · geometry':named(id,'near'),km:r.near},mean:{name:earth?'30° elevation · geometry, game choice':named(id,'mean'),km:r.mean},far:{name:earth?'10° elevation mask · geometry, game choice':named(id,'far'),km:r.far}};
+};
