@@ -17,6 +17,15 @@ export const SOURCES = [
   { id:'small', title:'NASA · State-of-the-Art of Small Spacecraft Technology', url:'https://www.nasa.gov/smallsat-institute/sst-soa/', use:'Subsystem framing: avionics, communications, pointing and launch. Fictional component classes and cost credits support learning; they are not flight hardware or market prices.', type:'Design reference' },
   { id:'se', title:'NASA · Systems Engineering Handbook appendix', url:'https://www.nasa.gov/reference/system-engineering-handbook-appendix/', use:'Trade studies, margins and technical performance measures inform readiness checks and comparison of alternative designs.', type:'Design reference' }
 ];
+// Sources for the Sources screen of any destination: the shared engineering references plus every distinct body URL
+// from the registry with its verified date and an unverified flag. For the Moon this is exactly SOURCES.
+export function sourcesFor(destination='moon'){
+ const id=getBody(destination)?destination:'moon';if(id==='moon')return SOURCES;
+ const b=BODIES[id],seen=new Map();
+ for(const [field,p] of Object.entries(b.provenance)){if(!p.url)continue;const e=seen.get(p.url)||{fields:[],unverified:true,verified:p.verified,kind:p.kind};e.fields.push(field);e.unverified=e.unverified&&p.unverified===true;seen.set(p.url,e);}
+ const own=[...seen].map(([url,e])=>({id:'body-'+id+'-'+e.fields[0],title:b.name+' · '+e.fields.join(', '),url,use:'Provenance of '+e.fields.join(', ')+' ('+e.kind+'). Verified '+e.verified+'.'+(e.unverified?' GAME ASSUMPTION: no NASA number behind this value.':''),type:e.unverified?'Game assumption':e.kind==='derived'?'Derived from NASA/JPL data':'NASA/JPL data',verified:e.verified,unverified:e.unverified}));
+ return [...own,...SOURCES.slice(1)];
+}
 const a = { source_type:'Educational assumption', source_note:'Fictional teaching component. Numerical values tuned for transparent trade-offs; NASA references inform the subsystem concepts, not these exact specifications.' };
 export const CATALOG = {
   bus: [

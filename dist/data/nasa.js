@@ -54,3 +54,14 @@ export const distanceOptions=d=>{
  const r=BODIES[id].earthRange,earth=id==='earth';
  return {near:{name:earth?'Overhead pass · geometry':named(id,'near'),km:r.near},mean:{name:earth?'30° elevation · geometry, game choice':named(id,'mean'),km:r.mean},far:{name:earth?'10° elevation mask · geometry, game choice':named(id,'far'),km:r.far}};
 };
+
+// CSV of every sourced value for a body (RFC 4180 quoting). unverified=true rows are game assumptions with no NASA number behind them.
+const csvCell=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+export function datasetCSV(destination){
+ const id=isBodyId(destination)?destination:'moon',rows=bodyRows(id),b=BODIES[id];
+ const head=['parameter','value','unit','evidence','source_url','verified_utc','unverified','note'];
+ const lines=[head.map(csvCell).join(',')];
+ for(const r of rows)lines.push([r.id,r.value,r.unit,r.kind==='direct'?'NASA/JPL':r.kind==='derived'?'DERIVED from NASA/JPL data':'GAME ASSUMPTION',r.url,r.verifiedOn,r.unverified?'true':'false',r.note].map(csvCell).join(','));
+ lines.push(['body',b.name,'','','','','false',''].map(csvCell).join(','));
+ return lines.join('\r\n')+'\r\n';
+}
