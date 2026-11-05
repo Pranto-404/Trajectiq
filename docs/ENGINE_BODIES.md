@@ -60,9 +60,20 @@ Share codes: Moon and Mars codes are byte-identical to v6 (`TQ6.`, payload `v:1`
 
 ## Calibration
 
-Probes: every combination of 2 buses, 2 payloads, 3 power kits, 2 thrusters, 3 radios, 3 recorders, 2 launchers, fuel, array scale (three values up to `arrayScaleMax`) and battery scale at the scenario's reference altitude and 90 degrees, flown with the ordinary and conservative policies, targets tuned so a clearly reasonable design succeeds and a careless one fails. Results: see the table below (filled from the final probe).
+Probes: every combination of 2 buses, 2 payloads, 3 power kits, 2 thrusters, 3 radios, 3 recorders, 2 launchers, fuel (45 or 70 kg), array scale (three values up to `arrayScaleMax`) and battery scale at the scenario's reference altitude and 90 degrees, flown with the ordinary and conservative policies, targets tuned so a clearly reasonable design succeeds and a careless one fails. Results: see the table below (filled from the final probe).
 
-BALANCE_TABLE
+| Scenario | Target (needed, Engineer) | Budget | Minutes | Balanced (ordinary / conservative policy) | Resilient | Fragile | Share of launchable grid designs that succeed (ordinary / conservative) |
+|---|---|---|---|---|---|---|---|
+| earth-observer | 800 (640) | 150 | 300 | 1004 win / 1004 win | 644 win / 580 fail | 38 fail / 38 fail | 23.0% / 21.6% of 3646 |
+| mercury-thermal | 700 (560) | 150 | 240 | 589 win / 459 fail | 694 win / 497 fail | 71 fail / 56 fail | 22.5% / 1.8% of 3641 |
+| venus-radar | 1000 (800) | 150 | 360 | 927 win / 927 win | 1138 win / 1073 win | 78 fail / 78 fail | 23.6% / 23.6% of 3646 |
+| dawn-vesta | 1500 (1200) | 150 | 600 | 1931 win / 1931 win | 1931 win / 1931 win | 10 fail / 0 fail | 5.4% / 5.1% of 3222 |
+| dawn-ceres | 1800 (1440) | 150 | 720 | 2284 win / 1986 win | 2284 win / 1986 win | 0 fail / 0 fail | 2.7% / 3.4% of 2924 |
+| europa-flyby | 560 (448) | 190 | 300 | 660 win / 670 win | 660 win / 670 win | 0 fail / 0 fail | 4.7% / 1.6% of 3300 |
+
+Cells read "science returned, win or fail". The grid is the explorer sweep described above (Mercury and Europa: 3,000-3,600 launchable designs; the grid is coarse, so shares are indicative). Ordinary policy = ride out events and keep collecting; conservative = safe the instruments at a weather event, conserve at an energy crisis, prioritise downlink at a recorder crisis. On Mercury and Europa the conservative policy fails the objective by design: giving up collection time to safe the instruments costs more than riding the event out, which is the trade the scenario teaches. Dawn at Vesta and Ceres have narrow success regions (about 5% and 3% of grid designs): success needs an array of at least 2.5 times the standard kit and a recorder of at least 768 MB, because only two or three ground contacts fall inside the campaign.
+
+Difficulty: the same targets apply at Cadet (70% needed, budget x1.25) and Flight Director (85% needed, budget x0.92, deadline x0.9). At Flight Director the Resilient and Fragile presets of most scenarios miss the 20-month deadline and are not launchable, as the Moon presets already do; Balanced stays launchable. Mercury Balanced misses the Director objective by about 1% (589 of 595); that is deliberate headroom for a harder tier.
 
 ## What the UI engineers must know
 

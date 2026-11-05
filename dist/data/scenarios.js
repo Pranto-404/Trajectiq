@@ -48,7 +48,7 @@ export const SCENARIOS = {
     id: 'mercury-thermal', destination: 'mercury', title: 'Mercury Thermal Squeeze', tag: 'Advanced · Mercury',
     summary: 'Map Mercury from a low orbit. Sunlight is nearly seven times Earth’s, so power is easy and heat is the enemy: a sunshade costs mass and a sunward heat load can strike mid-campaign.',
     subtitle: 'Plenty of sunlight. Survive it.',
-    budget: 150, scienceTarget: 650, referenceAltitude: 200, polarExp: 1, altitudeExp: 1, critical: 'mass',
+    budget: 150, scienceTarget: 700, referenceAltitude: 200, polarExp: 1, altitudeExp: 1, critical: 'mass',
     duration: 240, arrayEfficiency: 0.12, thermalMass: 30,
     weather: {kind: 'thermal', title: 'Sunward heat load', solar: 0.5, quality: 0.75, duration: 90, from: 60, span: 80, aftermath: 0.8},
     presets: {balanced: {arrayScale: 1, batteryScale: 1}, resilient: {arrayScale: 1, batteryScale: 1}, fragile: {arrayScale: 1, batteryScale: 1}},
