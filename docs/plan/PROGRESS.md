@@ -41,3 +41,5 @@ Never fabricate NASA numbers: every value needs a source URL and verification da
 
 - 2026-11-05: a 5-hour usage limit stopped the foundation and engine agents mid-work. Foundation left uncommitted files on `ux-v7` (src/ds, src/i18n, src/store, tests-ui). Engine worktree `D:
 asa\Trajectiq\.claude\worktreesgent-aacb668532c1702d9` (branch `nasa-bodies`) had no commits. Both agents were resumed by message and told to commit small milestones. If they are lost again, relaunch from the task descriptions above, using the existing files as the starting point.
+
+- 2026-11-05: foundation merged on `ux-v7`. Feature agents launched in worktrees: feat-board-hangar, feat-stage, feat-flight-crew, feat-report-sheets (see their branches on origin). Merge each into `ux-v7` after verifying build + tests.
