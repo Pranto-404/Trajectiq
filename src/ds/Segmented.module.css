@@ -1,0 +1,17 @@
+.group { display: inline-flex; padding: 3px; gap: 2px; border: 1px solid var(--line-1); border-radius: var(--radius-control); background: var(--surface-1); max-width: 100%; }
+.full { display: flex; width: 100%; }
+.full .option { flex: 1; }
+.option {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: calc(var(--target-min) - 6px); padding: 0 var(--space-3); border: 0; border-radius: 8px; background: transparent;
+  color: var(--text-2); font-weight: 600; font-size: var(--text-13); white-space: nowrap; touch-action: manipulation;
+  transition: color var(--dur-fast) var(--ease-enter);
+}
+.md .option { min-height: max(32px, calc(var(--target-min) - 6px)); }
+.sm .option { min-height: max(28px, calc(var(--target-min) - 10px)); padding: 0 var(--space-2); }
+.option:hover { color: var(--text-1); }
+.on { color: var(--on-lime); }
+.on:hover { color: var(--on-lime); }
+.pill { position: absolute; inset: 0; z-index: 0; border-radius: 8px; background: var(--lime-500); }
+.icon, .text { position: relative; z-index: 1; }
+.option[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }

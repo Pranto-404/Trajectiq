@@ -1,0 +1,52 @@
+.button {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: var(--target-min); padding: 0 var(--space-4);
+  border: 1px solid var(--line-2); border-radius: var(--radius-control);
+  background: var(--surface-3); color: var(--text-1);
+  font-weight: 600; font-size: var(--text-14); line-height: 1; white-space: nowrap; user-select: none; -webkit-user-select: none;
+  box-shadow: var(--inner-highlight); touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  transition: background var(--dur-fast) var(--ease-enter), border-color var(--dur-fast) var(--ease-enter), box-shadow var(--dur-fast) var(--ease-enter), color var(--dur-fast) var(--ease-enter);
+}
+.sm { min-height: calc(var(--target-min) - 4px); padding: 0 var(--space-3); font-size: var(--text-13); }
+.md { min-height: max(36px, var(--target-min)); }
+.lg { min-height: max(48px, var(--target-min)); padding: 0 var(--space-5); font-size: var(--text-16); }
+.iconOnly { padding: 0; width: max(36px, var(--target-min)); min-width: max(36px, var(--target-min)); }
+.iconOnly.sm { width: var(--target-min); min-width: var(--target-min); }
+.label { position: relative; z-index: 1; }
+
+@media (hover: hover) {
+  .button:not([aria-disabled="true"]):hover { background: color-mix(in srgb, var(--surface-3) 80%, white); border-color: var(--text-3); }
+}
+
+.primary { background: var(--lime-500); border-color: var(--lime-500); color: var(--on-lime); }
+@media (hover: hover) { .primary:not([aria-disabled="true"]):hover { background: var(--lime-500); border-color: var(--lime-500); box-shadow: var(--glow-lime); } }
+.primary:active:not([aria-disabled="true"]) { background: var(--lime-600); }
+
+.secondary { background: var(--surface-3); }
+.ghost { background: transparent; border-color: transparent; box-shadow: none; color: var(--text-2); }
+@media (hover: hover) { .ghost:not([aria-disabled="true"]):hover { background: var(--surface-3); color: var(--text-1); border-color: transparent; } }
+
+.danger { background: transparent; border-color: var(--red-400); color: var(--red-400); }
+@media (hover: hover) { .danger:not([aria-disabled="true"]):hover { background: color-mix(in srgb, var(--red-400) 14%, transparent); border-color: var(--red-400); box-shadow: var(--glow-red); } }
+
+.commit { background: var(--surface-3); border-color: var(--lime-600); color: var(--text-1); overflow: hidden; touch-action: none; }
+.commit[data-armed] { border-color: var(--amber-400); }
+.fill { position: absolute; inset: 0; z-index: 0; background: var(--lime-500); opacity: .85; transform-origin: left center; transform: scaleX(0); }
+.commit[data-holding] .label { color: var(--on-lime); mix-blend-mode: normal; }
+
+/* Disabled stays focusable (aria-disabled), so it keeps the focus ring and can show why. */
+.button[aria-disabled="true"] { opacity: .55; cursor: not-allowed; box-shadow: none; }
+.button[aria-busy="true"] { cursor: progress; }
+
+.spinner { width: 16px; height: 16px; border-radius: var(--radius-pill); border: 2px solid currentColor; border-right-color: transparent; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.check { display: inline-grid; place-items: center; color: inherit; }
+
+.tip {
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); z-index: var(--z-toast);
+  width: max-content; max-width: min(280px, 80vw); padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line-2); border-radius: var(--radius-control); background: var(--surface-1); color: var(--text-1);
+  font-size: var(--text-13); font-weight: 500; white-space: normal; text-align: center; line-height: 1.35;
+  visibility: hidden; opacity: 0; pointer-events: none; transition: opacity var(--dur-fast) var(--ease-enter), visibility var(--dur-fast);
+}
+.button:hover .tip, .button:focus-visible .tip { visibility: visible; opacity: 1; }

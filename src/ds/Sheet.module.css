@@ -1,0 +1,10 @@
+.layer { position: fixed; inset: 0; z-index: var(--z-sheet); }
+.scrim { position: absolute; inset: 0; background: var(--scrim); }
+.sheet { position: absolute; display: grid; grid-template-rows: auto 1fr auto; gap: var(--space-3); padding: var(--space-5); background: var(--surface-1); border: 1px solid var(--line-2); box-shadow: 0 0 80px rgb(0 0 0 / .5); overflow: hidden; touch-action: none; }
+.side { top: 0; right: 0; bottom: 0; width: min(420px, 100vw); border-radius: var(--radius-panel) 0 0 var(--radius-panel); border-right: 0; }
+.bottom { left: 0; right: 0; bottom: 0; max-height: 88dvh; border-radius: var(--radius-panel) var(--radius-panel) 0 0; border-bottom: 0; padding-top: var(--space-3); }
+.handle { justify-self: center; width: 44px; height: 5px; border-radius: var(--radius-pill); background: var(--line-2); cursor: grab; }
+.header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.title { font-size: var(--text-20); }
+.body { overflow: auto; overscroll-behavior: contain; display: grid; gap: var(--space-3); align-content: start; touch-action: pan-y; }
+.footer { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: flex-end; }

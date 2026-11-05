@@ -1,0 +1,15 @@
+.layer { position: fixed; inset: 0; z-index: var(--z-dialog); display: grid; place-items: center; padding: var(--space-4); }
+.scrim { position: absolute; inset: 0; background: var(--scrim); }
+.dialog {
+  position: relative; display: grid; gap: var(--space-3); width: 100%; max-height: min(86dvh, 760px); overflow: auto; overscroll-behavior: contain;
+  padding: var(--space-5); background: var(--surface-1); border: 1px solid var(--line-2); border-radius: var(--radius-panel); box-shadow: 0 24px 80px rgb(0 0 0 / .55);
+}
+.sm { max-width: 400px; }
+.md { max-width: 560px; }
+.lg { max-width: 760px; }
+.header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3); }
+.title { font-size: var(--text-20); }
+.description { color: var(--text-2); }
+.body { display: grid; gap: var(--space-3); }
+.footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-2); padding-top: var(--space-2); }
+@media (max-width: 480px) { .layer { padding: var(--space-2); align-items: end; } .dialog { padding: var(--space-4); max-height: 92dvh; } .footer > * { flex: 1 1 auto; } }

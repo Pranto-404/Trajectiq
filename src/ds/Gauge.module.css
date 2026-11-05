@@ -1,0 +1,44 @@
+.gauge { --tone: var(--cyan-400); display: grid; gap: var(--space-2); min-width: 0; }
+.warning { --tone: var(--amber-400); }
+.critical { --tone: var(--red-400); }
+.locked { --tone: var(--text-3); }
+
+.head { display: flex; align-items: baseline; gap: 2px; min-width: 0; }
+.label { font-size: var(--text-13); color: var(--text-2); font-weight: 550; }
+.reading { margin-inline-start: auto; display: inline-flex; align-items: baseline; gap: 4px; }
+.value { font: 600 var(--text-20)/1 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text-1); }
+.unit { font-size: var(--text-12); color: var(--text-3); }
+
+.body { min-width: 0; }
+.track { position: relative; height: 10px; border-radius: var(--radius-pill); background: var(--surface-3); border: 1px solid var(--line-1); overflow: hidden; }
+.fill { position: absolute; inset: 0; transform-origin: left center; background: var(--tone); border-radius: inherit; }
+.warning .fill { animation: pulse 1.6s ease-in-out infinite; }
+.critical .fill { animation: pulse .8s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .55; } }
+
+.ghost, .cut { position: absolute; inset: 0; pointer-events: none; animation: ghostIn var(--dur-fast) var(--ease-enter) both; }
+.ghost { transform-origin: left center; background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--lime-500) 70%, transparent) 0 4px, transparent 4px 8px); border-right: 2px solid var(--lime-500); }
+.cut { background: repeating-linear-gradient(135deg, rgb(6 10 17 / .85) 0 4px, color-mix(in srgb, var(--amber-400) 55%, transparent) 4px 8px); }
+@keyframes ghostIn { from { opacity: 0; } to { opacity: 1; } }
+
+.tick { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--text-1); opacity: .75; transform: translateX(-1px); }
+.limit { position: absolute; right: 0; top: -2px; bottom: -2px; width: 2px; background: var(--text-2); }
+
+.segments { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; height: 14px; }
+.cell { border-radius: 3px; background: var(--surface-3); border: 1px solid var(--line-1); transition: opacity var(--dur-fast); }
+.on { background: var(--tone); border-color: var(--tone); }
+.ghostUp { background: repeating-linear-gradient(135deg, var(--lime-500) 0 3px, transparent 3px 6px); border-color: var(--lime-500); }
+.ghostDown { background: repeating-linear-gradient(135deg, var(--amber-400) 0 3px, transparent 3px 6px); border-color: var(--amber-400); }
+.warning .on { animation: pulse 1.6s ease-in-out infinite; }
+.critical .on { animation: pulse .8s ease-in-out infinite; }
+
+.dial { width: 100%; max-width: 180px; display: block; margin-inline: auto; }
+.dialTrack { fill: none; stroke: var(--surface-3); stroke-width: 9; stroke-linecap: round; }
+.dialZone { fill: none; stroke: var(--text-1); stroke-width: 11; opacity: .8; }
+.dialGhost { fill: none; stroke: var(--lime-500); stroke-width: 6; stroke-dasharray: 3 3; }
+.needle { stroke: var(--tone); stroke-width: 3; stroke-linecap: round; }
+.hub { fill: var(--tone); }
+
+.foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); flex-wrap: wrap; min-height: 20px; }
+.note { font-size: var(--text-12); color: var(--text-3); }
+.previewText { font-size: var(--text-12); color: var(--lime-500); font-weight: 600; }

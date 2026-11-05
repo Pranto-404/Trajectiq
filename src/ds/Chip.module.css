@@ -1,0 +1,20 @@
+.chip {
+  --chip-tone: var(--info);
+  display: inline-flex; align-items: center; gap: 6px; vertical-align: middle;
+  border-radius: var(--radius-chip); border: 1px solid color-mix(in srgb, var(--chip-tone) 45%, transparent);
+  background: color-mix(in srgb, var(--chip-tone) 12%, var(--surface-2));
+  color: var(--chip-tone); font-weight: 600; line-height: 1; white-space: nowrap;
+}
+.md { padding: 5px 8px; font-size: var(--text-13); min-height: 24px; }
+.sm { padding: 3px 6px; font-size: var(--text-12); min-height: 20px; }
+.text { color: var(--text-1); }
+.pass { --chip-tone: var(--ok); }
+.warn { --chip-tone: var(--warn); }
+.fail { --chip-tone: var(--bad); }
+.info { --chip-tone: var(--info); }
+.role { --chip-tone: var(--violet-400); }
+.mode { --chip-tone: var(--text-2); }
+.selectable { cursor: pointer; background: var(--surface-2); color: var(--text-2); transition: background var(--dur-fast) var(--ease-enter), border-color var(--dur-fast) var(--ease-enter); }
+.selectable:hover { background: var(--surface-3); }
+.selectable[aria-pressed="true"] { background: color-mix(in srgb, var(--chip-tone) 22%, var(--surface-2)); border-color: var(--chip-tone); }
+@media (pointer: coarse) { .selectable { min-height: var(--target-min); padding-inline: 12px; } }

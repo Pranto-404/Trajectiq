@@ -1,0 +1,16 @@
+.card { position: relative; border: 1px solid var(--line-1); border-radius: var(--radius-control); background: var(--surface-2); transition: border-color var(--dur-fast) var(--ease-enter), background var(--dur-fast) var(--ease-enter); }
+.card:hover, .card:focus-within { border-color: var(--line-2); background: var(--surface-3); }
+.installed { border-color: var(--lime-600); background: color-mix(in srgb, var(--lime-500) 8%, var(--surface-2)); }
+.locked { border-style: dashed; opacity: .7; }
+.main { display: grid; gap: var(--space-2); width: 100%; min-height: var(--target-min); padding: var(--space-3); border: 0; border-radius: inherit; background: transparent; text-align: left; color: inherit; touch-action: manipulation; }
+.main[draggable="true"] { cursor: grab; }
+.main[aria-disabled="true"] { cursor: not-allowed; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.name { font-size: var(--text-14); font-weight: 650; }
+.cta { display: inline-flex; align-items: center; gap: 4px; font-size: var(--text-12); font-weight: 600; color: var(--cyan-400); }
+.note { font-size: var(--text-13); color: var(--text-2); line-height: 1.4; }
+.deltas { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.delta { display: inline-flex; align-items: center; gap: 4px; padding: 3px 7px; border-radius: var(--radius-chip); border: 1px solid var(--line-1); background: var(--surface-1); font: 600 var(--text-12) var(--font-mono); color: var(--text-2); }
+.delta[data-trend="good"] { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 40%, transparent); }
+.delta[data-trend="bad"] { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
+.why { padding: 0 var(--space-3) var(--space-3); font-size: var(--text-12); color: var(--amber-400); }

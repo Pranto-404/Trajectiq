@@ -1,0 +1,116 @@
+/* TRAJECTIQ design tokens (plan section 2.1). Every colour/space/radius/motion value used by the design system lives here.
+   Contrast (checked by tests-ui/ds/tokens.test.js): text-1/2/3 on surface-1/2/3 and bg-0/1 are >= 4.5:1; lime-on-dark and
+   the status hues are >= 4.5:1 on every surface. */
+:root {
+  color-scheme: dark;
+
+  /* colour */
+  --bg-0: #060a11;
+  --bg-1: #080d15;
+  --surface-1: #0e1620;
+  --surface-2: #131d2a;
+  --surface-3: #1a2636;
+  --line-1: #223041;
+  --line-2: #2f4258;
+  --text-1: #f1f4f8;
+  --text-2: #b6c1ce;
+  --text-3: #8d9bab;
+  --lime-500: #ccff6b;
+  --lime-600: #b4f03f;
+  --on-lime: #0b1305;
+  --cyan-400: #7cdbf3;
+  --amber-400: #ffbc6e;
+  --red-400: #ff7b83;
+  --violet-400: #b5a8ff;
+  --role-commander: #ffd166;
+  --role-engineer: #7cdbf3;
+  --role-science: #c3a6ff;
+  --role-power: #ff9f7a;
+
+  /* semantic aliases */
+  --ok: var(--lime-500);
+  --warn: var(--amber-400);
+  --bad: var(--red-400);
+  --info: var(--cyan-400);
+  --focus: var(--cyan-400);
+  --scrim: rgb(3 6 10 / .66);
+  --glass: rgb(14 22 32 / .82);
+
+  /* glow replaces drop shadow */
+  --glow-lime: 0 0 0 1px rgb(204 255 107 / .5), 0 0 24px rgb(204 255 107 / .25);
+  --glow-cyan: 0 0 0 1px rgb(124 219 243 / .5), 0 0 20px rgb(124 219 243 / .2);
+  --glow-red: 0 0 0 1px rgb(255 123 131 / .55), 0 0 22px rgb(255 123 131 / .25);
+  --inner-highlight: inset 0 1px 0 rgb(255 255 255 / .06);
+
+  /* spacing (4 px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* radius */
+  --radius-chip: 6px;
+  --radius-control: 10px;
+  --radius-panel: 16px;
+  --radius-pill: 999px;
+
+  /* z layers */
+  --z-stage: 0;
+  --z-hud: 10;
+  --z-sheet: 30;
+  --z-dialog: 40;
+  --z-toast: 50;
+  --z-incident: 60;
+
+  /* type */
+  --font-ui: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", "Noto Sans Bengali", "Hind Siliguri", Roboto, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --text-12: 12px;
+  --text-13: 13px;
+  --text-14: 14px;
+  --text-16: 16px;
+  --text-20: 20px;
+  --text-28: 28px;
+  --text-40: clamp(32px, 4vw, 40px);
+  --text-64: clamp(44px, 7vw, 64px);
+
+  /* motion (CSS mirror of src/motion/presets.js) */
+  --dur-instant: 90ms;
+  --dur-fast: 160ms;
+  --dur-base: 240ms;
+  --dur-slow: 420ms;
+  --dur-scene: 900ms;
+  --ease-enter: cubic-bezier(.2, 0, 0, 1);
+  --ease-exit: cubic-bezier(.4, 0, 1, 1);
+  --ease-camera: cubic-bezier(.65, 0, .35, 1);
+
+  /* touch targets and density */
+  --target-min: 32px;
+  --header-h: 56px;
+  --gap: var(--space-4);
+  --panel-pad: var(--space-4);
+}
+
+/* Compact density keeps the mission-control screen inside a short laptop viewport. */
+:root[data-density="compact"] {
+  --gap: var(--space-3);
+  --panel-pad: var(--space-3);
+  --header-h: 48px;
+}
+
+/* 44 px touch targets on coarse pointers (WCAG 2.5.5 / HIG). */
+@media (pointer: coarse) {
+  :root { --target-min: 44px; }
+}
+
+/* Reduced motion: one source of truth. The attribute is set by MotionProvider (system preference OR the in-app toggle). */
+:root[data-motion="reduced"] {
+  --dur-fast: 1ms;
+  --dur-base: 1ms;
+  --dur-slow: 1ms;
+  --dur-scene: 1ms;
+}

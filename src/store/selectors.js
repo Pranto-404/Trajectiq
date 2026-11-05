@@ -22,7 +22,7 @@ export const selectActiveDesign = activeDesign;
 
 /** Memoised calculate() of the active design (flown design in flight, draft otherwise). Read-only. */
 export const selectAnalysis = state => analyze(activeDesign(state));
-export const selectMission = state => missionFor(activeDesign(state));
+export const selectMission = memo(s => [activeDesign(s)], design => missionFor(design));
 
 const LEARN_FOR = {mass: 'mass', budget: 'budget', deltaV: 'deltav', eclipse: 'eclipse', schedule: 'schedule'};
 const CRITICAL_ID = {deltaV: 'deltav', budget: 'budget', mass: 'mass', schedule: 'time', eclipse: 'power'};
@@ -100,7 +100,7 @@ export const selectLaunchCheck = memo(s => [s.design, s.team], (design, team) =>
   return {checks: a.checks, launchable: a.launchable, crew, verdicts, signed, ready, canLaunch: a.launchable && ready, failedCount: failed.length, blockReason: !a.launchable ? `Fix ${failed.length} failed check${failed.length === 1 ? '' : 's'} to launch` : !ready ? 'Every role must sign off to launch' : ''};
 });
 /** True when the Launch readiness button should be enabled, with a human reason when not (for aria-disabled buttons). */
-export const selectLaunchGate = state => { const lc = selectLaunchCheck(state); return {ok: lc.launchable, reason: lc.launchable ? '' : lc.blockReason}; };
+export const selectLaunchGate = memo(s => [selectLaunchCheck(s)], lc => ({ok: lc.launchable, reason: lc.launchable ? '' : lc.blockReason}));
 
 /** The four orbit presets with their checked consequences (port of orbitOptions()). */
 export const selectOrbitOptions = memo(s => [s.design], design => {

@@ -1,0 +1,9 @@
+.concept {
+  display: inline-grid; place-items: center; width: 22px; height: 22px; padding: 0; margin-inline-start: 4px;
+  border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--text-3); vertical-align: middle;
+  transition: color var(--dur-fast) var(--ease-enter), background var(--dur-fast) var(--ease-enter);
+  position: relative;
+}
+.concept:hover { color: var(--cyan-400); background: var(--surface-3); }
+/* Visual size stays small; the hit area grows to the touch target size. */
+@media (pointer: coarse) { .concept::after { content: ""; position: absolute; inset: calc((var(--target-min) - 22px) / -2); } }

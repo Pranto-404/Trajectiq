@@ -1,0 +1,15 @@
+/* Vendored, OFL-licensed Latin subsets (see src/assets/fonts/README.txt). Served from 'self' (CSP font-src 'self'). */
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../assets/fonts/InterVariable-latin-subset.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("../assets/fonts/JetBrainsMono-latin-subset.woff2") format("woff2");
+}
