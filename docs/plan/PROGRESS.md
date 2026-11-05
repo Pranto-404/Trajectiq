@@ -20,7 +20,7 @@ Agents launched (they run in the background and may be lost if a session ends; i
 |---|---|---|---|
 | UX/stack planner | audit, design system, stack decision, work packages | `docs/plan/UX_REDESIGN_PLAN.md` | DONE, committed on `ux-v7` |
 | NASA data lead | sourced data for more destinations, 17 real missions, NASA textures/3D models, 12 scenarios | `docs/plan/NASA_DATA_PLAN.md`, `bodies.json` (14 bodies), `real_missions.json` (17), `ASSETS.md`, `SCENARIOS.md` | DONE, committed. Unverified items are flagged inside the files. Key: engine period formula reproduces Dawn/GRAIL/Landsat 9/MRO periods; real arrays ~13-17% of irradiance x area vs game 28%; GOLD Rules margins; DONKI gives ~8.3 SEP episodes/yr; SSD/Horizons terms forbid embedding live APIs (use build-time snapshots only). |
-| Engine/NASA-bodies engineer | generalise engine + data for new destinations and scenarios from the NASA data; branch `nasa-bodies` (worktree) | `dist/engine`, `dist/data`, `tests/` | RUNNING |
+| Engine/NASA-bodies engineer | 8 bodies (Moon, Mars, Earth LEO, Mercury, Venus, Ceres, Vesta, Europa), 6 new real-mission scenarios, REAL_MISSIONS, provenance, `dist/engine/api.js` | `docs/ENGINE_BODIES.md` | DONE, merged into `ux-v7` (2697573), verified: 371 node + 127 vitest pass. Skipped Phobos/Bennu/Ganymede/Titan (reasons in SKIPPED_BODIES). Legacy UI/sw/standalone don't know the new bodies (expected; replaced at cutover). |
 | Foundation engineer | WP0 build, WP1 store/shell/i18n, WP2 design system + motion, WP3 sound/haptics on `ux-v7`; writes `docs/plan/FOUNDATION_NOTES.md` | commits on `ux-v7` (build, store, shell, DS, kit gallery, fx, tests, FOUNDATION_NOTES.md) | DONE, see report; 337 node + ~130 vitest tests green |
 
 ## Next steps (in order)
@@ -43,3 +43,5 @@ Never fabricate NASA numbers: every value needs a source URL and verification da
 asa\Trajectiq\.claude\worktreesgent-aacb668532c1702d9` (branch `nasa-bodies`) had no commits. Both agents were resumed by message and told to commit small milestones. If they are lost again, relaunch from the task descriptions above, using the existing files as the starting point.
 
 - 2026-11-05: foundation merged on `ux-v7`. Feature agents launched in worktrees: feat-board-hangar, feat-stage, feat-flight-crew, feat-report-sheets (see their branches on origin). Merge each into `ux-v7` after verifying build + tests.
+
+- 2026-11-05: engine merged into `ux-v7`; feature agents told to merge `ux-v7` for the new API. Feature branches on origin: `feat-board-hangar`, `feat-stage`, `feat-flight-crew`, `feat-report-sheets`. When all four report: merge each into `ux-v7`, verify (`npm run build`, `npm test`), wire together, smoke-test the loop in the browser, then launch the independent reviewer agent.
