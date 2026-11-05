@@ -36,3 +36,8 @@ Agents launched (they run in the background and may be lost if a session ends; i
 ## Working rules (also in CLAUDE.md)
 
 Never fabricate NASA numbers: every value needs a source URL and verification date, else mark unverified. Never claim a test or device check that was not run. Do not edit `dist/engine` and `dist/data` from UI work. Commit and push to GitHub regularly; `main` only after full verification. Avoid backslashes in Python patch scripts sent through the shell (they get mangled); use the Edit tool for such strings.
+
+## Interruption log
+
+- 2026-11-05: a 5-hour usage limit stopped the foundation and engine agents mid-work. Foundation left uncommitted files on `ux-v7` (src/ds, src/i18n, src/store, tests-ui). Engine worktree `D:
+asa\Trajectiq\.claude\worktreesgent-aacb668532c1702d9` (branch `nasa-bodies`) had no commits. Both agents were resumed by message and told to commit small milestones. If they are lost again, relaunch from the task descriptions above, using the existing files as the starting point.
