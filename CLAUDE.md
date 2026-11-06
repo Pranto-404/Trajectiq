@@ -13,7 +13,7 @@ Space Mission Design Game for the NASA International Space Apps Challenge 2026 (
 ## Rules
 
 - Pure engine and data (`dist/engine`, `dist/data`) are tested sources of truth; change them only in an engine-focused task and keep tests green.
-- NASA data: every number needs a source URL and a verification date. If unverified, say so. Never invent values. Show NASA attribution for any NASA imagery or model. No runtime network access (strict CSP `connect-src 'self'`; the game works offline).
+- NASA data: every number needs a source URL and a verification date. If unverified, say so. Never invent values. Show NASA attribution for any NASA imagery or model. No runtime network access except the optional, button-triggered AI backup, which only calls this site's own `/api/assist` function (strict CSP `connect-src 'self'` stays; the game works offline). The Gemini key exists only as the Vercel env var `GEMINI_API_KEY`; never write it to a file, a commit, a log or a chat reply.
 - Security: strict CSP, no inline scripts, hostile-input tests; never `dangerouslySetInnerHTML`.
 - Do not put team names or contributions in the web app. They belong in the README only, when the owner supplies them.
 - Report honestly: say what was not tested (physical devices, other browsers, screen readers) and what failed.

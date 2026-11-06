@@ -115,7 +115,7 @@ export function AssistantBody() {
         {chat.length ? chat.map((m, i) => (
           <div key={i} className={s.exchange}>
             <p className={s.question}><Icon name="arrow-right" size={12} /> {String(m.q)}</p>
-            <AnswerCard answer={m.answer} index={i} design={design} locked={locked} level={level} language={language} onApply={n => act.applyAssistant(n)} onAsk={ask} showSuggestions={i === chat.length - 1} />
+            <AnswerCard answer={m.answer} index={i} design={design} locked={locked} level={level} language={language} onApply={n => act.applyAssistant(n)} onAsk={ask} onAI={() => act.askAI(i)} ai={m.ai} showSuggestions={i === chat.length - 1} />
           </div>
         )) : <p className={s.muted}>{t('Say hi, or ask anything about your mission: readiness, battery, orbit maths, NASA data for eight worlds, what-if changes and crisis choices.')}</p>}
         {busy ? <p className={s.muted} role="status">{t('Thinking with the game engine…')}</p> : null}

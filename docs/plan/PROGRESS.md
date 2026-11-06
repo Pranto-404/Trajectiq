@@ -153,3 +153,8 @@ asa\Trajectiq\.claude\worktreesgent-aacb668532c1702d9` (branch `nasa-bodies`) h
 - Owner: "Heyy" returned "I can't answer that reliably"; wants a powerful assistant. Still offline, deterministic, no generative AI.
 - New `dist/engine/smart.js` + wrapper in `dist/engine/assistant.js`: small talk and greetings (typo-tolerant), live-mission facts (battery, fuel, recorder, science, contact, time, launch readiness), orbit/eclipse and rocket-equation calculators, NASA facts and comparisons for all 8 bodies with source links and assumption labels, glossary, stuck/improve routing, fuzzy topic matching, and refusals that still offer next steps. Hard refusals (prices, trajectory/thermal/radiation, off-topic, guarantees) are untouched and tested.
 - Tests: tests/v8-assistant.test.mjs (13 tests). 385 node + 364 UI tests pass. Not verified: Bengali wording by a native speaker; long answers on a real phone.
+
+## 2026-11-07 (5): AI backup assistant (branch ai-backup)
+- Owner pasted a Gemini key in chat and asked to set it up securely. The key was NOT written to any file, commit, log or Vercel by me; the owner adds it as `GEMINI_API_KEY` in Vercel. Recommend rotating it, since it appeared in chat.
+- Built: `server/assist-core.js` + `api/assist.js` (same-origin, rate-limited, sanitised, key in header), `src/store/aiBackup.js`, `askAI` store action, button on refusals in AnswerCard. Default model `gemini-3.5-flash-lite` (Google docs, 2026-11-07). Header auth `x-goog-api-key` is Google's documented form but was not exercised against the live API (no key available to me).
+- Not verified: a real call to Gemini end to end; rate limiting across serverless instances.

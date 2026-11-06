@@ -102,3 +102,11 @@ Team: **Kemon Dilam Bondhura**. Member names, roles and contributions: *to be ad
 ## Attribution
 
 NASA/JPL data sources are linked inside the game and in the science document. All visuals are generated in code; there are no external assets or runtime dependencies. This project is not endorsed by NASA. A first version of TRAJECTIQ existed before the event; the scenarios, scoring, crew mode, decision review, sharing and interface described here were built for it.
+
+## Optional AI backup assistant
+
+The verified assistant runs offline from the game's own rules, simulation and NASA/JPL data. When it cannot answer, the player can press **Ask the AI backup**; the question and a short numeric mission summary are sent to this site's own server function (`api/assist.js`), which calls Google Gemini. Nothing is sent until the button is pressed, answers are labelled "not verified by the game", and the offline game never depends on it.
+
+- Setup: add `GEMINI_API_KEY` in Vercel (Project, Settings, Environment Variables, Sensitive), then redeploy. Optional `GEMINI_MODEL` (default `gemini-3.5-flash-lite`). The key lives only on the server; the browser never sees it, it is not in the repository, and the CSP is unchanged (`connect-src 'self'`).
+- Safeguards: same-origin only, JSON only, 6 KB body cap, 500-character question, whitelisted context, per-client and daily rate limits (best effort per serverless instance), 12 s timeout, capped plain-text output. Also set a spend limit on the key in Google AI Studio.
+- Tests: `tests/v8-ai-backup.test.mjs` (server, secret scan) and `tests-ui/store/ai-backup.test.jsx` (client).
