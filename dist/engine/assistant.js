@@ -5,6 +5,7 @@ import {getRealMission,PROPELLANT_FRACTIONS,ODYSSEY_SUBSYSTEMS,REAL_ARRAY_EFFICI
 import {calculate,linkEnvironment,debrief,diagnose} from './model.js';
 import {advancedAnswer} from './copilot.js';
 import {reviewDecisions,forecastDirections} from './review.js';
+import {smartAnswer,rankTopics,contextSuggestions,glossary} from './smart.js';
 const n=(v,p=0)=>Number(v).toLocaleString('en-US',{maximumFractionDigits:p});
 export const HELP_TOPICS=[
  ['start','How do I play?','Start with Balanced build, open Launch readiness, then authorize launch. Map in sunlight. When an event pauses the game, read the choices and choose a response. Return at least 520 useful science units within 240 campaign minutes, with battery remaining.','খেলা শুরু: Balanced build নিন, Launch readiness দেখে launch করুন। Map in sunlight চালান। বিপদ এলে একটি সিদ্ধান্ত নিন। ২৪০ মিনিটে অন্তত ৫২০ science পৃথিবীতে ফেরত পাঠাতে হবে।','play start beginner tutorial khelbo kheli shuru শুরু খেলবো খেলব কিভাবে'],
@@ -114,7 +115,7 @@ function hazardAnswer(q,a,bn){
  const text=`In this scenario the game includes a "${W.title}" event: ${W.kind==='thermal'?`solar output falls to ${Math.round(W.solar*100)}% and observations are ${Math.round(W.quality*100)}% as useful`:`observations are ${Math.round(W.quality*100)}% as useful and stored data can be corrupted`} for ${W.duration} minutes, once, somewhere in the campaign. This is a GAME ASSUMPTION, not a NASA measurement. No absolute ${W.kind==='thermal'?'temperature limit':'dose in rads'} was read from a NASA source, so I will not quote one.\nReal context for ${body.name}: ${real}\nThe game does not simulate heat transfer, shielding mass or total dose; it models the consequence as a power and data-quality event you respond to.`;
  return {known:true,title:bn?'Scenario hazard · game assumption':'Scenario hazard · game assumption',text,sources:[{title:'NASA/JPL data for '+body.name,url:dataset.factURL}],topic:'hazard',evidence:'GAME ASSUMPTION · NASA CONTEXT',suggestions:['Which NASA data is actually used?','Which values are game assumptions?']};
 }
-export function answerQuestion(question,{design=PRESETS.balanced,run=null,language='en',history=[]}={}){
+function answerCore(question,{design=PRESETS.balanced,run=null,language='en',history=[]}={}){
  let q=String(question||'').slice(0,500).trim().replace(/\bbat+e?r+y\b/gi,'battery').replace(/\bbatery\b/gi,'battery').replace(/\bbuget\b/gi,'budget').replace(/\bstorge\b/gi,'storage');
  if (/^(?:what (?:now|should i do(?: now)?|is happening(?: now)?)|how (?:am i doing|is my mission doing)|help me(?: with (?:this|my mission))?|what(?:'s| is) my next (?:step|move))[?!. ]*$/i.test(q)) q='Mission status';
  const priorAnswer=history.at(-1)?.answer,previous=priorAnswer?.topic;
@@ -183,4 +184,45 @@ export function answerQuestion(question,{design=PRESETS.balanced,run=null,langua
  if(['nasa','distance','battery','orbit','assumptions','destination'].includes(id))sources.push({title:body==='Mars'?'NASA Mars Fact Sheet':body==='Moon'?'NASA Moon Fact Sheet':'NASA/JPL data for '+body,url:nasaDataset(a.d).factURL});
  if(['nasa','orbit'].includes(id))sources.push({title:'NASA/JPL physical parameters',url:nasaDataset(a.d).jplURL});
  return {known:true,title:bn?'Mission সহকারী · '+title:title,text,sources,topic:id,evidence:sources.length?'PROJECT KNOWLEDGE · SOURCE LINKED':'PROJECT KNOWLEDGE · CURRENT CONTEXT',suggestions:id==='start'?['What counts as success?','Mission status']:['Review my design','Compare crisis choices']};
+}
+
+// Questions the game must always decline (real prices, full trajectory/thermal/radiation simulation, off-topic, guarantees). The smart layer never touches these.
+const OUT_OF_SCOPE=[/(?:\b(dollars|usd|taka|bdt)\b|\b(real|actual|market|nasa)\b.*\b(cost|price|prices|budget)\b|\b(cost|price|prices)\b.*\b(real|actual|dollars|usd|taka|bdt)\b)/i,/(?:radiation|thermal|temperature|atmospher|aerobraking|aerocapture|reentry|re-entry|landing|dust storm|weather|n.body|ephemeris|ephemerides|launch window|transfer trajectory|hohmann|life support|temperature|তাপমাত্রা|বিকিরণ|আবহাওয়া|অবতরণ)/i,/president|stock|crypto|api key|password|chemistry|manufacturer|career|become.*engineer|salary|আজকের|আজ কত|live position|today|tomorrow|yesterday|guarantee|guaranteed|ignore.*instruction|system prompt|pretend|fabricate|invent.*(?:fact|source)|write.*(?:poem|essay)|recipe|horoscope|cooking|football/i];
+const exactPrompts=()=>new Set(HELP_TOPICS.map(x=>canonical(x[1])).concat(['mission status','review my design','compare crisis choices','compare presets','use my one forecast','explain my result','battery endurance','recorder fill time','rocket equation']));
+let _exact=null;
+/**
+ * Public entry point. Order: hard refusals stay refusals → conversation, live-mission facts, calculators, NASA body facts and glossary
+ * (assistant v2, smart.js) → the original verified topic engine → typo-tolerant topic matching → an honest refusal that still
+ * offers next steps. Every branch is deterministic and offline.
+ */
+export function answerQuestion(question,opts={}){
+ const {design=PRESETS.balanced,run=null,language='en'}=opts;
+ const q=String(question||'').slice(0,500).trim();
+ const hard=OUT_OF_SCOPE.some(r=>r.test(q));
+ let ctx=null;
+ try{ctx={a:calculate(run?.design||design),run,design:run?.design||design,bn:language==='bn'};}catch{ctx=null;}
+ if(!hard&&ctx&&q){
+  _exact??=exactPrompts();
+  if(!_exact.has(canonical(q))){
+   const s=smartAnswer(q,ctx);
+   if(s?.rewrite){const core=answerCore(s.rewrite,opts);return s.lead&&core.known?{...core,text:s.lead+'\n'+core.text}:core;}
+   if(s)return s;
+  }
+ }
+ const core=answerCore(question,opts);
+ if(core.known||hard||!q||core.evidence!=='OUTSIDE VERIFIED KNOWLEDGE')return core;
+ const g=ctx?glossary(q,ctx,{late:true}):null;
+ if(g)return g;
+ return recover(q,core,ctx,opts);
+}
+function recover(q,core,ctx,opts){
+ const ranked=rankTopics(q,HELP_TOPICS),best=ranked[0],second=ranked[1];
+ if(best&&best.score>=1.6&&best.coverage>=.75&&(!second||best.score>=second.score*1.25)){
+  const via=answerCore(best.topic[1],opts);
+  if(via.known)return {...via,text:(opts.language==='bn'?'আমি প্রশ্নটি এভাবে বুঝেছি: “':'I read your question as “')+best.topic[1]+'”.\n'+via.text,interpreted:best.topic[1]};
+ }
+ const close=ranked.filter(x=>x.score>=.9&&x.coverage>=.5&&!x.topic[0].startsWith('part-')).slice(0,3).map(x=>x.topic[1]);
+ const next=ctx?contextSuggestions(ctx):[];
+ const text=core.text+(close.length?'\n'+(opts.language==='bn'?'কাছাকাছি বিষয়: ':'Closest things I can explain: ')+close.join(' · '):'')+'\n'+(opts.language==='bn'?'এখন আমি এগুলো করতে পারি: ':'Right now I can help with: ')+next.join(' · ');
+ return {...core,text,suggestions:[...new Set([...close,...next])].slice(0,4)};
 }

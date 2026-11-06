@@ -148,3 +148,8 @@ asa\Trajectiq\.claude\worktreesgent-aacb668532c1702d9` (branch `nasa-bodies`) h
 - Owner asked for the top (stage + tabs) and bottom (parts tray + launch bar) to disappear on scroll down and for the bottom bars to be fully minimizable.
 - Done: `useScrollHide` hides stage, tabs, tray and launch bar while scrolling down (only when the tray is collapsed), shows them on scroll up / near top / page end; a minimize button on the parts bar hides the bottom bars until the "Parts and launch" pill is tapped. Assistant button drops when bars are gone.
 - Note: the owner's phone was still showing the earlier build (cfea5c9) when they sent the screenshot; production for 19936fe was READY. Ask for a hard refresh / reopen.
+
+## 2026-11-07 (4): assistant v2 (branch assistant-v2)
+- Owner: "Heyy" returned "I can't answer that reliably"; wants a powerful assistant. Still offline, deterministic, no generative AI.
+- New `dist/engine/smart.js` + wrapper in `dist/engine/assistant.js`: small talk and greetings (typo-tolerant), live-mission facts (battery, fuel, recorder, science, contact, time, launch readiness), orbit/eclipse and rocket-equation calculators, NASA facts and comparisons for all 8 bodies with source links and assumption labels, glossary, stuck/improve routing, fuzzy topic matching, and refusals that still offer next steps. Hard refusals (prices, trajectory/thermal/radiation, off-topic, guarantees) are untouched and tested.
+- Tests: tests/v8-assistant.test.mjs (13 tests). 385 node + 364 UI tests pass. Not verified: Bengali wording by a native speaker; long answers on a real phone.

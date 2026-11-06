@@ -4,6 +4,7 @@ import {CATALOG, CATEGORIES, missionFor} from '@data/catalog.js';
 import {distanceOptions} from '@data/nasa.js';
 import {HELP_TOPICS} from '@engine/assistant.js';
 import {EXPERIMENT_FIELDS} from '@engine/copilot.js';
+import {contextSuggestions} from '@engine/smart.js';
 import {useGame, selectAssistantContext, selectCrisis, analyze} from '@/store/index.js';
 import {Button, Chip, Segmented, Icon} from '@/ds/index.js';
 import {useT} from '@/i18n/index.js';
@@ -11,7 +12,9 @@ import {AnswerCard, DirectionChips} from './AnswerCard.jsx';
 import {clean, fmt} from '../report/format.js';
 import s from './sheets.module.css';
 
-const quickQuestions = ctx => ctx.run?.done ? ['Mission status', 'Explain my result'] : ctx.run?.crisis ? ['Mission status', 'Compare crisis choices'] : ctx.run ? ['Mission status', 'Why is my battery dropping?'] : ['Mission status', 'Review my design'];
+/** Starter chips follow the situation (draft, blocked launch, flying, crisis, finished); the same list the engine offers after a greeting. */
+const quickQuestions = ctx => ['Mission status', ...contextSuggestions({run: ctx.run, a: analyze(ctx.run?.design || ctx.design)})].filter((x, i, all) => all.indexOf(x) === i).slice(0, 4);
+const tryThese = (ctx, body) => ['Orbit period at 150 km', `Tell me about ${body}`, 'What is an eclipse?', 'Which planet has the most sunlight?', 'How much fuel for 700 m/s?'];
 
 function ContextCard({ctx}) {
   const t = useT();
@@ -102,13 +105,19 @@ export function AssistantBody() {
         </section>
       ) : null}
       <div className={s.chipRow} role="group" aria-label={t('Quick questions')}>{quickQuestions(ctx).map(x => <Button key={x} size="sm" variant="ghost" disabled={busy} onClick={() => ask(x)}>{t(x)}</Button>)}</div>
+      {chat.length ? null : (
+        <div className={s.stackSm} data-testid="assistant-try">
+          <span className="kicker">{t('Things to try')}</span>
+          <div className={s.chipRow} role="group" aria-label={t('Things to try')}>{tryThese(ctx, analyze(ctx.run?.design || ctx.design).m.bodyName || 'Moon').map(x => <Button key={x} size="sm" variant="secondary" disabled={busy} onClick={() => ask(x)}>{x}</Button>)}</div>
+        </div>
+      )}
       <div ref={log} className={s.thread} role="log" aria-live="polite" aria-label={t('Conversation')} tabIndex={0}>
         {chat.length ? chat.map((m, i) => (
           <div key={i} className={s.exchange}>
             <p className={s.question}><Icon name="arrow-right" size={12} /> {String(m.q)}</p>
             <AnswerCard answer={m.answer} index={i} design={design} locked={locked} level={level} language={language} onApply={n => act.applyAssistant(n)} onAsk={ask} showSuggestions={i === chat.length - 1} />
           </div>
-        )) : <p className={s.muted}>{t('I can simulate a change, compare decisions and explain your mission. Try “What if fuel = 45” or “Review my design”.')}</p>}
+        )) : <p className={s.muted}>{t('Say hi, or ask anything about your mission: readiness, battery, orbit maths, NASA data for eight worlds, what-if changes and crisis choices.')}</p>}
         {busy ? <p className={s.muted} role="status">{t('Thinking with the game engine…')}</p> : null}
       </div>
       <details className={s.disclosure}>
@@ -126,7 +135,7 @@ export function AssistantBody() {
       <div role="alert">{error}</div>
       <form onSubmit={onSubmit} className={s.askForm}>
         <label className={s.field} htmlFor={inputId}>{t('Your question')}
-          <input id={inputId} name="question" maxLength={500} autoComplete="off" placeholder={t('e.g. How can I avoid losing data?')} value={q} onChange={e => setQ(e.target.value)} required />
+          <input id={inputId} name="question" maxLength={500} autoComplete="off" placeholder={t('e.g. Am I ready to launch?')} value={q} onChange={e => setQ(e.target.value)} required />
         </label>
         <Button type="submit" variant="primary" loading={busy}>{t('Ask')}</Button>
       </form>
