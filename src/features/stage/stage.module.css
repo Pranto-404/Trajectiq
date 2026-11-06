@@ -1,0 +1,14 @@
+.slot { position: relative; width: 100%; height: 100%; min-height: 220px; overflow: hidden; background: #060b14; border-radius: inherit; touch-action: pan-y; }
+.slot canvas { display: block; touch-action: pan-y; outline: none; }
+.slot canvas:focus-visible { outline: 2px solid var(--focus, #7cdbf3); outline-offset: -2px; }
+.fallback { display: block; width: 100%; height: 100%; touch-action: pan-y; }
+.part { cursor: pointer; outline: none; }
+.part:focus-visible { outline: 2px solid var(--focus, #7cdbf3); }
+.part:hover, .partHot { filter: drop-shadow(0 0 6px rgb(124 219 243 / .7)); }
+.partOn { filter: drop-shadow(0 0 8px rgb(204 255 107 / .85)); }
+.partSeat { animation: seat 520ms cubic-bezier(.2, 0, 0, 1); transform-box: fill-box; transform-origin: center; }
+.rise { animation: rise 1800ms cubic-bezier(.4, 0, 1, 1) forwards; }
+.sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@keyframes seat { 0% { transform: translateY(-14px) scale(1.06); } 70% { transform: translateY(2px) scale(.99); } 100% { transform: none; } }
+@keyframes rise { to { transform: translateY(-360px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .partSeat, .rise { animation: none; } }

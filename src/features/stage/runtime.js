@@ -41,9 +41,13 @@ export function createRuntime({now = () => (typeof performance !== 'undefined' ?
       const duration = reduced ? LAUNCH_SECONDS.reduced : rt.launchesPlayed === 0 ? LAUNCH_SECONDS.first : LAUNCH_SECONDS.repeat;
       L.active = true; L.t = 0; L.duration = duration; L.skipped = false;
       L.promise = new Promise(resolve => { L.resolve = resolve; });
+      // Frames advance the cinematic; this timer guarantees it ends (reduced motion draws no frames, hidden tabs pause them).
+      clearTimeout(rt.launchTimer);
+      rt.launchTimer = setTimeout(() => rt.endLaunch(false), duration * 1000 + (reduced ? 0 : 1500));
       rt.poke(); rt.emit();
       return L.promise;
     },
+    launchTimer: 0,
     /** Advance the cinematic by dt seconds; returns progress 0..1 (or null when idle). */
     stepLaunch(dt) {
       const L = rt.launch;
@@ -55,6 +59,7 @@ export function createRuntime({now = () => (typeof performance !== 'undefined' ?
     endLaunch(skipped) {
       const L = rt.launch;
       if (!L.active) return;
+      clearTimeout(rt.launchTimer);
       L.active = false; L.skipped = skipped; rt.launchesPlayed++;
       const done = L.resolve; L.resolve = null; done?.({skipped});
       rt.poke(); rt.emit();
