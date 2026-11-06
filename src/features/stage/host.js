@@ -84,9 +84,11 @@ export function createHost({loadCanvas, detect = () => detectWebGL2(), doc = glo
   return host;
 }
 
-let singleton = null, defaults = {};
-/** Set how the singleton is built (lazy loader, WebGL probe). Tests use this; the app sets the loader once. */
-export function configureHost(opts) { singleton?.dispose(); singleton = null; defaults = opts || {}; }
+let singleton = null, defaults = {}, explicit = false;
+/** The app's default loader (set once when Stage3D is imported). An explicit configureHost() call always wins. */
+export function setHostDefaults(opts) { if (!explicit) defaults = opts || {}; }
+/** Set how the singleton is built (lazy loader, WebGL probe). Tests use this. */
+export function configureHost(opts) { singleton?.dispose(); singleton = null; defaults = opts || {}; explicit = true; }
 /** The app-wide host (created on first use). */
 export function getHost() {
   if (!singleton) singleton = createHost(defaults);

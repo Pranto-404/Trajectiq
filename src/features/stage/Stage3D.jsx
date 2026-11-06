@@ -5,7 +5,7 @@
 import {forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useSyncExternalStore} from 'react';
 import {STANDALONE} from '../../env.js';
 import {useReducedMotion} from '../../ds/index.js';
-import {configureHost, getHost} from './host.js';
+import {getHost, setHostDefaults} from './host.js';
 import {SceneFallback} from './SceneFallback.jsx';
 import {missionFor} from '@data/catalog.js';
 import {describeCraft} from './parts.js';
@@ -13,8 +13,8 @@ import css from './stage.module.css';
 
 // The single-file offline build has no code splitting: it keeps the SVG scene and leaves three.js out of the file.
 const loadCanvas = STANDALONE ? null : () => import('./StageCanvas.jsx');
-let configured = false;
-function host() { if (!configured) { configured = true; configureHost({loadCanvas}); } return getHost(); }
+setHostDefaults({loadCanvas});
+const host = getHost;
 
 export const Stage3D = forwardRef(function Stage3D(props, ref) {
   const {design, selected, hoverPart, run, phase, quality, reduced, onPick, onSocketHover, exploded, xray, autoLaunch = true, className, style, label} = props;

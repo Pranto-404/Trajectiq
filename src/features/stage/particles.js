@@ -25,7 +25,9 @@ export function createParticles(count, {color = '#ffb45a', size = 1} = {}) {
       live = 0; mat.uniforms.uPx.value = pixelRatio;
       for (let i = 0; i < count; i++) {
         if (age[i] >= life[i]) { alpha[i] = 0; continue; }
-        age[i] += dt; live++;
+        age[i] += dt;
+        if (age[i] >= life[i]) { alpha[i] = 0; continue; }
+        live++;
         pos[i * 3] += vel[i * 3] * dt; pos[i * 3 + 1] += vel[i * 3 + 1] * dt; pos[i * 3 + 2] += vel[i * 3 + 2] * dt;
         const k = 1 - age[i] / life[i]; alpha[i] = k > 0 ? k * k : 0;
       }
