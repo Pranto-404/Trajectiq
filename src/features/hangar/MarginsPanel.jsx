@@ -47,14 +47,14 @@ function StatusRow({label, status, children}) {
  * recorder-before-first-contact warning are all design-system Gauges; the previewed change draws a striped ghost segment.
  * Launch-orbit compatibility, pointing and the recorder interface are status rows with the engine's own explanation.
  */
-export function MarginsPanel() {
+export function MarginsPanel({compact = false}) {
   const t = useT();
   const margins = useGame(selectMargins), ghost = useGame(selectPreview), a = useGame(selectAnalysis);
   const g = ghost?.analysis || null;
   const byId = Object.fromEntries(margins.rows.map(r => [r.id, r]));
   const ghostRow = id => ghost?.margins.rows.find(r => r.id === id)?.value ?? null;
   const row = r => (
-    <Gauge key={r.id} kind="margin" label={t(r.title)} value={r.value} max={r.max} unit={r.unit} digits={r.digits} limit={r.margin}
+    <Gauge key={r.id} compact={compact} kind="margin" label={t(r.title)} value={r.value} max={r.max} unit={r.unit} digits={r.digits} limit={r.margin}
       status={gaugeStatus(r.status)} preview={ghostRow(r.id)}
       help={<>{r.critical ? <Chip kind="warn" size="sm" icon="warning">{t('Critical')}</Chip> : null}{r.learn ? <Concept id={r.learn} label={t(r.title)} /> : null}</>} />
   );
@@ -66,15 +66,15 @@ export function MarginsPanel() {
   const gFill = g ? (Number.isFinite(g.fillMinutes) ? Math.min(g.fillMinutes, Math.max(1, g.contactStart * 2)) : Math.max(1, g.contactStart * 2)) : null;
   const rec = checks.recorder, lo = checks.launchOrbit, comp = checks.compatibility, pt = checks.pointing;
   return (
-    <Panel kicker={t('Mission constraints')} title={t('Margins')} badge={margins.launchable ? t('No hard failures') : t('Launch blocked')} state={margins.launchable ? 'default' : 'warning'} data-testid="margins" data-tour="margins">
+    <Panel kicker={t('Mission constraints')} title={t('Margins')} badge={margins.launchable ? t('No hard failures') : t('Launch blocked')} state={margins.launchable ? 'default' : 'warning'} className={compact ? s.flat : undefined} data-testid="margins" data-tour="margins">
       <GhostSummary />
-      <div className={s.gauges}>
+      <div className={compact ? `${s.gauges} ${s.gaugesCompact}` : s.gauges}>
         {['mass', 'budget', 'schedule'].map(id => byId[id] && row(byId[id]))}
         {['deltaV', 'eclipse'].map(id => byId[id] && row(byId[id]))}
-        <Gauge kind="margin" label={t('Peak power')} value={peak} max={avail} unit="W" digits={0} limit={margins.extras.power.margin} status={gaugeStatus(margins.extras.power.status)} preview={g ? g.peak : null} help={<Concept id="power" label={t('Peak power')} />} />
-        <Gauge kind="margin" label={t('Contact capacity')} value={a.dataGenerated} max={a.dataDownlink} unit="MB/orbit" digits={0} limit={margins.extras.data.margin} status={gaugeStatus(margins.extras.data.status)} preview={g ? g.dataGenerated : null} help={<Concept id="datarate" label={t('Contact capacity')} />} />
+        <Gauge compact={compact} kind="margin" label={t('Peak power')} value={peak} max={avail} unit="W" digits={0} limit={margins.extras.power.margin} status={gaugeStatus(margins.extras.power.status)} preview={g ? g.peak : null} help={<Concept id="power" label={t('Peak power')} />} />
+        <Gauge compact={compact} kind="margin" label={t('Contact capacity')} value={a.dataGenerated} max={a.dataDownlink} unit="MB/orbit" digits={0} limit={margins.extras.data.margin} status={gaugeStatus(margins.extras.data.status)} preview={g ? g.dataGenerated : null} help={<Concept id="datarate" label={t('Contact capacity')} />} />
         {rec ? (
-          <Gauge kind="linear" label={t('Recorder fill time')} value={recorderValue} max={recorderMax} unit="min" digits={0} thresholds={[{at: contact, label: t('First contact')}]} status={gaugeStatus(rec.status)} preview={gFill}
+          <Gauge compact={compact} className={compact ? s.span2 : ''} kind="linear" label={t('Recorder fill time')} value={recorderValue} max={recorderMax} unit="min" digits={0} thresholds={[{at: contact, label: t('First contact')}]} status={gaugeStatus(rec.status)} preview={gFill}
             valueText={rec.value} statusLabel={rec.status === 'pass' ? t('OK before contact') : t('May fill before first contact')} />
         ) : null}
       </div>

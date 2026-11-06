@@ -1,4 +1,4 @@
-import {useEffect, useLayoutEffect} from 'react';
+import {useEffect, useLayoutEffect, useRef} from 'react';
 import {AnimatePresence, motion} from 'motion/react';
 import {useGame, selectMission} from '../store/index.js';
 import {Button, Chip, LiveRegion, ToastViewport, MotionProvider, useReducedMotion, variants, variantsFor, setConceptOpener} from '../ds/index.js';
@@ -18,8 +18,18 @@ function Header() {
   const mission = useGame(selectMission);
   const theme = useGame(st => st.prefs.theme);
   const reason = {flight: run && !run.done ? '' : t('Launch a mission first'), report: run?.done || runs.length ? '' : t('Finish a mission first')};
+  const ref = useRef(null);
+  // The header is two rows on a phone, so screens that stick something beneath it need its real height, not the one-row token.
+  useLayoutEffect(() => {
+    const el = ref.current; if (!el) return undefined;
+    const set = () => document.documentElement.style.setProperty('--header-live-h', `${Math.round(el.getBoundingClientRect().height)}px`);
+    set();
+    if (typeof ResizeObserver === 'undefined') return undefined;
+    const ro = new ResizeObserver(set); ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   return (
-    <header className={s.header}>
+    <header ref={ref} className={s.header}>
       <button type="button" className={s.brand} onClick={() => a.home()} aria-label="TRAJECTIQ"><img src={iconUrl} alt="" width="28" height="28" /><span className={s.brandText}>TRAJECTIQ</span></button>
       <nav className={s.nav} aria-label={t('Mission screens')}>
         {NAV.map(([id, label]) => {

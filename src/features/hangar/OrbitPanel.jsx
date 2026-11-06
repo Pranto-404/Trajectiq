@@ -24,7 +24,7 @@ function useDraftField(field, current) {
 const INCLINATIONS = [[90, 'Polar'], [60, 'Mid-inclination'], [30, 'Low-inclination']];
 
 /** Destination, propellant, orbit altitude and inclination, and the four checked orbit options. Disabled with a visible reason in flight. */
-export function OrbitPanel() {
+export function OrbitPanel({compact = false}) {
   const t = useT();
   const locked = useLocked();
   const a = useGame(st => st.actions);
@@ -34,7 +34,7 @@ export function OrbitPanel() {
   const dests = destinationOptions();
   const far = Number.isFinite(mission.referenceDistance) && mission.referenceDistance > 1e7;
   return (
-    <Panel kicker={t('Orbit and propellant')} title={t('Mission orbit')} state={locked ? 'locked' : 'default'} data-testid="orbit-panel">
+    <Panel kicker={t('Orbit and propellant')} title={t('Mission orbit')} state={locked ? 'locked' : 'default'} className={compact ? `${s.flat} ${s.orbitCompact}` : undefined} data-testid="orbit-panel">
       <div className={s.field}>
         <label htmlFor="mission-destination" className={s.fieldLabel}>{t('Choose destination')}</label>
         <select id="mission-destination" className={s.select} value={design.destination} disabled={locked} aria-describedby="destination-help"

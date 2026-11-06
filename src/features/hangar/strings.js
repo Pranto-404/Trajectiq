@@ -26,6 +26,7 @@ export const HANGAR_BN = {
   'Fictional teaching hardware. Drag a module onto the spacecraft, or select it here.': 'শেখার জন্য কাল্পনিক যন্ত্রাংশ। মহাকাশযানের উপর টেনে আনুন, অথবা এখান থেকে বাছুন।',
   'Spacecraft bus': 'মহাকাশযানের কাঠামো', 'Science payload': 'বিজ্ঞানের যন্ত্র', 'Power system': 'বিদ্যুৎ ব্যবস্থা', 'Communications': 'যোগাযোগ', 'Avionics & storage': 'এভিওনিক্স ও সংরক্ষণ', 'Launch provider': 'উৎক্ষেপণ সেবা',
   'Platform & pointing': 'কাঠামো ও লক্ষ্যনির্ধারণ', 'Observation & data': 'পর্যবেক্ষণ ও ডেটা', 'Generation & battery': 'উৎপাদন ও ব্যাটারি', 'Fuel & maneuver reserve': 'জ্বালানি ও চালনার রিজার্ভ', 'Return your discoveries': 'আবিষ্কার পৃথিবীতে ফেরত পাঠান', 'Protect the science': 'বিজ্ঞানের ডেটা রক্ষা করুন', 'Capacity & injection': 'ক্ষমতা ও কক্ষপথে প্রবেশ',
+  'Advice': 'পরামর্শ', 'Design inspector': 'নকশা পরিদর্শক',
   'Margins': 'মার্জিন', 'Mission constraints': 'মিশনের সীমাবদ্ধতা', 'No hard failures': 'কোনো গুরুতর ব্যর্থতা নেই', 'Launch blocked': 'উৎক্ষেপণ আটকে আছে',
   'Hover or focus a part to see its effect before you install it.': 'বসানোর আগে প্রভাব দেখতে যন্ত্রাংশের উপর কার্সার রাখুন বা ফোকাস করুন।', 'Preview': 'প্রিভিউ', 'no change to the margins': 'মার্জিনে কোনো বদল নেই', 'Would block launch': 'উৎক্ষেপণ আটকে দেবে',
   'Mass': 'ভর', 'Cost': 'খরচ', 'Schedule': 'সময়সূচি', 'Maneuver': 'চালনা', 'Power margin': 'বিদ্যুতের মার্জিন', 'Contact margin': 'যোগাযোগের মার্জিন', 'Critical': 'সবচেয়ে গুরুত্বপূর্ণ',

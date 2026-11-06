@@ -11,7 +11,7 @@
 
 .body { min-width: 0; }
 .track { position: relative; height: 10px; border-radius: var(--radius-pill); background: var(--surface-3); border: 1px solid var(--line-1); overflow: hidden; }
-.fill { position: absolute; inset: 0; transform-origin: left center; background: var(--tone); border-radius: inherit; }
+.fill { position: absolute; inset: 0; overflow: hidden; transform-origin: left center; background: var(--tone); border-radius: inherit; }
 .warning .fill { animation: pulse 1.6s ease-in-out infinite; }
 .critical .fill { animation: pulse .8s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity: .55; } }
@@ -38,6 +38,21 @@
 .dialGhost { fill: none; stroke: var(--lime-500); stroke-width: 6; stroke-dasharray: 3 3; }
 .needle { stroke: var(--tone); stroke-width: 3; stroke-linecap: round; }
 .hub { fill: var(--tone); }
+
+/* Compact tile for the phone: small reading, one-line note, the fill carries a slow light sweep (transform only). */
+.compact { gap: 6px; padding: 10px 11px 9px; border: 1px solid var(--line-1); border-radius: var(--radius-control); background: color-mix(in srgb, var(--surface-1) 80%, transparent); }
+.compact .head { flex-wrap: wrap; row-gap: 2px; }
+.compact .label { font-size: 12px; line-height: 1.25; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.compact .reading { flex: none; }
+.compact .value { font-size: 17px; }
+.compact .unit { font-size: 11px; }
+.compact .track { height: 8px; }
+.compact .foot { min-height: 0; gap: 4px; }
+.compact .note { font-size: 11px; line-height: 1.3; }
+.fill::after { content: ''; position: absolute; inset: 0; width: 40%; background: linear-gradient(90deg, transparent, rgb(255 255 255 / .35), transparent); transform: translateX(-120%); animation: sheen 3.6s var(--ease-enter, ease-out) infinite; }
+@keyframes sheen { 0%, 55% { transform: translateX(-120%); } 100% { transform: translateX(300%); } }
+:global([data-motion="reduced"]) .fill::after { animation: none; display: none; }
+@media (prefers-reduced-motion: reduce) { .fill::after { animation: none; display: none; } }
 
 .foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); flex-wrap: wrap; min-height: 20px; }
 .note { font-size: var(--text-12); color: var(--text-3); }

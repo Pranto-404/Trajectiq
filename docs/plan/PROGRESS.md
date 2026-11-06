@@ -132,3 +132,9 @@ asa\Trajectiq\.claude\worktreesgent-aacb668532c1702d9` (branch `nasa-bodies`) h
 - So the cutover is DONE; do not redo it. Branch `ux-v7` and the `feat-*`/`nasa-bodies` branches are historical. Do not push anything to `main` without checking `git fetch` first: another session is active on it.
 - Remaining from the original plan: independent adversarial review of the live React build and fixes (launched), phone-width and crisis/crew checks in a browser, README roster (owner supplies names), videos transcript (optional).
 - Hazard: running `npm ci` in the shared checkout fails while another session's dev server holds files, and leaves `node_modules` half-deleted. Use `npm install --ignore-scripts` to repair, or verify in a separate worktree.
+
+## 2026-11-07: phone hangar cleanup (branch ux-mobile-hangar)
+- Cause of the "messy" phone hangar: Margins and Orbit panels were ~950 px each, stacked under the stage (page 3543 px), and the sticky stage used the one-row header token (56 px) while the phone header is two rows (105 px), so it tucked under the header.
+- Fix: `MobileInspector` (Margins / Orbit / Advice / Crew tabs, one panel at a time, sliding pill), compact 2-column gauge tiles, 2x2 orbit option cards, compact header and presets row, live header height (`--header-live-h`), stage height variable `--stage-h`. Page is now 1.2-1.6k px, no horizontal overflow at 375 px.
+- Motion added: stage HUD corner brackets + scan line, gauge fill light sweep, staggered tile entrance, tab pill spring, alert-dot pop, launch button ring. All honour reduced motion.
+- Not yet verified: a physical phone, the crowded tray sheet peek (it still covers the lower ~200 px), Flight/Report/Board screens on phone.

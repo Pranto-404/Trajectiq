@@ -36,7 +36,7 @@ function arcPath(from, to) {
  * - help: a node placed beside the label (usually <Concept/>).
  * Accessible as role="meter" with a spoken value text. Only transform and opacity animate.
  */
-export function Gauge({kind = 'linear', label, value, max = 100, min = 0, unit = '', digits = 0, thresholds = [], preview = null, status = 'nominal', statusLabel, help, valueText, limit, segments = 10, className = '', ...rest}) {
+export function Gauge({kind = 'linear', label, value, max = 100, min = 0, unit = '', digits = 0, thresholds = [], preview = null, status = 'nominal', statusLabel, help, valueText, limit, segments = 10, compact = false, className = '', ...rest}) {
   const reduced = useReducedMotion();
   const labelId = useId();
   const span = max - min || 1;
@@ -59,7 +59,7 @@ export function Gauge({kind = 'linear', label, value, max = 100, min = 0, unit =
   const ghostUp = previewFrac != null && previewFrac > frac, ghostDown = previewFrac != null && previewFrac < frac;
 
   return (
-    <div className={`${s.gauge} ${s[status]} ${s[kind]} ${className}`} data-kind={kind} data-status={status} {...rest}>
+    <div className={`${s.gauge} ${s[status]} ${s[kind]} ${compact ? s.compact : ''} ${className}`} data-kind={kind} data-status={status} {...rest}>
       <div className={s.head}>
         <span id={labelId} className={s.label}>{label}</span>{help}
         <span className={s.reading}>

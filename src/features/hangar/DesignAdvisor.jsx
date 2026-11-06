@@ -11,7 +11,7 @@ export function priorityCheck(checks, critical) {
 }
 
 /** Explains the engine's actual constraints. Never claims a warning-free design guarantees success. */
-export function DesignAdvisor() {
+export function DesignAdvisor({compact = false}) {
   const t = useT(), locked = useLocked();
   const model = useGame(selectAnalysis), a = useGame(st => st.actions);
   const issue = priorityCheck(model.checks, model.m.critical);
@@ -25,7 +25,7 @@ export function DesignAdvisor() {
       tab?.scrollIntoView?.({block: 'nearest'}); tab?.focus();
     });
   };
-  return <section className={s.advisor} aria-label={t('Design advisor')}>
+  return <section className={compact ? `${s.advisor} ${s.advisorCompact}` : s.advisor} aria-label={t('Design advisor')}>
     <div className={s.advisorHead}>
       <span className="kicker"><Icon name="assistant" size={16} /> {t('YOUR NEXT DECISION')}</span>
       <Chip kind={failed ? 'fail' : warnings ? 'warn' : 'pass'} size="sm">{failed ? `${failed} ${t('launch blockers')}` : warnings ? `${warnings} ${t('trade-offs to review')}` : t('Checks clear')}</Chip>

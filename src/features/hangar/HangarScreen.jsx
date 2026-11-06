@@ -13,6 +13,7 @@ import {DesignAdvisor} from './DesignAdvisor.jsx';
 import {MarginsPanel} from './MarginsPanel.jsx';
 import {OrbitPanel} from './OrbitPanel.jsx';
 import {CrewStrip} from './CrewStrip.jsx';
+import {MobileInspector} from './MobileInspector.jsx';
 import {Spotlight} from './Spotlight.jsx';
 import {TraySheet} from './TraySheet.jsx';
 import {LaunchPanel, LaunchBar} from './LaunchPanel.jsx';
@@ -67,7 +68,7 @@ export function HangarScreen() {
       <div className={s.row}>
         <Button variant="ghost" size="sm" onClick={() => a.start()}>{locked ? t('Discard / new mission') : t('Mission board')}</Button>
         <Button variant="ghost" size="sm" onClick={() => a.customize()} disabled={locked} disabledReason={locked ? lockWhy : undefined}>{t('Engineering lab')}</Button>
-        {!guided ? <Button variant="ghost" size="sm" icon="help" onClick={() => a['guide-toggle']()}>{t('Show guided help')}</Button> : null}
+        {!guided ? <Button variant="ghost" size="sm" icon="help" iconOnly={narrow} label={narrow ? t('Show guided help') : undefined} onClick={() => a['guide-toggle']()}>{narrow ? null : t('Show guided help')}</Button> : null}
       </div>
     </motion.header>
   );
@@ -101,11 +102,7 @@ export function HangarScreen() {
         {objectiveStrip}
         {lockPanel}
         <div className={s.stageSticky}><StageSlot stageRef={stageRef} onDropPart={drop} compact /></div>
-        <CrewStrip />
-        <DesignAdvisor />
-        <MarginsPanel />
-        <OrbitPanel />
-        {presets}
+        <MobileInspector presets={presets} />
         <div className={s.mobilePad} aria-hidden="true" />
         <TraySheet header={<PartsTray part="tabs" />}><div ref={trayRef}><PartsTray part="list" onInstall={install} /></div></TraySheet>
         <LaunchBar />
