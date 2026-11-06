@@ -120,3 +120,13 @@ test('AI backup: browser and engine code never touch the key or the provider dir
   const gi = readFileSync(new URL('.gitignore', root), 'utf8');
   assert.match(gi, /^\.env/m);
 });
+
+test('AI backup: answers any ordinary question but is told to tie it back to the game, and refuses harm', async () => {
+  let sent;
+  await call({body: {question: 'Why is the sky blue?', context: {recent: ['How do I play?', '<b>x</b>', 'a'.repeat(400), 'four', 'five'], body: 'Moon'}}, fetchImpl: async (u, init) => { sent = JSON.parse(init.body); return geminiOk('ok')(); }});
+  const rules = sent.systemInstruction.parts[0].text, prompt = sent.contents[0].parts[0].text;
+  assert.match(rules, /any ordinary question, on any topic/); assert.match(rules, /ties? the answer back to the game/i); assert.match(rules, /requests for harm/); assert.match(rules, /Never invent numbers/);
+  assert.match(prompt, /earlier questions: a{120} \| four \| five/); assert.ok(!/<b>|How do I play/.test(prompt), 'only the last three are kept'); assert.ok(!/a{121}/.test(prompt), 'each is clipped to 120 characters');
+  assert.deepEqual(sanitizeContext({recent: 'not an array'}), {});
+  assert.deepEqual(sanitizeContext({recent: []}).recent, []);
+});
