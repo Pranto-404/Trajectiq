@@ -55,15 +55,15 @@ export function drawPatch(ctx, m, size = PATCH_SIZE) {
   ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(241,244,248,.55)'; ctx.beginPath(); ctx.arc(c, c, R - 22, 0, Math.PI * 2); ctx.stroke();
 
   ctx.textAlign = 'center'; ctx.fillStyle = '#f1f4f8'; ctx.textBaseline = 'middle';
-  ctx.font = '700 44px "Inter Variable", system-ui, sans-serif'; ctx.fillText('TRAJECTIQ', c, c - R * 0.76);
-  ctx.font = '600 30px "Inter Variable", system-ui, sans-serif'; ctx.fillStyle = '#b6c1ce'; ctx.fillText(m.title.toUpperCase(), c, c - R * 0.64);
-  ctx.fillStyle = gradeColor; ctx.font = '800 250px "Inter Variable", system-ui, sans-serif'; ctx.fillText(m.grade, c + R * 0.38, c - R * 0.16);
-  ctx.fillStyle = '#f1f4f8'; ctx.font = '700 64px "JetBrains Mono", ui-monospace, monospace'; ctx.fillText(`${m.total}`, c + R * 0.38, c + R * 0.28);
-  ctx.fillStyle = '#b6c1ce'; ctx.font = '500 28px "JetBrains Mono", ui-monospace, monospace'; ctx.fillText('/ 1000', c + R * 0.38, c + R * 0.4);
-  ctx.textAlign = 'left'; ctx.fillStyle = '#f1f4f8'; ctx.font = '700 38px "Inter Variable", system-ui, sans-serif'; ctx.fillText(m.name, c - R * 0.78, c - R * 0.34);
-  ctx.fillStyle = '#b6c1ce'; ctx.font = '500 26px "Inter Variable", system-ui, sans-serif';
+  ctx.font = '700 44px "IBM Plex Sans", system-ui, sans-serif'; ctx.fillText('TRAJECTIQ', c, c - R * 0.76);
+  ctx.font = '600 30px "IBM Plex Sans", system-ui, sans-serif'; ctx.fillStyle = '#b6c1ce'; ctx.fillText(m.title.toUpperCase(), c, c - R * 0.64);
+  ctx.fillStyle = gradeColor; ctx.font = '800 250px "IBM Plex Sans", system-ui, sans-serif'; ctx.fillText(m.grade, c + R * 0.38, c - R * 0.16);
+  ctx.fillStyle = '#f1f4f8'; ctx.font = '700 64px "IBM Plex Mono", ui-monospace, monospace'; ctx.fillText(`${m.total}`, c + R * 0.38, c + R * 0.28);
+  ctx.fillStyle = '#b6c1ce'; ctx.font = '500 28px "IBM Plex Mono", ui-monospace, monospace'; ctx.fillText('/ 1000', c + R * 0.38, c + R * 0.4);
+  ctx.textAlign = 'left'; ctx.fillStyle = '#f1f4f8'; ctx.font = '700 38px "IBM Plex Sans", system-ui, sans-serif'; ctx.fillText(m.name, c - R * 0.78, c - R * 0.34);
+  ctx.fillStyle = '#b6c1ce'; ctx.font = '500 26px "IBM Plex Sans", system-ui, sans-serif';
   ctx.fillText(`${m.body} · ${m.label}${m.achieved ? ' · objective achieved' : ' · objective incomplete'}`, c - R * 0.78, c - R * 0.26);
-  ctx.textAlign = 'center'; ctx.font = '500 21px "JetBrains Mono", ui-monospace, monospace'; ctx.fillStyle = '#8d9bab';
+  ctx.textAlign = 'center'; ctx.font = '500 21px "IBM Plex Mono", ui-monospace, monospace'; ctx.fillStyle = '#8d9bab';
   ctx.fillText('Educational game · not a NASA product', c, c + R * 0.9);
   return m;
 }

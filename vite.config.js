@@ -26,7 +26,8 @@ export default defineConfig({
     outDir: 'site',
     emptyOutDir: true,
     sourcemap: false,
-    assetsInlineLimit: 4096,
+    // Fonts stay separate files (cached, not render-blocking inside the CSS); other small assets still inline below 4 KB.
+    assetsInlineLimit: file => (file.endsWith('.woff2') ? false : undefined),
     chunkSizeWarningLimit: 700,
     // Only the game is built. kit.html (the design-system gallery) is a development page.
     rolldownOptions: {input: path.resolve(root, 'index.html')}

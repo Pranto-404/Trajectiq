@@ -20,13 +20,11 @@ function ContextCard({ctx}) {
   const t = useT();
   const a = analyze(ctx.run?.design || ctx.design), r = ctx.run;
   return (
-    <div className={s.context} data-testid="assistant-context">
+    <p className={s.context} data-testid="assistant-context" title={t('Answers use this context. Older answers are snapshots from when you asked.')}>
       <Chip kind={r ? 'mode' : 'info'} size="sm" icon={r ? 'orbit' : 'assistant'}>{r ? (r.done ? t('Completed mission') : t('Paused mission')) : t('Current draft')}</Chip>
       <strong>{clean(a.d.name, 40)}</strong>
-      <span className="num">{r ? `T+${fmt(r.minute, 1)} min · ${fmt(r.science)} ${t('science returned')}` : `${fmt(a.cost, 1)} / ${a.m.budget} cr · ${fmt(a.wet, 1)} kg`}</span>
-      {r ? <span className="num">{t('battery')} {fmt(r.battery / a.c.power.battery * 100)}% · {t('Recorder')} {fmt(r.backlog / a.c.storage.capacity * 100)}%</span> : null}
-      <small className={s.muted}>{t('Answers use this context. Older answers are snapshots from when you asked.')}</small>
-    </div>
+      <span className="num">{r ? `T+${fmt(r.minute, 1)} min · ${fmt(r.science)} ${t('science returned')} · ${t('battery')} ${fmt(r.battery / a.c.power.battery * 100)}%` : `${fmt(a.cost, 1)} / ${a.m.budget} cr · ${fmt(a.wet, 1)} kg`}</span>
+    </p>
   );
 }
 
@@ -90,60 +88,67 @@ export function AssistantBody() {
   };
   const onSubmit = async e => { e.preventDefault(); const text = q; if (await ask(text)) setQ(current => current === text ? '' : current); };
   const design = ctx.run?.design || ctx.design;
+  const a0 = analyze(ctx.run?.design || ctx.design), bodyName = a0.m.bodyName || 'Moon';
+  const starters = [...quickQuestions(ctx), ...tryThese(ctx, bodyName).slice(0, 2)].filter((x, k, all) => all.indexOf(x) === k).slice(0, 6);
   return (
     <div className={s.chatBody}>
       <div className={s.chatScroll}>
-      <p className={s.chatIntro}>{t('I read your current mission. Ask what to do next, or why something changed.')} <strong>{t('Flight pauses while you read.')}</strong></p>
-      <ContextCard ctx={ctx} />
-      {!['en', 'bn'].includes(language) && <p className={s.muted}>{t('Detailed assistant explanations are currently in English. Use the translated quick questions.')}</p>}
-      {crisis ? (
-        <section className={s.crisis} aria-label={t('Rough preview of the pending decision')}>
-          <span className="kicker">{t('Rough preview · direction only')}</span>
-          <DirectionChips directions={crisis.directions} />
-          <p className={s.muted}>{t('Provenance: each response was rehearsed to campaign end from this exact paused state by the game engine. Only directions are shown so the decision stays yours.')}</p>
-          {crisis.forecastAvailable ? <Button size="sm" variant="secondary" disabled={busy} onClick={() => ask('Use my one forecast')}>{t('Spend my one forecast for ranges')}</Button> : <small className={s.muted}>{t('Your one forecast for this mission is used.')}</small>}
-        </section>
-      ) : null}
-      <div className={s.chipRow} role="group" aria-label={t('Quick questions')}>{quickQuestions(ctx).map(x => <Button key={x} size="sm" variant="ghost" disabled={busy} onClick={() => ask(x)}>{t(x)}</Button>)}</div>
-      {chat.length ? null : (
-        <div className={s.stackSm} data-testid="assistant-try">
-          <span className="kicker">{t('Things to try')}</span>
-          <div className={s.chipRow} role="group" aria-label={t('Things to try')}>{tryThese(ctx, analyze(ctx.run?.design || ctx.design).m.bodyName || 'Moon').map(x => <Button key={x} size="sm" variant="secondary" disabled={busy} onClick={() => ask(x)}>{x}</Button>)}</div>
-        </div>
-      )}
-      <div ref={log} className={s.thread} role="log" aria-live="polite" aria-label={t('Conversation')} tabIndex={0}>
-        {chat.length ? chat.map((m, i) => (
-          <div key={i} className={s.exchange}>
-            <p className={s.question}><Icon name="arrow-right" size={12} /> {String(m.q)}</p>
-            <AnswerCard answer={m.answer} index={i} design={design} locked={locked} level={level} language={language} onApply={n => act.applyAssistant(n)} onAsk={ask} onAI={() => act.askAI(i)} ai={m.ai} showSuggestions={i === chat.length - 1} />
+        <ContextCard ctx={ctx} />
+        {!['en', 'bn'].includes(language) && <p className={s.muted}>{t('Detailed assistant explanations are currently in English. Use the translated quick questions.')}</p>}
+        {crisis ? (
+          <section className={s.crisis} aria-label={t('Rough preview of the pending decision')}>
+            <span className="kicker">{t('Rough preview · direction only')}</span>
+            <DirectionChips directions={crisis.directions} />
+            <p className={s.muted}>{t('Provenance: each response was rehearsed to campaign end from this exact paused state by the game engine. Only directions are shown so the decision stays yours.')}</p>
+            {crisis.forecastAvailable ? <Button size="sm" variant="secondary" disabled={busy} onClick={() => ask('Use my one forecast')}>{t('Spend my one forecast for ranges')}</Button> : <small className={s.muted}>{t('Your one forecast for this mission is used.')}</small>}
+          </section>
+        ) : null}
+        {chat.length ? null : (
+          <div className={s.hello} data-testid="assistant-try">
+            <span className={s.helloMark} aria-hidden="true"><Icon name="assistant" size={22} /></span>
+            <h3 className={s.helloTitle}>{t('How can I help, Commander?')}</h3>
+            <p className={s.helloSub}>{t('Ask about your design, the flight, the maths or NASA data.')}</p>
+            <div className={s.starters} role="group" aria-label={t('Quick questions')}>
+              {starters.map(x => <button key={x} type="button" className={s.starter} disabled={busy} onClick={() => ask(x)}>{t(x)}</button>)}
+            </div>
           </div>
-        )) : <p className={s.muted}>{t('Say hi, or ask anything about your mission: readiness, battery, orbit maths, NASA data for eight worlds, what-if changes and crisis choices.')}</p>}
-        {busy ? <p className={s.muted} role="status">{t('Thinking with the game engine…')}</p> : null}
-      </div>
-      <details className={s.disclosure}>
-        <summary>{t('Tools & preferences')}</summary>
-        <label className={s.switchRow} data-testid="ai-auto">
-          <input type="checkbox" checked={aiAuto} onChange={e => act.setPref('aiBackup', e.target.checked)} />
-          <span><strong>{t('Automatic AI backup')}</strong><small className={s.muted}>{t('When the verified assistant cannot answer, an AI model answers instead. Your question and a short mission summary are sent to Google Gemini through this site. Turn off to be asked first.')}</small></span>
-        </label>
-      <div className={s.row}>
-        <Segmented size="sm" label={t('Level')} value={level} onChange={v => act.setMentorLevel(v)} options={[{value: 'Beginner', label: t('Beginner'), hint: t('Plain language; tables folded')}, {value: 'Engineer', label: t('Engineer'), hint: t('Evidence class and full tables')}]} />
-        <LanguagePicker />
-      </div>
-        <Experiments ctx={ctx} onAsk={ask} busy={busy} />
-        <p className={s.muted}>{t('Local reasoning and the game engine; no generative AI, no API key. I say when I cannot answer.')}</p>
-        <Button variant="ghost" size="sm" disabled={!chat.length} onClick={() => act['clear-chat']()}>{t('Clear conversation')}</Button>
-        <details className={s.disclosure}><summary>{t('Browse everything I can explain')}</summary><div className={s.chipRow}>{HELP_TOPICS.map(topic => <Button key={topic[0]} size="sm" variant="ghost" disabled={busy} onClick={() => ask(topic[1])}>{clean(topic[1], 80)}</Button>)}</div></details>
-      </details>
+        )}
+        <div ref={log} className={s.thread} role="log" aria-live="polite" aria-label={t('Conversation')} tabIndex={0}>
+          {chat.map((m, i) => (
+            <div key={i} className={s.exchange}>
+              <p className={s.question}>{String(m.q)}</p>
+              <AnswerCard answer={m.answer} index={i} design={design} locked={locked} level={level} language={language} onApply={n => act.applyAssistant(n)} onAsk={ask} onAI={() => act.askAI(i)} ai={m.ai} showSuggestions={i === chat.length - 1} />
+            </div>
+          ))}
+          {busy ? <p className={s.muted} role="status">{t('Thinking with the game engine…')}</p> : null}
+        </div>
       </div>
       <div role="alert">{error}</div>
-      {aiAuto ? <small className={s.muted} data-testid="ai-notice">{t('If I cannot answer, an AI backup may reply. Answers from it are labelled.')}</small> : null}
-      <form onSubmit={onSubmit} className={s.askForm}>
-        <label className={s.field} htmlFor={inputId}>{t('Your question')}
-          <input id={inputId} name="question" maxLength={500} autoComplete="off" placeholder={t('e.g. Am I ready to launch?')} value={q} onChange={e => setQ(e.target.value)} required />
-        </label>
-        <Button type="submit" variant="primary" loading={busy}>{t('Ask')}</Button>
+      <form onSubmit={onSubmit} className={s.composer}>
+        <label className="sr-only" htmlFor={inputId}>{t('Your question')}</label>
+        <input id={inputId} name="question" maxLength={500} autoComplete="off" placeholder={t('e.g. Am I ready to launch?')} value={q} onChange={e => setQ(e.target.value)} required />
+        <Button type="submit" variant="primary" iconOnly icon="arrow-right" label={t('Ask')} loading={busy} />
       </form>
+      <div className={s.composerMeta}>
+        {aiAuto ? <small className={s.muted} data-testid="ai-notice">{t('If I cannot answer, an AI backup may reply. Answers from it are labelled.')}</small> : <span />}
+        <details className={s.tools}>
+          <summary>{t('Tools & preferences')}</summary>
+          <div className={s.toolsBody}>
+            <label className={s.switchRow} data-testid="ai-auto">
+              <input type="checkbox" checked={aiAuto} onChange={e => act.setPref('aiBackup', e.target.checked)} />
+              <span><strong>{t('Automatic AI backup')}</strong><small className={s.muted}>{t('When the verified assistant cannot answer, an AI model answers instead. Your question and a short mission summary are sent to Google Gemini through this site. Turn off to be asked first.')}</small></span>
+            </label>
+            <div className={s.row}>
+              <Segmented size="sm" label={t('Level')} value={level} onChange={v => act.setMentorLevel(v)} options={[{value: 'Beginner', label: t('Beginner'), hint: t('Plain language; tables folded')}, {value: 'Engineer', label: t('Engineer'), hint: t('Evidence class and full tables')}]} />
+              <LanguagePicker />
+            </div>
+            <Experiments ctx={ctx} onAsk={ask} busy={busy} />
+            <p className={s.muted}>{t('Local reasoning and the game engine; no generative AI, no API key. I say when I cannot answer.')}</p>
+            <Button variant="ghost" size="sm" disabled={!chat.length} onClick={() => act['clear-chat']()}>{t('Clear conversation')}</Button>
+            <details className={s.disclosure}><summary>{t('Browse everything I can explain')}</summary><div className={s.chipRow}>{HELP_TOPICS.map(topic => <Button key={topic[0]} size="sm" variant="ghost" disabled={busy} onClick={() => ask(topic[1])}>{clean(topic[1], 80)}</Button>)}</div></details>
+          </div>
+        </details>
+      </div>
     </div>
   );
 }
