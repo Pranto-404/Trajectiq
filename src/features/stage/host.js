@@ -20,6 +20,22 @@ export function createHost({loadCanvas, detect = () => detectWebGL2(), doc = glo
   el.setAttribute('data-stage-host', '');
   el.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;';
   let parking = null;
+  // Do not spend GPU time on a mounted scene below the fold. Keep the last frame.
+  let observer = null;
+  const observe = target => {
+    observer?.disconnect();
+    const Observer = doc.defaultView?.IntersectionObserver;
+    if (!Observer) return;
+    observer = new Observer(entries => {
+      const entry = entries.find(e => e.target === slot);
+      if (!entry) return;
+      const offscreen = !entry.isIntersecting;
+      if (store.get().offscreen === offscreen) return;
+      store.set({...store.get(), offscreen});
+      if (!offscreen) runtime.poke();
+    }, {rootMargin: '80px'});
+    observer.observe(target);
+  };
   const park = () => {
     if (!parking) { parking = doc.createElement('div'); parking.setAttribute('aria-hidden', 'true'); parking.style.cssText = 'position:fixed;left:-10000px;top:0;width:320px;height:240px;visibility:hidden;pointer-events:none;overflow:hidden;'; }
     if (!parking.isConnected) doc.body.appendChild(parking);
@@ -61,13 +77,15 @@ export function createHost({loadCanvas, detect = () => detectWebGL2(), doc = glo
       if (disposed) return;
       clearTimeout(parkTimer);
       slot = slotEl; slotEl.appendChild(el);
-      store.set({...store.get(), parked: false});
+      store.set({...store.get(), parked: false, offscreen: false});
+      observe(slotEl);
       runtime.poke();
       start();
     },
     /** A slot unmounted. If no other slot claims the canvas shortly, park it (the scene pauses, nothing is disposed). */
     detach(slotEl) {
       if (slot !== slotEl) return;
+      observer?.disconnect();
       slot = null;
       clearTimeout(parkTimer);
       parkTimer = setTimeout(() => { if (!slot && !disposed) { park(); store.set({...store.get(), parked: true}); } }, 0);
@@ -82,6 +100,7 @@ export function createHost({loadCanvas, detect = () => detectWebGL2(), doc = glo
     retry() { if (status === 'fallback' && !disposed) { status = 'idle'; start(); } },
     /** Release the scene and every GPU resource. The host can be used again by calling attach(). */
     dispose() {
+      observer?.disconnect(); observer = null;
       clearTimeout(parkTimer); teardown(); runtime.reset(); store.clear();
       el.remove(); parking?.remove(); slot = null; setStatus('idle');
     }

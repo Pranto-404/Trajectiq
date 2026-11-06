@@ -62,7 +62,7 @@ export function BoardScreen() {
             <span className="kicker">{t('How you play')}</span>
             <Segmented label={t('Mode')} value={mode} onChange={v => a['board-mode']({mode: v})} fullWidth
               options={[{value: 'solo', label: t('Solo'), icon: 'assistant', hint: t('You play every role')}, {value: 'crew', label: t('Crew'), icon: 'share', hint: t('2–4 players, shared decisions')}, {value: 'sandbox', label: t('Sandbox'), icon: 'motion', hint: t('No budget cap, unranked')}].map(o => ({...o, disabled: locked}))} />
-            <p className={s.note}>{mode === 'solo' ? t('You play every role') : mode === 'crew' ? t('2–4 players, shared decisions') : t('No budget cap, unranked')}</p>
+            <p className={s.note}>{mode === 'solo' ? t('You play every role') : mode === 'crew' ? t('2–4 friends on one device · take turns by role') : t('No budget cap, unranked')}</p>
           </motion.section>
 
           {mode === 'crew' ? <CrewSetup reduced={reduced} locked={locked} /> : null}

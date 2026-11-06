@@ -37,11 +37,12 @@ export function SourcesSheet() {
         <Method i={1} kicker={t('Derived · orbit')} title={t('Circular orbit period')} formula={'T = 2π √((R + h)³ / μ)'}>
           R = {fmt(M.radius, 1)} km, μ = {fmt(M.mu, 3)} km³/s² ({body}). {t('Divide T by 60 for minutes. Shadow uses a central cylindrical bound ({m} min at the reference altitude); contact windows ({c} min) are fixed teaching schedules, not dated ground geometry.', {m: fmt(M.eclipseMinutes, 1), c: M.contactMinutes})}
         </Method>
-        <Method i={2} kicker={t('Derived · energy')} title={t('Battery integration')} formula={'E(next) = clamp(E + (Pgen − Pload) × Δt / 60)'}>
+        <Method i={2} kicker={t('Derived · energy')} title={t('Battery integration')} formula={'E(next) = clamp(E + (Pgen − Pload) × Δt / 60, 0, capacity)'}>
           {t('E in Wh, power in W, Δt ≤ 1 minute, split at orbit window boundaries. Generation is zero in eclipse; operations apply an 85% derating. Safe mode begins at 15% state of charge and ends above 40%.')}
         </Method>
-        <Method i={3} kicker={t('Derived · information')} title={t('Data → returned science')} formula={'MB = Mb/s × seconds / 8\nScience = quality × duty × time × 10'}>
+        <Method i={3} kicker={t('Derived · information')} title={t('Data → returned science')} formula={'MB = Mb/s × seconds / 8\nGenerated science = quality × duty × minutes × 10'}>
           {t('Only accepted data is stored. Overflow discards new data. Science depends on payload quality, pointing, inclination and altitude. Unreturned observations do not count.')}
+          {' '}{t('The factor 10 sets the educational score scale; it is not a physical constant. Stored science is reduced by the accepted-data fraction, and earns points only when downlinked.')}
         </Method>
       </div>
 

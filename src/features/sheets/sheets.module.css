@@ -50,8 +50,13 @@
 .chatBody { height: 100%; display: flex; flex-direction: column; min-height: 0; gap: 8px; }
 .chatScroll { overflow: auto; min-height: 0; flex: 1; display: flex; flex-direction: column; gap: 14px; padding-right: 4px; overscroll-behavior: contain; }
 .chatIntro { font-size: var(--text-13); color: var(--text-2); line-height: 1.6; }
-.chatBody .askForm { flex: none; padding-top: 12px; border-top: 1px solid var(--line-2); }
-.chatBody .thread { flex: 1; grid-template-columns: minmax(0, 1fr); }
+.chatBody .askForm { flex: none; padding: 16px 4px 6px; border-top: 1px solid var(--line-2); gap: 12px; }
+.chatBody .askForm .field { gap: 8px; }
+.chatBody .askForm input { height: 46px; font-size: 16px; padding-inline: 12px; }
+.chatBody .askForm button { min-height: 46px; min-width: 64px; }
+.chatBody .thread { grid-template-columns: minmax(0, 1fr); }
+.chatScroll > * { flex-shrink: 0; }
+.chatBody .disclosure { margin-top: auto; }
 .chatBody .exchange, .chatBody .answer { min-width: 0; grid-template-columns: minmax(0, 1fr); }
 .chatBody .field input, .chatBody .field select { min-width: 0; width: 100%; }
 .chatBody .evidence { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }

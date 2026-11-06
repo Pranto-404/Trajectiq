@@ -18,8 +18,8 @@
   --text-1: #f1f4f8;
   --text-2: #b6c1ce;
   --text-3: #8d9bab;
-  --lime-500: #ccff6b;
-  --lime-600: #b4f03f;
+  --lime-500: #a8e8ce;
+  --lime-600: #8dd9bc;
   --on-lime: #0b1305;
   --cyan-400: #7cdbf3;
   --amber-400: #ffbc6e;
@@ -40,7 +40,7 @@
   --glass: rgb(14 22 32 / .82);
 
   /* glow replaces drop shadow */
-  --glow-lime: 0 0 0 1px rgb(204 255 107 / .5), 0 0 24px rgb(204 255 107 / .25);
+  --glow-lime: 0 0 0 1px rgb(168 232 206 / .45), 0 0 20px rgb(168 232 206 / .14);
   --glow-cyan: 0 0 0 1px rgb(124 219 243 / .5), 0 0 20px rgb(124 219 243 / .2);
   --glow-red: 0 0 0 1px rgb(255 123 131 / .55), 0 0 22px rgb(255 123 131 / .25);
   --inner-highlight: inset 0 1px 0 rgb(255 255 255 / .06);

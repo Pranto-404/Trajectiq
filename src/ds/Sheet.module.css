@@ -9,6 +9,9 @@
 .body { overflow: auto; overscroll-behavior: contain; display: grid; gap: var(--space-3); align-content: start; touch-action: pan-y; }
 .footer { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: flex-end; }
 .chat { right: 24px; bottom: 24px; width: min(460px, calc(100vw - 32px)); height: min(740px, calc(100dvh - 100px)); border-radius: 24px; padding: 18px; box-shadow: var(--elevation-panel), 0 24px 80px rgb(0 0 0 / .25); }
-.chat .body { display: block; min-height: 0; overflow: hidden; }
+.chat { grid-template-rows: auto minmax(0, 1fr); }
+.chat .body { display: block; min-height: 0; overflow: hidden; padding: 3px; margin: -3px; }
 .chat .header { padding-bottom: 10px; border-bottom: 1px solid var(--line-1); }
+.bottom { grid-template-rows: auto auto minmax(0, 1fr) auto; }
+.bottom .body, .side .body { min-width: 0; min-height: 0; }
 @media (max-width: 760px) { .chat { inset: auto 8px max(8px, env(safe-area-inset-bottom)) 8px; width: auto; height: min(760px, calc(100dvh - 32px)); padding: 14px; } }

@@ -72,6 +72,21 @@ describe('SVG fallback (WebGL2 unavailable)', () => {
 });
 
 describe('persistent host (mocked 3D chunk)', () => {
+  it('suspends offscreen slots, resumes visible slots and ignores stale observations', () => {
+    const callbacks = [], disconnect = vi.fn();
+    const original = window.IntersectionObserver;
+    window.IntersectionObserver = class { constructor(cb) { callbacks.push(cb); } observe() {} disconnect() { disconnect(); } };
+    const h = createHost({detect: () => false}), one = document.createElement('div'), two = document.createElement('div');
+    try {
+      h.attach(one); callbacks[0]([{target: one, isIntersecting: false}]);
+      expect(h.store.get().offscreen).toBe(true);
+      h.update({phase: 'operations'}); expect(h.store.get().offscreen).toBe(true);
+      callbacks[0]([{target: one, isIntersecting: true}]); expect(h.store.get().offscreen).toBe(false);
+      h.detach(one); h.attach(two);
+      callbacks[0]([{target: one, isIntersecting: false}]); expect(h.store.get().offscreen).toBe(false);
+      h.dispose(); expect(disconnect).toHaveBeenCalled();
+    } finally { h.dispose(); window.IntersectionObserver = original; }
+  });
   // Counters live in a per-test object so a late load from a previous test cannot pollute the next one.
   let S;
   beforeEach(() => {

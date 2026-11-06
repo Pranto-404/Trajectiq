@@ -15,6 +15,10 @@ h1 { font-size: var(--text-28); line-height: 1.15; font-weight: 650; letter-spac
 h2 { font-size: var(--text-20); line-height: 1.25; font-weight: 620; }
 h3 { font-size: var(--text-16); line-height: 1.3; font-weight: 600; }
 button, input, select, textarea { font: inherit; color: inherit; }
+/* Keep touch text fields readable without Safari's small-input focus zoom. */
+@media (pointer: coarse), (max-width: 760px) {
+  input, select, textarea { font-size: 16px; min-height: 44px; }
+}
 button { cursor: pointer; }
 a { color: var(--cyan-400); }
 code, kbd, samp, .mono { font-family: var(--font-mono); }

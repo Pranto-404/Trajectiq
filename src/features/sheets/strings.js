@@ -1,6 +1,7 @@
 // Bengali strings for the sheets package (key = English source text). Missing keys render in English.
 export const strings = {
   bn: {
+    'The factor 10 sets the educational score scale; it is not a physical constant. Stored science is reduced by the accepted-data fraction, and earns points only when downlinked.': '১০ গুণকটি শিক্ষামূলক স্কোরের মাপ নির্ধারণ করে; এটি ভৌত ধ্রুবক নয়। যতটুকু ডেটা রাখা যায় ততটুকুর বিজ্ঞান জমে, আর পৃথিবীতে পাঠালেই পয়েন্ট হয়।',
     'Tools & preferences': 'সরঞ্জাম ও পছন্দ',
     'I read your current mission. Ask what to do next, or why something changed.': 'আমি আপনার বর্তমান মিশন দেখি। পরের ধাপ বা পরিবর্তনের কারণ জানতে চান।',
     'Explain my result': 'আমার ফলাফল বুঝিয়ে দিন',

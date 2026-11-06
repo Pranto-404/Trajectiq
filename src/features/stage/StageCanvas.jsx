@@ -43,10 +43,10 @@ function StageRoot({ctx, hooks}) {
   useEffect(() => { const f = () => setHidden(!!document.hidden); document.addEventListener('visibilitychange', f); return () => document.removeEventListener('visibilitychange', f); }, []);
   const tier = resolveTier(props.quality, auto), settings = TIER_SETTINGS[tier];
   const reduced = !!props.reduced;
-  const frameloop = props.parked || hidden ? 'never' : reduced ? 'demand' : 'always';
+  const frameloop = props.parked || props.offscreen || hidden ? 'never' : reduced ? 'demand' : 'always';
   const dpr = dprRange(tier, {phone: env.phone, devicePixelRatio: env.dpr});
   const cam = CAMERA_PRESETS.hangar;
-  useEffect(() => { if (!hidden && !props.parked) ctx.runtime.poke(); }, [hidden, props.parked, ctx]);
+  useEffect(() => { if (!hidden && !props.parked && !props.offscreen) ctx.runtime.poke(); }, [hidden, props.parked, props.offscreen, ctx]);
   const antialias = useMemo(() => settings.antialias, []); // fixed at context creation
   const onCreated = ({gl}) => {
     const el = gl.domElement; let timer = 0;

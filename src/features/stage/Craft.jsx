@@ -3,7 +3,7 @@
 import {createContext, useCallback, useContext, useMemo} from 'react';
 import {DoubleSide, AdditiveBlending} from 'three';
 import {KINDS, SOCKETS} from './parts.js';
-import {solarTexture} from './textures.js';
+import {solarTexture, foilTexture} from './textures.js';
 
 export const CraftCtx = createContext(null);
 
@@ -29,9 +29,10 @@ const Cyl = ({p = [0, 0, 0], a, rot, seg = 24, ...mat}) => <mesh position={p} ro
 
 function Bus({spec, color}) {
   const b = spec.parts.bus, [w, h, d] = b.size;
+  const blanket = useMemo(() => foilTexture(), []);
   return (
     <group>
-      <Box k="bus" s={[w, h, d]} c={color} m={b.foil ? 0.75 : 0.45} r={b.foil ? 0.32 : 0.5} />
+      <Box k="bus" s={[w, h, d]} c={color} map={b.foil ? blanket : undefined} m={b.foil ? 0.75 : 0.45} r={b.foil ? 0.32 : 0.5} />
       <Box k="bus" s={[w + 0.02, 0.04, d + 0.02]} p={[0, h / 2 - 0.02, 0]} c="#2b3744" m={0.3} r={0.6} />
       <Box k="bus" s={[w + 0.02, 0.04, d + 0.02]} p={[0, -h / 2 + 0.02, 0]} c="#2b3744" m={0.3} r={0.6} />
       <Cyl k="bus" a={[0.035, 0.035, 0.1]} p={[-w / 2 + 0.08, h / 2 + 0.04, -d / 2 + 0.08]} c="#1a222c" />
@@ -58,7 +59,7 @@ function Wings({spec, api}) {
   return (
     <group>
       {[-1, 1].map(sign => (
-        <group key={sign} position={[sign * 0.26, 0, 0]} ref={n => { if (n) api.wings.add(n); }}>
+        <group key={sign} position={[sign * 0.26, 0, 0]} ref={n => { if (!n) return; api.wings.add(n); return () => api.wings.delete(n); }}>
           <Box k="power" s={[0.12, 0.03, 0.03]} p={[sign * 0.06, 0, 0]} c="#c7d0d8" m={0.6} r={0.4} />
           {Array.from({length: pw.cells}, (_, i) => (
             <mesh key={i} position={[sign * (0.14 + cellW * (i + 0.5) + i * 0.012), 0, 0]}>

@@ -4,6 +4,17 @@ Keep this file current. Update it after every milestone, agent launch and agent 
 
 Last updated: 2026-11-06. Event date below is retained from the owner's project notes, not independently verified.
 
+## Responsive polish, performance and crew verification — 2026-11-06
+
+Follow-up to the owner's cramped-chat screenshot. Work is on feat-responsive-polish, verified locally and being published to main. Previous contextual-copilot release 72c223d is already live.
+
+- Larger chat composer, focus-ring clearance, short-screen sheet sizing, touch input fonts and a repaired 320px mission-charter overflow.
+- Softer mint/navy dark theme, original thermal-blanket texture, restrained scene framing and briefing motion. Mobile panel blur removed; offscreen WebGL pauses; unmounted solar-wing references are released.
+- Corrected Ice Hunter's squared coverage explanation; clarified equation units, clamp limits and generated/returned science distinction.
+- Verified four-person pass-and-play setup, handoffs, sign-offs, proposal acceptance, crisis voting/tie resolution and two completed crew flights. Network multiplayer is not implemented.
+- Final validation: 372 Node + 359 UI tests (731), build passed, 290 workload runs completed. Six Edge viewport sizes, phone report/tools checks and 320px/landscape chat review. No physical Apple/Android device or Safari-engine test is claimed.
+- Details, measurements, reference links and limitations: [responsive/performance review](../RESPONSIVE_PERFORMANCE_REVIEW.md).
+
 ## Contextual copilot and onboarding — 2026-11-06
 
 Latest follow-up supersedes older assistant placement and release notes below. Publishing feat-contextual-copilot to main after verification.

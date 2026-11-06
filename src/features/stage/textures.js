@@ -8,7 +8,7 @@ const urlLoader = name => URLS[`../../assets/textures/${name}.jpg`];
 
 const owned = new Set(), cache = new Map();
 export const track = t => { owned.add(t); return t; };
-export function disposeTextures() { for (const t of owned) t.dispose(); owned.clear(); cache.clear(); solar = null; }
+export function disposeTextures() { for (const t of owned) t.dispose(); owned.clear(); cache.clear(); solar = null; foil = null; }
 export const ownedTextureCount = () => owned.size;
 export const hasBundledTexture = name => typeof urlLoader(name) === 'function';
 
@@ -45,7 +45,22 @@ export function proceduralTexture(visual, w = 512, h = 256) {
   return track(tex);
 }
 
-let solar = null;
+let solar = null, foil = null;
+/** Original thermal-blanket seams: one small shared texture, no added geometry or downloads. */
+export function foilTexture() {
+  if (foil) return foil;
+  const canvas = document.createElement('canvas'); canvas.width = canvas.height = 128;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#dedbd0'; ctx.fillRect(0, 0, 128, 128);
+  for (let i = 0; i < 24; i++) {
+    const x = (i * 47) % 128, y = (i * 71) % 128;
+    ctx.strokeStyle = i % 2 ? '#f6f2df' : '#aaa99f'; ctx.lineWidth = .7;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo((x + 37) % 128, (y + 53) % 128); ctx.stroke();
+  }
+  ctx.strokeStyle = '#7c858b'; ctx.lineWidth = 2; ctx.strokeRect(4, 4, 120, 120);
+  foil = new CanvasTexture(canvas); foil.colorSpace = SRGBColorSpace;
+  return track(foil);
+}
 /** Solar-cell grid texture (shared). */
 export function solarTexture() {
   if (solar) return solar;

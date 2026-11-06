@@ -81,6 +81,7 @@
 .noteList { margin: 0; padding-inline-start: var(--space-4); display: grid; gap: var(--space-1); }
 .actions { display: grid; gap: var(--space-2); }
 .actions > button:first-child { width: 100%; }
+.actions > button { white-space: normal; min-width: 0; height: auto; padding-block: 10px; }
 
 .pitch { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border: 1px solid var(--violet-400); border-radius: var(--radius-panel); background: color-mix(in srgb, var(--violet-400) 10%, var(--surface-1)); }
 .pitch svg { color: var(--violet-400); }
@@ -167,6 +168,15 @@
 .heroCopy { padding: clamp(24px, 2.5vw, 36px); }
 .heroCopy h1 { font-size: clamp(30px, 2.8vw, 44px); margin-block: 16px 12px; }
 .heroActions { margin-top: 18px; }
+.missionArt::after { content: ''; position: absolute; inset: -50%; pointer-events: none; background: linear-gradient(105deg, transparent 43%, color-mix(in srgb, var(--cyan-400) 9%, transparent) 50%, transparent 57%); animation: observatorySweep 20s ease-in-out infinite; }
+@keyframes observatorySweep { 0%, 20% { transform: translateX(-35%) rotate(-12deg); opacity: 0; } 45% { opacity: .6; } 75%, 100% { transform: translateX(35%) rotate(-12deg); opacity: 0; } }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .card { transition: border-color 180ms ease, background 180ms ease, transform 240ms var(--ease-enter); }
+  .card:hover { transform: perspective(900px) translateY(-3px) rotateX(1deg); }
+}
+:global([data-motion="reduced"]) .missionArt::after { animation: none; opacity: 0; }
+:global([data-background-paused="true"]) .missionArt::after { animation-play-state: paused; }
+:global([data-motion="reduced"]) .card:hover { transform: none; }
 .selectedBrief { margin-top: 20px; }
 .main { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
 .main > * { grid-column: 1 / -1; }

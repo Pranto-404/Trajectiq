@@ -28,6 +28,7 @@ export const BOARD_BN = {
   'Plan your mission.': 'আপনার মিশন সাজান।',
   'Pick how you play, choose an objective, then build the spacecraft that can reach it.': 'কীভাবে খেলবেন বাছুন, লক্ষ্য ঠিক করুন, তারপর সেই লক্ষ্যে পৌঁছানোর মহাকাশযান বানান।',
   'Play mode': 'খেলার ধরন', 'How you play': 'কীভাবে খেলবেন', 'Mode': 'ধরন', 'Solo': 'একা', 'Crew': 'দল', 'Sandbox': 'স্যান্ডবক্স',
+  '2–4 friends on one device · take turns by role': 'একটি ডিভাইসে ২–৪ জন বন্ধু · ভূমিকা অনুযায়ী পালা নিন',
   'You play every role': 'সব ভূমিকা আপনিই সামলাবেন', '2–4 players, shared decisions': '২–৪ জন, একসাথে সিদ্ধান্ত', 'No budget cap, unranked': 'বাজেটের সীমা নেই, র‍্যাংক হবে না',
   'Objective': 'লক্ষ্য', 'Scenario': 'পরিস্থিতি', 'Difficulty': 'কঠিনতা', 'Selected': 'বাছাই করা', 'Critical': 'সবচেয়ে গুরুত্বপূর্ণ',
   'units to return': 'একক ফেরত আনতে হবে', 'Simplified': 'সরলীকৃত', 'Game assumptions': 'খেলার অনুমান',
