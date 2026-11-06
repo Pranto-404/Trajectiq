@@ -2,7 +2,7 @@
 // Unknown ids never throw: they fall back to the engine's own colours (getBody) and then to a neutral grey rock.
 // `texture` names a bundled NASA map (see textures.js and src/assets/ATTRIBUTION.md); null means procedural shading.
 // radiusRatio is a visual exaggeration of the body against the stage reference radius, not a true size ratio.
-import {getBody} from '@engine/api.js';
+import {getBody} from '@data/bodies.js';
 
 export const REFERENCE_BODY_RADIUS = 1.7;   // world units for radiusRatio 1
 

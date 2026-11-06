@@ -22,7 +22,7 @@ export const Stage3D = forwardRef(function Stage3D(props, ref) {
   const isReduced = reduced ?? systemReduced;
   const h = host(), slotRef = useRef(null), fbRef = useRef(null);
   const status = useSyncExternalStore(h.subscribe, h.getStatus, h.getStatus);
-  const fallback = status === 'fallback';
+  const fallback = status === 'fallback', placeholder = status === 'loading';   // the SVG scene also covers the short chunk load
 
   useLayoutEffect(() => { const el = slotRef.current; h.attach(el); return () => h.detach(el); }, [h]);
   // The latest props (including callbacks) flow into the persistent scene on every render.
@@ -57,7 +57,7 @@ export const Stage3D = forwardRef(function Stage3D(props, ref) {
   const text = describeCraft(design, mission.bodyName, phase || run?.phase);
   return (
     <div ref={slotRef} className={`${css.slot} ${className || ''}`} style={style} data-stage-slot="" data-status={status}>
-      {fallback && <SceneFallback ref={fbRef} design={design} selected={selected} hoverPart={hoverPart} run={run} phase={phase} reduced={isReduced} onPick={onPick} onSocketHover={onSocketHover} />}
+      {(fallback || placeholder) && <SceneFallback ref={fbRef} design={design} selected={selected} hoverPart={hoverPart} run={run} phase={phase} reduced={isReduced} onPick={onPick} onSocketHover={onSocketHover} />}
       <span className={css.sr} aria-live="off">{label || text}</span>
     </div>
   );

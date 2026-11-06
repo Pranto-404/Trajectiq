@@ -72,7 +72,12 @@ export function createHost({loadCanvas, detect = () => detectWebGL2(), doc = glo
       clearTimeout(parkTimer);
       parkTimer = setTimeout(() => { if (!slot && !disposed) { park(); store.set({...store.get(), parked: true}); } }, 0);
     },
-    update(props) { store.set({...store.get(), ...props, parked: slot ? false : store.get().parked}); runtime.poke(); },
+    update(props) {
+      const cur = store.get(), next = {...cur, ...props, parked: slot ? false : cur.parked};
+      // identical props (same design/run objects and callbacks) must not re-render the scene
+      if (Object.keys(next).length === Object.keys(cur).length && Object.keys(next).every(k => Object.is(next[k], cur[k]))) return;
+      store.set(next); runtime.poke();
+    },
     /** Try WebGL again after a fallback (e.g. a lost context). */
     retry() { if (status === 'fallback' && !disposed) { status = 'idle'; start(); } },
     /** Release the scene and every GPU resource. The host can be used again by calling attach(). */
