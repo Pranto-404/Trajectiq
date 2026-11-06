@@ -77,8 +77,10 @@ export function CodeImport() {
   const [error, setError] = useState('');
   const compare = useGame(st => st.compare);
   const a = useGame.getState().actions;
+  const clearCompare = () => { if (useGame.getState().compare?.error) useGame.setState({compare: null}); };
   const onCompare = () => { setError(''); a['compare-run']({code}); };
   const onImport = () => {
+    clearCompare();
     const r = decodeDesign(code);
     if (!r.ok) { setError(r.error); return; }
     setError('');
@@ -88,7 +90,7 @@ export function CodeImport() {
   return (
     <div className={s.stackSm}>
       <label className="kicker" htmlFor={id}>{t('Paste a TQ6 code')}</label>
-      <textarea id={id} className={s.code} rows={3} maxLength={2400} autoComplete="off" spellCheck={false} placeholder="TQ6.…" value={code} onChange={e => { setCode(e.target.value); setError(''); }} aria-invalid={error ? true : undefined} aria-describedby={error ? `${id}-e` : undefined} />
+      <textarea id={id} className={s.code} rows={3} maxLength={2400} autoComplete="off" spellCheck={false} placeholder="TQ6.…" value={code} onChange={e => { setCode(e.target.value); setError(''); clearCompare(); }} aria-invalid={error ? true : undefined} aria-describedby={error ? `${id}-e` : undefined} />
       {error ? <p id={`${id}-e`} className={s.error} role="alert"><Chip kind="fail" size="sm">{t('Rejected')}</Chip> {error}</p> : null}
       <div className={s.row}>
         <Button variant="primary" size="sm" disabled={!code.trim()} disabledReason={t('Paste a code first')} onClick={onCompare}>{t('Compare with my design')}</Button>
