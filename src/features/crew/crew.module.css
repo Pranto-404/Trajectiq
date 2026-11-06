@@ -1,0 +1,67 @@
+/* Crew strip, roll call, team vote. Role hue is always paired with an icon and an initial. */
+.roleBadge { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px 2px 4px; border-radius: var(--radius-pill); border: 1px solid color-mix(in srgb, var(--tone) 55%, var(--line-2)); background: color-mix(in srgb, var(--tone) 12%, var(--surface-1)); color: var(--text-1); font-size: var(--text-12); font-weight: 650; white-space: nowrap; }
+.roleDot { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--tone); color: #0b1305; }
+.roleInitial { font-family: var(--font-mono); color: var(--tone); }
+.note { color: var(--text-2); font-size: var(--text-13); }
+.bad { color: var(--red-400); }
+
+/* strip */
+.strip { position: relative; display: grid; gap: var(--space-2); padding: var(--space-3); border: 1px solid var(--line-2); border-radius: var(--radius-panel); background: var(--glass); min-width: 0; }
+.stripTop { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+.stripText { display: grid; gap: 2px; min-width: 0; font-size: var(--text-13); color: var(--text-2); }
+:root[data-density="compact"] .stripText p { display: none; }
+.players { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.player { position: relative; flex: 1 1 180px; min-width: 0; padding: var(--space-2) var(--space-3); border: 1px solid var(--line-1); border-radius: var(--radius-control); background: var(--surface-1); }
+.player[data-active] { border-color: var(--lime-500); }
+.baton { position: absolute; inset: -1px; border-radius: var(--radius-control); border: 2px solid var(--lime-500); box-shadow: var(--glow-lime); pointer-events: none; }
+.playerBody { position: relative; display: grid; gap: 4px; font-size: var(--text-13); }
+.playerBody strong { overflow-wrap: anywhere; }
+.playerBody small { color: var(--text-3); font-size: var(--text-12); }
+:root[data-density="compact"] .playerBody small { display: none; }
+.playerRoles { display: flex; flex-wrap: wrap; gap: 4px; }
+.handoff { display: inline-flex; align-items: center; gap: var(--space-2); justify-self: start; padding: 6px 14px; border-radius: var(--radius-pill); background: var(--lime-500); color: var(--on-lime); font-weight: 650; font-size: var(--text-13); }
+.suggestions { display: grid; gap: var(--space-2); }
+.suggestionList { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-2); }
+.suggestion { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); flex-wrap: wrap; padding: var(--space-2) var(--space-3); border: 1px solid var(--line-2); border-radius: var(--radius-control); background: var(--surface-2); font-size: var(--text-13); }
+.suggestionBtns { display: inline-flex; gap: var(--space-2); }
+.waiting { color: var(--text-3); }
+
+/* roll call */
+.rollcall { display: grid; gap: var(--space-3); }
+.consoles { display: grid; gap: var(--space-3); margin: 0; padding: 0; list-style: none; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.console { position: relative; display: grid; gap: var(--space-2); align-content: start; min-height: 150px; padding: var(--space-3); border: 1px solid var(--line-2); border-radius: var(--radius-panel); background: var(--surface-1); transition: border-color var(--dur-base) var(--ease-enter), box-shadow var(--dur-base) var(--ease-enter), background var(--dur-base) var(--ease-enter); }
+.console[data-status="standby"] { opacity: .72; }
+.console[data-status="go"] { border-color: var(--lime-500); box-shadow: var(--glow-lime); }
+.console[data-status="concern"] { border-color: var(--amber-400); }
+.console[data-status="nogo"] { border-color: var(--red-400); box-shadow: var(--glow-red); }
+.consoleHead { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); flex-wrap: wrap; }
+.consoleHead small { color: var(--text-3); overflow-wrap: anywhere; }
+.stampSlot { min-height: 40px; display: flex; align-items: center; }
+.stamp { display: inline-block; padding: 4px 12px; border: 3px solid currentColor; border-radius: 8px; font-weight: 800; letter-spacing: .1em; font-size: var(--text-14); text-transform: uppercase; }
+.stamp[data-status="go"] { color: var(--lime-500); }
+.stamp[data-status="concern"] { color: var(--amber-400); }
+.stamp[data-status="nogo"] { color: var(--red-400); }
+.standby { display: inline-flex; align-items: center; gap: 6px; color: var(--text-3); font-size: var(--text-12); font-weight: 650; letter-spacing: .08em; }
+.pollDot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan-400); animation: poll 1s ease-in-out infinite alternate; }
+@keyframes poll { from { opacity: .25; } to { opacity: 1; } }
+.issues { color: var(--text-2); font-size: var(--text-12); line-height: 1.4; }
+.summary { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); border-radius: var(--radius-control); border: 1px solid var(--line-2); background: var(--surface-2); font-size: var(--text-13); }
+.summary[data-ready] { border-color: var(--lime-500); color: var(--lime-500); }
+
+/* vote */
+.vote { display: grid; gap: var(--space-3); padding: var(--space-3); border: 1px dashed var(--line-2); border-radius: var(--radius-control); }
+.voteRows { display: grid; gap: var(--space-3); }
+.voteRow { display: grid; gap: var(--space-2); grid-template-columns: minmax(0, 1fr); padding-bottom: var(--space-3); border-bottom: 1px solid var(--line-1); }
+.voteRow:last-child { border-bottom: 0; padding-bottom: 0; }
+@media (min-width: 760px) { .voteRow { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: start; } }
+.voteWho { display: grid; gap: 2px; font-size: var(--text-13); }
+.voteWho small { color: var(--text-3); }
+.voteWho p { color: var(--text-2); font-size: var(--text-12); }
+.voteOptions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.tally { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.voteFoot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; font-size: var(--text-13); }
+
+/* setup */
+.setup { display: grid; gap: var(--space-4); }
+.nameField { display: grid; gap: var(--space-2); font-size: var(--text-13); color: var(--text-2); }
+.nameField input { min-height: var(--target-min); padding: 0 var(--space-3); border: 1px solid var(--line-2); border-radius: var(--radius-control); background: var(--surface-2); color: var(--text-1); }
