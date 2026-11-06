@@ -143,3 +143,8 @@ asa\Trajectiq\.claude\worktreesgent-aacb668532c1702d9` (branch `nasa-bodies`) h
 - Seen on the owner's phone: translucent sticky header and tray let scrolling content show through; header + stage + tabs + tray peek + launch bar left ~170 px of usable space.
 - Fix: header scrolls away on phones (opaque), sticky offsets use `--header-live-h` (0 when not sticky), tray collapsed state is a 60 px bar (Parts + live mass/cost) with an opaque sheet, floating Assistant is a 48 px round button above the bottom bars.
 - Still unverified: physical phone re-check after deploy; the Flight and Report screens on phone.
+
+## 2026-11-07 (3): phone chrome auto-hide
+- Owner asked for the top (stage + tabs) and bottom (parts tray + launch bar) to disappear on scroll down and for the bottom bars to be fully minimizable.
+- Done: `useScrollHide` hides stage, tabs, tray and launch bar while scrolling down (only when the tray is collapsed), shows them on scroll up / near top / page end; a minimize button on the parts bar hides the bottom bars until the "Parts and launch" pill is tapped. Assistant button drops when bars are gone.
+- Note: the owner's phone was still showing the earlier build (cfea5c9) when they sent the screenshot; production for 19936fe was READY. Ask for a hard refresh / reopen.

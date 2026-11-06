@@ -29,7 +29,7 @@ function useViewportHeight() {
  * mouse), or use the handle button from the keyboard: Enter / Space cycle the snap points, Arrow Up / Down move one. Choosing a
  * subsystem from the collapsed tray opens it to half height. Under reduced motion it jumps instead of springing.
  */
-export function TraySheet({header, children}) {
+export function TraySheet({header, onMinimize, children}) {
   const t = useT();
   const reduced = useReducedMotion();
   const vh = useViewportHeight();
@@ -83,6 +83,7 @@ export function TraySheet({header, children}) {
           {mass ? <Chip size="sm" kind={mass.status === 'pass' ? 'pass' : mass.status === 'warn' ? 'warn' : 'fail'}>{t('Mass')} {fmt(mass.margin, 0)} kg</Chip> : null}
           {cost ? <Chip size="sm" kind={cost.status === 'pass' ? 'pass' : cost.status === 'warn' ? 'warn' : 'fail'}>{t('Cost')} {fmt(cost.margin, 0)} cr</Chip> : null}
         </div>
+        {onMinimize ? <button type="button" className={s.minimize} onClick={onMinimize} aria-label={t('Minimize the parts tray and launch bar')}><Icon name="chevron-down" size={18} /></button> : null}
       </div>
       {header}
       <div className={s.traySheetBody}>{children}</div>
