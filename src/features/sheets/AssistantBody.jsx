@@ -1,3 +1,4 @@
+import {LanguagePicker} from '@/i18n/LanguagePicker.jsx';
 import {useEffect, useId, useRef, useState} from 'react';
 import {CATALOG, CATEGORIES, missionFor} from '@data/catalog.js';
 import {distanceOptions} from '@data/nasa.js';
@@ -91,6 +92,7 @@ export function AssistantBody() {
       <div className={s.chatScroll}>
       <p className={s.chatIntro}>{t('I read your current mission. Ask what to do next, or why something changed.')} <strong>{t('Flight pauses while you read.')}</strong></p>
       <ContextCard ctx={ctx} />
+      {!['en', 'bn'].includes(language) && <p className={s.muted}>{t('Detailed assistant explanations are currently in English. Use the translated quick questions.')}</p>}
       {crisis ? (
         <section className={s.crisis} aria-label={t('Rough preview of the pending decision')}>
           <span className="kicker">{t('Rough preview · direction only')}</span>
@@ -113,7 +115,7 @@ export function AssistantBody() {
         <summary>{t('Tools & preferences')}</summary>
       <div className={s.row}>
         <Segmented size="sm" label={t('Level')} value={level} onChange={v => act.setMentorLevel(v)} options={[{value: 'Beginner', label: t('Beginner'), hint: t('Plain language; tables folded')}, {value: 'Engineer', label: t('Engineer'), hint: t('Evidence class and full tables')}]} />
-        <Segmented size="sm" label={t('Answer language')} value={language} onChange={v => act.setPref('language', v)} options={[{value: 'en', label: 'English'}, {value: 'bn', label: 'বাংলা'}]} />
+        <LanguagePicker />
       </div>
         <Experiments ctx={ctx} onAsk={ask} busy={busy} />
         <p className={s.muted}>{t('Local reasoning and the game engine; no generative AI, no API key. I say when I cannot answer.')}</p>

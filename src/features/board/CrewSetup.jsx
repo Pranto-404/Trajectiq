@@ -20,7 +20,7 @@ function NameField({index, player, label, placeholder, disabled}) {
       <label htmlFor={id} className={s.crewLabel}>
         <span>{label}</span>
         <span className={s.roleChips}>
-          {player.roles.map(r => <Chip key={r} kind="role" size="sm" tone={`var(--role-${r})`} icon="assistant">{ROLES[r]?.short || r}</Chip>)}
+          {player.roles.map(r => <Chip key={r} kind="role" size="sm" tone={`var(--role-${r})`} icon="assistant">{t(ROLES[r]?.short || r)}</Chip>)}
         </span>
       </label>
       <input id={id} className={s.input} data-team-name={index} maxLength={24} value={draft} autoComplete="off" placeholder={placeholder} disabled={disabled}

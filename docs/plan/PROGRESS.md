@@ -4,6 +4,18 @@ Keep this file current. Update it after every milestone, agent launch and agent 
 
 Last updated: 2026-11-06. Event date below is retained from the owner's project notes, not independently verified.
 
+## Twelve-language first release and orbital UI — 2026-11-06
+
+Owner selected 12 languages with deeper gameplay coverage. Implemented on feat-global-mission-ui, ready for main publication after local checks.
+
+- English/Bengali plus ten new lazy-loaded packs, 173 translated keys per new language; saved preferences, native-name selector, Arabic RTL, script-aware system fonts and explicit English fallback.
+- Onboarding, navigation, resource/build/crew/report labels and assistant shortcuts covered. Localized shortcuts use the existing contextual engine; detailed answers remain English for new languages, explicitly disclosed. Native-speaker review and full narrative localization remain outstanding.
+- Original atmosphere/horizon treatment informed by all six supplied Pinterest references; reduced-motion handling and no additional graphics dependency.
+- Final verification: 364 UI/store tests plus existing Node suite, production and standalone builds passed. Edge Arabic mobile chat/reload, narrow German layout, Japanese light theme and LTR restoration verified; no captured browser errors. No physical device or Safari claim.
+- Details and remaining scope: [multilingual release](../MULTILINGUAL_RELEASE.md). Online multiplayer remains unimplemented; existing crew is pass-and-play.
+
+Next steps: publish this verified release, verify Vercel status and production language selector. Then continue native-language review and remaining scenario/assistant prose before describing localization as complete.
+
 ## Responsive polish, performance and crew verification — 2026-11-06
 
 Follow-up to the owner's cramped-chat screenshot. Work is on feat-responsive-polish, verified locally and being published to main. Previous contextual-copilot release 72c223d is already live.

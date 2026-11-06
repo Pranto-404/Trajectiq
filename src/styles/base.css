@@ -1,5 +1,15 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+.languagePicker { display: grid; gap: 8px; min-width: 0; width: 100%; }
+.languagePicker label { font-weight: 600; }
+.languagePicker select { width: 100%; min-height: 46px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line-2); background: var(--surface-1); color: var(--text-1); }
+.languagePicker small { color: var(--text-3); line-height: 1.5; }
+html[dir="rtl"] .num, html[dir="rtl"] code { direction: ltr; unicode-bidi: isolate; }
+html:lang(ar) { --font-ui: Tahoma, 'Segoe UI', sans-serif; }
+html:lang(hi) { --font-ui: 'Nirmala UI', Mangal, sans-serif; }
+html:lang(zh) { --font-ui: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+html:lang(ja) { --font-ui: 'Yu Gothic', Meiryo, sans-serif; }
+html:lang(ar) :is(h1,h2,h3,button,label) { letter-spacing: normal; }
 body {
   margin: 0;
   min-height: 100dvh;

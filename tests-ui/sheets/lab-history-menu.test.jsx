@@ -89,7 +89,7 @@ describe('menu', () => {
     await user.click(sound); expect(useGame.getState().prefs.sound).toBe(true); expect(screen.getByRole('switch', {name: /Sound/}).getAttribute('aria-checked')).toBe('true');
     await user.click(screen.getByRole('switch', {name: /Haptics/})); expect(useGame.getState().prefs.haptics).toBe(true);
     await user.click(screen.getByRole('switch', {name: /Reduce animation/})); expect(useGame.getState().prefs.reducedMotion).toBe(false);
-    await user.click(screen.getByRole('radio', {name: 'বাংলা'})); expect(useGame.getState().prefs.language).toBe('bn');
+    await user.selectOptions(screen.getByRole('combobox', {name: 'Language'}), 'bn'); expect(useGame.getState().prefs.language).toBe('bn');
     const saved = JSON.parse(localStorage.getItem('trajectiq-v1')).prefs; expect(saved.sound).toBe(true); expect(saved.language).toBe('bn');
   });
   it('tools open their sheets', async () => {

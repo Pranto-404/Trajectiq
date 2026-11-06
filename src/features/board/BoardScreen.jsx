@@ -70,20 +70,20 @@ export function BoardScreen() {
           <section className={`${s.block} ${s.settingsPanel}`} aria-label={t('Difficulty')}>
             <span className="kicker">{t('Difficulty')}</span>
             <Segmented label={t('Difficulty')} value={mission.difficulty} onChange={v => a['board-difficulty']({difficulty: v})} fullWidth
-              options={diffs.map(d => ({value: d.id, label: d.label, hint: d.blurb, disabled: locked}))} />
-            {diff ? <p className={s.note}>{diff.blurb}</p> : null}
+              options={diffs.map(d => ({value: d.id, label: t(d.label), hint: t(d.blurb), disabled: locked}))} />
+            {diff ? <p className={s.note}>{t(diff.blurb)}</p> : null}
           </section>
 
           <section className={s.block} aria-label={t('Objective')}>
             <div className={s.sectionHeading}><div><span className="kicker">{t('MISSION LIBRARY')}</span><h2>{t('Choose your next frontier')}</h2></div><Button variant="ghost" size="sm" icon="payload" onClick={() => a.customize()} disabled={locked}>{t('Engineering lab')}</Button></div>
             <div className={s.destinations} role="group" aria-label={t('Filter destinations')}>
               <button type="button" aria-pressed={destination === 'all'} onClick={() => setDestination('all')}>{t('All destinations')}</button>
-              {groups.map(g => <button type="button" key={g.destination} aria-pressed={destination === g.destination} onClick={() => setDestination(g.destination)}>{g.label}</button>)}
+              {groups.map(g => <button type="button" key={g.destination} aria-pressed={destination === g.destination} onClick={() => setDestination(g.destination)}>{t(g.label)}</button>)}
             </div>
             <div className={s.groups} role="group" aria-label={t('Scenario')}>
               {groups.filter(g => destination === 'all' || g.destination === destination).map(g => (
                 <div key={g.destination} className={s.groupBlock}>
-                  <h2 className={s.groupTitle}>{g.label}</h2>
+                  <h2 className={s.groupTitle}>{t(g.label)}</h2>
                   <div className={s.cards}>
                     {g.cards.map(card => (
                       <ScenarioCard key={card.id} card={card} index={index++} reduced={reduced} tilt={tilt} locked={locked}

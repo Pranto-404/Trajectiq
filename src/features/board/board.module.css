@@ -178,6 +178,27 @@
 :global([data-background-paused="true"]) .missionArt::after { animation-play-state: paused; }
 :global([data-motion="reduced"]) .card:hover { transform: none; }
 .selectedBrief { margin-top: 20px; }
+.missionHero { isolation: isolate; background: radial-gradient(ellipse at 85% 10%, color-mix(in srgb, var(--violet-400) 12%, transparent), transparent 55%), var(--hero-surface); }
+.heroCopy h1 { font-size: clamp(32px, 3.2vw, 50px); max-width: 18ch; text-wrap: balance; }
+.heroCopy h1 em { color: var(--text-1); }
+.heroCopy { min-width: 0; }
+.missionArt { border-left: 0; border-inline-start: 1px solid var(--line-1); min-height: 400px; }
+.atmosphere { position: absolute; width: 340px; height: 340px; border-radius: 50%; background: radial-gradient(circle, transparent 28%, color-mix(in srgb, var(--violet-400) 18%, transparent) 48%, transparent 70%); animation: atmosphereBreathe 14s ease-in-out infinite alternate; pointer-events: none; }
+.horizon { position: absolute; width: 145%; height: 240px; bottom: -170px; border-radius: 50%; border-top: 1px solid var(--cyan-400); box-shadow: 0 -12px 50px color-mix(in srgb, var(--violet-400) 18%, transparent), 0 -2px 12px color-mix(in srgb, var(--cyan-400) 20%, transparent); background: var(--surface-1); transform: rotate(-12deg); }
+.artGrid { opacity: .16; }
+.orbitalSystem { transform: rotate(-8deg); }
+.selectedBrief { padding-left: 0; padding-inline-start: 14px; border-left: 0; border-inline-start: 2px solid var(--cyan-400); }
+.missionSteps li { min-width: 0; overflow-wrap: anywhere; }
+.missionSteps svg, .eyebrow > span { margin-left: 0; margin-inline-start: auto; }
+.card { text-align: start; }
+.cardTitle, .cardTop { padding-right: 0; padding-inline-end: 60px; }
+.cardArtwork { right: auto; inset-inline-end: -10px; }
+.reqList strong { text-align: end; }
+@keyframes atmosphereBreathe { from { transform: scale(.85) translateY(-12px); opacity: .5; } to { transform: scale(1.15) translateY(12px); opacity: .9; } }
+@media (max-width: 760px) { .missionArt { min-height: 290px; border-inline-start: 0; } .heroCopy h1 { font-size: clamp(28px, 7vw, 36px); } }
+@media (prefers-reduced-motion: reduce) { .atmosphere, .missionArt::after { animation: none; } }
+:global([data-motion="reduced"]) .atmosphere { animation: none; }
+:global([data-background-paused="true"]) .atmosphere { animation-play-state: paused; }
 .main { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
 .main > * { grid-column: 1 / -1; }
 .main > .settingsPanel { grid-column: auto; }

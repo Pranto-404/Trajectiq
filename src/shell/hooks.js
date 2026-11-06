@@ -1,10 +1,15 @@
 import {useEffect, useState} from 'react';
 import {useGame} from '../store/index.js';
+import {loadLanguage} from '../i18n/loadLanguage.js';
 
 /** <html lang> follows the language preference (en | bn). */
 export function useDocumentLanguage() {
   const lang = useGame(s => s.prefs.language);
-  useEffect(() => { document.documentElement.lang = lang; }, [lang]);
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    loadLanguage(lang).catch(() => { /* English source remains usable offline. */ });
+  }, [lang]);
 }
 
 /** data-density="compact" under 820 px viewport height, so short laptop screens fit the mission-control layout. */

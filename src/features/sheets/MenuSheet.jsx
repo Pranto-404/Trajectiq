@@ -1,3 +1,4 @@
+import {LanguagePicker} from '@/i18n/LanguagePicker.jsx';
 import {useGame} from '@/store/index.js';
 import {Button, Icon, Segmented} from '@/ds/index.js';
 import {useFx} from '@/fx/index.js';
@@ -33,7 +34,7 @@ export function MenuSheet({close}) {
     <div className={s.sheet}>
       <section className={s.block} aria-label={t('Preferences')}>
         <h3>{t('Preferences')}</h3>
-        <Segmented label={t('Language')} value={prefs.language} onChange={v => act.setPref('language', v)} options={[{value: 'en', label: 'English'}, {value: 'bn', label: 'বাংলা'}]} />
+        <LanguagePicker />
         <Segmented label={t('Appearance')} value={prefs.theme} onChange={v => act.setPref('theme', v)} options={[{value: 'light', label: t('Light')}, {value: 'dark', label: t('Dark')}]} />
         <Switch icon="motion" label={t('Reduce animation')} hint={t('Follows your system setting too')} on={prefs.reducedMotion} onChange={() => act['toggle-motion']()} />
         <Switch icon={prefs.sound ? 'sound-on' : 'sound-off'} label={t('Sound')} hint={t('Short synthesized cues; off by default')} on={prefs.sound} onChange={fx.toggleSound} />

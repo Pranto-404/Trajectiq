@@ -1,3 +1,5 @@
+import {normalizeLanguage} from '../i18n/locales.js';
+import {canonicalQuestion} from '../i18n/translate.js';
 // The TRAJECTIQ game store (zustand). One factory so tests can build isolated stores with an injected storage, clock,
 // timers, id source and browser I/O; src/store/index.js exports the singleton `useGame` built from the browser defaults.
 //
@@ -428,7 +430,8 @@ export function createGame(options = {}) {
     async function askAssistant(q) {
       if (!String(q).trim()) return;
       const {answerQuestion} = await import('@engine/assistant.js');
-      const answer = answerQuestion(String(q).trim().slice(0, 500), assistantContext());
+      const ctx = assistantContext();
+      const answer = answerQuestion(canonicalQuestion(ctx.language, String(q).trim().slice(0, 500)), ctx);
       set(s => ({chat: [...s.chat, {q: String(q).slice(0, 500), answer}].slice(-12),
         ...(answer.consumesForecast && s.run?.crisis ? {run: {...s.run, forecasts: (s.run.forecasts || 0) + 1}} : {})}));
       persist();
@@ -676,7 +679,7 @@ export function createGame(options = {}) {
       // preferences
       setPref(key, value) {
         if (!['language', 'guided', 'reducedMotion', 'sound', 'haptics', 'theme', 'overviewSeen'].includes(key)) return;
-        const v = key === 'language' ? (value === 'bn' ? 'bn' : 'en') : key === 'theme' ? (value === 'light' ? 'light' : 'dark') : !!value;
+        const v = key === 'language' ? normalizeLanguage(value) : key === 'theme' ? (value === 'light' ? 'light' : 'dark') : !!value;
         set(s => ({prefs: {...s.prefs, [key]: v}})); persist();
       },
       'toggle-motion'() { set(s => ({prefs: {...s.prefs, reducedMotion: !s.prefs.reducedMotion}})); persist(); },
@@ -709,6 +712,6 @@ function hydrate(saved, env) {
     team: loadTeam(saved.team),
     board: (Array.isArray(saved.board) ? saved.board : []).filter(validBoardEntry).slice(0, 30),
     runs: (Array.isArray(saved.runs) ? saved.runs : []).filter(validSavedRun).slice(-20),
-    prefs: {overviewSeen: saved.prefs?.overviewSeen === true, theme: saved.prefs?.theme === 'light' ? 'light' : 'dark', language: saved.prefs?.language === 'bn' ? 'bn' : 'en', guided: saved.prefs?.guided !== false, reducedMotion: reduced, sound: saved.prefs?.sound === true, haptics: saved.prefs?.haptics === true}
+    prefs: {overviewSeen: saved.prefs?.overviewSeen === true, theme: saved.prefs?.theme === 'light' ? 'light' : 'dark', language: normalizeLanguage(saved.prefs?.language), guided: saved.prefs?.guided !== false, reducedMotion: reduced, sound: saved.prefs?.sound === true, haptics: saved.prefs?.haptics === true}
   };
 }

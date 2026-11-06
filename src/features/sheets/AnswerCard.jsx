@@ -81,7 +81,7 @@ export function AnswerCard({answer, index, design, locked, level, onApply, onAsk
   return (
     <article className={s.answer} data-known={answer.known ? 'yes' : 'no'} data-testid="answer">
       {answer.evidence ? <Chip kind={answer.known ? 'info' : 'warn'} size="sm" icon={answer.known ? 'check' : 'warning'} className={s.evidence}>{String(answer.evidence)}</Chip> : null}
-      <strong className={s.answerTitle}>{String(answer.title ?? '')}</strong>
+      <strong className={s.answerTitle}>{t(String(answer.title ?? ''))}</strong>
       <p className={s.answerText}>{String(answer.text ?? '')}</p>
       {Array.isArray(answer.directions) && answer.directions.length ? <DirectionChips directions={answer.directions} /> : null}
       {Array.isArray(answer.ranges) && answer.ranges.length ? (
@@ -97,7 +97,7 @@ export function AnswerCard({answer, index, design, locked, level, onApply, onAsk
       ) : null}
       {Array.isArray(answer.sources) && answer.sources.length ? <p className={s.links}>{answer.sources.map((x, i) => <ExternalLink key={i} href={x.url}>{clean(x.title, 80)}</ExternalLink>)}</p> : null}
       {showSuggestions && Array.isArray(answer.suggestions) && answer.suggestions.length ? (
-        <div className={s.chipRow}>{answer.suggestions.map(q => <Button key={q} size="sm" variant="ghost" onClick={() => onAsk(q)}>{clean(q, 60)}</Button>)}</div>
+        <div className={s.chipRow}>{answer.suggestions.map(q => <Button key={q} size="sm" variant="ghost" onClick={() => onAsk(q)}>{t(clean(q, 60))}</Button>)}</div>
       ) : null}
       {answer.topic === 'battery' || answer.topic === 'data' ? <Concept id={answer.topic === 'battery' ? 'power' : 'datarate'} label={t('the idea behind this')} /> : null}
       {!engineer ? null : <small className={s.muted}><Icon name="info" size={12} /> {t('Answer {n}', {n: index + 1})}</small>}

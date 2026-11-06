@@ -17,12 +17,13 @@ export function MissionHero({mission, card, need, locked, onBuild, onHelp}) {
         <Button variant="ghost" icon="help" onClick={onHelp}>{t('How to play')}</Button>
       </div>
       <div className={s.selectedBrief} aria-live="polite">
-        <span>{t('YOUR OBJECTIVE')}</span><strong>{mission.title}</strong>
+        <span>{t('YOUR OBJECTIVE')}</span><strong>{t(mission.title)}</strong>
         <small>{t('Watch your')} {t(criticalLabel(card?.critical))}. {t('Only science returned to Earth counts.')}</small>
       </div>
     </div>
     <div className={s.missionArt} aria-hidden="true">
       <div className={s.artGrid} />
+      <div className={s.atmosphere} /><div className={s.horizon} />
       <span className={s.artCoordinates}>TRAJECTIQ / {mission.destination.toUpperCase()}</span>
       <div className={s.orbitalSystem} key={mission.destination}>
         <div className={s.orbitTrack} /><div className={s.orbitTrackOuter} />
