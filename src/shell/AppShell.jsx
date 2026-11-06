@@ -22,7 +22,7 @@ function Header() {
   // The header is two rows on a phone, so screens that stick something beneath it need its real height, not the one-row token.
   useLayoutEffect(() => {
     const el = ref.current; if (!el) return undefined;
-    const set = () => document.documentElement.style.setProperty('--header-live-h', `${Math.round(el.getBoundingClientRect().height)}px`);
+    const set = () => document.documentElement.style.setProperty('--header-live-h', getComputedStyle(el).position === 'sticky' ? `${Math.round(el.getBoundingClientRect().height)}px` : '0px');
     set();
     if (typeof ResizeObserver === 'undefined') return undefined;
     const ro = new ResizeObserver(set); ro.observe(el);

@@ -85,7 +85,7 @@
 .launchPanel { display: grid; gap: var(--space-2); padding: var(--space-4); border: 1px solid var(--line-2); border-radius: var(--radius-panel); background: var(--glass); }
 .launchBar { position: fixed; inset: auto 0 0 0; height: var(--launch-bar-h, 64px); box-sizing: border-box; z-index: calc(var(--z-sheet) + 2); display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) var(--space-3) calc(var(--space-2) + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--bg-0) 94%, transparent); border-top: 1px solid var(--line-2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .launchBarText { font-size: var(--text-13); color: var(--text-2); }
-.mobilePad { height: calc(18dvh + var(--launch-bar-h, 64px) + 8px); }
+.mobilePad { height: calc(60px + var(--launch-bar-h, 64px) + 12px); }
 
 /* crew */
 .crew { }
@@ -114,13 +114,17 @@
 .tourDots i[data-on] { background: var(--lime-500); }
 
 /* mobile bottom-sheet tray */
-.traySheet { position: fixed; left: 0; right: 0; bottom: var(--launch-bar-h, 64px); z-index: calc(var(--z-sheet) + 1); display: grid; grid-template-rows: auto auto auto 1fr; border-radius: var(--radius-panel) var(--radius-panel) 0 0; border: 1px solid var(--line-2); border-bottom: 0; background: color-mix(in srgb, var(--surface-1) 96%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 -8px 30px rgb(0 0 0 / .4); will-change: transform; }
+.traySheet { position: fixed; left: 0; right: 0; bottom: var(--launch-bar-h, 64px); z-index: calc(var(--z-sheet) + 1); display: grid; grid-template-rows: auto auto 1fr; border-radius: var(--radius-panel) var(--radius-panel) 0 0; border: 1px solid var(--line-2); border-bottom: 0; background: var(--surface-1); box-shadow: 0 -8px 30px rgb(0 0 0 / .4); will-change: transform; }
 .handle { display: grid; place-items: center; gap: 2px; width: 100%; min-height: var(--target-min); padding: var(--space-2) 0 0; border: 0; background: transparent; color: var(--text-3); touch-action: none; cursor: grab; }
 .grip { width: 44px; height: 4px; border-radius: 2px; background: var(--line-2); }
 .flipUp { transform: rotate(180deg); }
-.miniMargins { display: flex; gap: 6px; padding: 0 var(--space-3) var(--space-2); }
-.traySheet > :nth-child(3) { padding-inline: var(--space-3); overflow-x: auto; scrollbar-width: none; }
-.traySheet > :nth-child(3) > div { flex-wrap: nowrap; width: max-content; padding-bottom: var(--space-2); }
+.peek { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 60px; padding-inline: var(--space-3); }
+.peek .handle { flex: 1 1 auto; min-height: 44px; padding: 8px 0 0; display: flex; align-items: center; justify-content: flex-start; gap: 8px; width: auto; text-align: left; font: 700 14px var(--font-ui); color: var(--text-1); position: static; }
+.peek .grip { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); }
+.peekTitle { font-size: 14px; }
+.miniMargins { display: flex; gap: 6px; flex: none; }
+.traySheet > :nth-child(2) { padding-inline: var(--space-3); overflow-x: auto; scrollbar-width: none; }
+.traySheet > :nth-child(2) > div { flex-wrap: nowrap; width: max-content; padding-bottom: var(--space-2); }
 .traySheetBody { overflow-y: auto; padding: var(--space-2) var(--space-3) var(--space-4); overscroll-behavior: contain; touch-action: pan-y; }
 
 .advisor { display: grid; gap: 12px; padding: 20px; border: 1px solid var(--line-2); border-radius: var(--radius-panel); background: var(--hero-surface); box-shadow: var(--elevation-panel); }

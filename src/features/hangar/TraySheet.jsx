@@ -6,7 +6,9 @@ import {useT} from '@/i18n/index.js';
 import {fmt} from './hooks.js';
 import s from './hangar.module.css';
 
-export const SNAPS = [0.18, 0.5, 0.88];
+export const SNAPS = [0.08, 0.5, 0.88];
+/** The collapsed tray is a fixed-height bar (handle, title and the two live margins), not a share of the viewport. */
+export const PEEK_PX = 60;
 const FULL = SNAPS[SNAPS.length - 1];
 
 /** Index of the snap point whose visible height is nearest to `visible` (a fraction of the viewport). */
@@ -33,13 +35,14 @@ export function TraySheet({header, children}) {
   const vh = useViewportHeight();
   const category = useGame(st => st.category), margins = useGame(selectMargins);
   const [snap, setSnap] = useState(0);
-  const base = useMotionValue((FULL - SNAPS[0]) * vh), drag = useMotionValue(0);
+  const vis = i => (i === 0 ? PEEK_PX / vh : SNAPS[i]);
+  const base = useMotionValue((FULL - vis(0)) * vh), drag = useMotionValue(0);
   const y = useTransform([base, drag], ([b, d]) => b + d);
   const start = useRef(null), moved = useRef(false);
   const prevCat = useRef(category);
 
   useEffect(() => {
-    const target = (FULL - SNAPS[snap]) * vh;
+    const target = (FULL - vis(snap)) * vh;
     if (reduced) base.set(target); else { const c = animate(base, target, spring.soft); return () => c.stop(); }
     return undefined;
   }, [snap, vh, reduced, base]);
@@ -50,14 +53,14 @@ export function TraySheet({header, children}) {
     if (!start.current) return;
     const dy = e.clientY - start.current.y; if (Math.abs(dy) > 6) moved.current = true;
     // never pull above the top snap point or below the screen edge
-    drag.set(Math.max(-((FULL - SNAPS[snap]) * vh), Math.min(SNAPS[snap] * vh, dy)));
+    drag.set(Math.max(-((FULL - vis(snap)) * vh), Math.min(vis(snap) * vh, dy)));
   };
   const up = e => {
     if (!start.current) return;
     const dy = e.clientY - start.current.y, dt = Math.max(1, performance.now() - start.current.t), flick = dy / dt * 1000;
     start.current = null; e.currentTarget.releasePointerCapture?.(e.pointerId);
     if (!moved.current) { drag.set(0); return; }
-    const visible = (SNAPS[snap] * vh - dy - flick * 0.12) / vh;
+    const visible = (vis(snap) * vh - dy - flick * 0.12) / vh;
     drag.set(0); setSnap(nearestSnap(visible));
   };
   const cycle = () => { if (moved.current) { moved.current = false; return; } setSnap(i => (i + 1) % SNAPS.length); };
@@ -69,14 +72,17 @@ export function TraySheet({header, children}) {
   const label = [t('Collapsed'), t('Half height'), t('Full height')][snap];
   return (
     <motion.section className={s.traySheet} style={{y, height: FULL * vh}} aria-label={t('Parts tray')} data-snap={snap} data-testid="tray-sheet" data-tour="tray">
-      <button type="button" className={s.handle} aria-expanded={snap > 0} aria-label={`${t('Parts tray')}: ${label}. ${t('Press to change height.')}`}
-        onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onClick={cycle} onKeyDown={key}>
-        <span className={s.grip} aria-hidden="true" />
-        <Icon name="chevron-down" size={16} className={snap === SNAPS.length - 1 ? '' : s.flipUp} />
-      </button>
-      <div className={s.miniMargins} aria-label={t('Margins')}>
-        {mass ? <Chip size="sm" kind={mass.status === 'pass' ? 'pass' : mass.status === 'warn' ? 'warn' : 'fail'}>{t('Mass')} {fmt(mass.margin, 0)} kg</Chip> : null}
-        {cost ? <Chip size="sm" kind={cost.status === 'pass' ? 'pass' : cost.status === 'warn' ? 'warn' : 'fail'}>{t('Cost')} {fmt(cost.margin, 0)} cr</Chip> : null}
+      <div className={s.peek}>
+        <button type="button" className={s.handle} aria-expanded={snap > 0} aria-label={`${t('Parts tray')}: ${label}. ${t('Press to change height.')}`}
+          onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onClick={cycle} onKeyDown={key}>
+          <span className={s.grip} aria-hidden="true" />
+          <span className={s.peekTitle} aria-hidden="true">{t('Parts')}</span>
+          <Icon name="chevron-down" size={16} className={snap === SNAPS.length - 1 ? '' : s.flipUp} />
+        </button>
+        <div className={s.miniMargins} aria-label={t('Margins')}>
+          {mass ? <Chip size="sm" kind={mass.status === 'pass' ? 'pass' : mass.status === 'warn' ? 'warn' : 'fail'}>{t('Mass')} {fmt(mass.margin, 0)} kg</Chip> : null}
+          {cost ? <Chip size="sm" kind={cost.status === 'pass' ? 'pass' : cost.status === 'warn' ? 'warn' : 'fail'}>{t('Cost')} {fmt(cost.margin, 0)} cr</Chip> : null}
+        </div>
       </div>
       {header}
       <div className={s.traySheetBody}>{children}</div>
