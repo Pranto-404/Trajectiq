@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-aoX+F9FpBZFoFHpAuNkxVoO3HOLUbBsoVLETthmmddc='; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080d15"><meta name="description" content="The complete TRAJECTIQ mission design game. Standalone offline edition."><title>TRAJECTIQ — Complete offline game</title><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22%230b1420%22%2F%3E%3Cpath%20d%3D%22M14%2020h36v8H36v24h-8V28H14z%22%20fill%3D%22%23ccff6b%22%2F%3E%3Cellipse%20cx%3D%2232%22%20cy%3D%2232%22%20rx%3D%2227%22%20ry%3D%2212%22%20transform%3D%22rotate(-35%2032%2032)%22%20fill%3D%22none%22%20stroke%3D%22%23ccff6b%22%20stroke-width%3D%222%22%2F%3E%3C%2Fsvg%3E%0A"><style>:root{--bg:#080d15;--panel:#111924;--panel2:#151f2c;--line:#263342;--text:#f1f4f8;--muted:#a1adbb;--dim:#6c7d8d;--lime:#ccff6b;--cyan:#7cdbf3;--warn:#ffbc6e;--red:#ff7b83;--radius:14px;color-scheme:dark;font-family:Inter,Segoe UI,Arial,sans-serif;font-synthesis:none}
+<html lang="en"><head><meta charset="UTF-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-BfGZU77uMc65WM36XG+n8piRRiG+aplSe5w47NosiVw='; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080d15"><meta name="description" content="The complete TRAJECTIQ mission design game. Standalone offline edition."><title>TRAJECTIQ — Complete offline game</title><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22%230b1420%22%2F%3E%3Cpath%20d%3D%22M14%2020h36v8H36v24h-8V28H14z%22%20fill%3D%22%23ccff6b%22%2F%3E%3Cellipse%20cx%3D%2232%22%20cy%3D%2232%22%20rx%3D%2227%22%20ry%3D%2212%22%20transform%3D%22rotate(-35%2032%2032)%22%20fill%3D%22none%22%20stroke%3D%22%23ccff6b%22%20stroke-width%3D%222%22%2F%3E%3C%2Fsvg%3E%0A"><style>:root{--bg:#080d15;--panel:#111924;--panel2:#151f2c;--line:#263342;--text:#f1f4f8;--muted:#a1adbb;--dim:#6c7d8d;--lime:#ccff6b;--cyan:#7cdbf3;--warn:#ffbc6e;--red:#ff7b83;--radius:14px;color-scheme:dark;font-family:Inter,Segoe UI,Arial,sans-serif;font-synthesis:none}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-size:14px;line-height:1.55}button,input,select{font:inherit}button,a,input,select{touch-action:manipulation}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.4}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--lime);outline-offset:4px}a{color:var(--cyan)}button{color:inherit}h1,h2,h3,p{margin:0}h1{font-size:42px;line-height:1.12;letter-spacing:-1.8px;font-weight:650}h2{font-size:23px;letter-spacing:-.6px;line-height:1.3}h3{font-size:16px;font-weight:600}p{color:var(--muted)}small{font-size:12px}.mono{font-family:Consolas,monospace;letter-spacing:.3px}.eyebrow{font-size:10px;letter-spacing:2px;font-weight:700;color:var(--lime);text-transform:uppercase}.muted{color:var(--muted)}.dim{color:var(--dim)}.good{color:var(--lime)}.warning{color:var(--warn)}.bad{color:var(--red)}.cyan{color:var(--cyan)}.nowrap{white-space:nowrap}
 .topbar{height:76px;padding:0 30px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:relative;z-index:2;background:#080d15}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);font-size:21px;letter-spacing:3px;font-weight:800}.brand img{width:35px;height:35px}.brand span:last-child{display:block;font-size:9px;letter-spacing:2px;color:var(--dim);font-weight:500}.top-actions{display:flex;gap:12px;align-items:center}.badge{font-size:10px;letter-spacing:1px;border:1px solid var(--line);padding:6px 10px;border-radius:6px;color:var(--muted)}.online-dot{width:5px;height:5px;display:inline-block;background:var(--lime);border-radius:50%;margin-right:7px}.btn{padding:11px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;font-size:12px;transition:background .16s,transform .16s}.btn:hover:not(:disabled){background:#243243}.btn.primary{background:var(--lime);color:#18220b;border-color:var(--lime)}.btn.primary:hover:not(:disabled){background:#deff9a}.btn.ghost{background:transparent}.btn.small{padding:7px 11px;font-size:11px}.btn.danger{border-color:#773b47;background:#301f2a;color:var(--red)}.arrow{font-size:19px;line-height:1}.shell{display:grid;grid-template-columns:218px minmax(0,1fr);min-height:calc(100vh - 76px)}.sidebar{border-right:1px solid var(--line);padding:26px 18px;display:flex;flex-direction:column;gap:25px;background:#0b111a}.sidebar-label{font-size:9px;letter-spacing:2px;color:var(--dim);padding:0 12px;margin-bottom:12px}.nav-list{display:flex;flex-direction:column;gap:5px}.nav-btn{text-align:left;border:1px solid transparent;color:var(--muted);background:transparent;padding:11px 12px;border-radius:8px;display:flex;align-items:center;gap:12px;font-size:12px}.nav-btn .number{font-size:10px;color:var(--dim);font-family:monospace}.nav-btn.active{background:#1b2624;border-color:#344437;color:var(--lime)}.nav-btn.active .number{color:var(--lime)}.nav-btn:hover{background:var(--panel)}.sidebar-mission{padding:16px 12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.sidebar-mission h3{font-size:12px;margin-top:7px}.sidebar-mission p{font-size:11px;margin-top:4px}.sidebar-bottom{margin-top:auto;padding:12px;font-size:10px;color:var(--dim)}.sidebar-bottom strong{display:block;color:var(--muted);margin-top:4px;font-size:11px;font-weight:500}.main{min-width:0;padding:30px 34px 20px;max-width:1800px;width:100%;margin:auto}.page-heading{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;gap:20px}.page-heading .eyebrow{margin-bottom:10px}.page-heading p{margin-top:10px;font-size:12px}.page-heading h1{font-size:33px}.heading-actions{display:flex;gap:8px;flex-wrap:wrap}.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius)}.panel-pad{padding:22px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.section-title h3{font-size:12px;font-weight:600}.kicker{font-size:10px;color:var(--muted);letter-spacing:1.3px;text-transform:uppercase}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.stack{display:flex;flex-direction:column;gap:18px}.footer-note{margin-top:24px;padding-top:13px;border-top:1px solid var(--line);color:var(--dim);font-size:10px;display:flex;justify-content:space-between;gap:18px}.insight{border:1px solid #364934;border-radius:10px;padding:14px 18px;background:#142019;display:flex;gap:15px;align-items:center;margin-top:18px}.insight strong{font-size:10px;letter-spacing:1px;color:var(--lime);white-space:nowrap}.insight p{font-size:12px;color:#bdc8b9}
 .landing{position:relative;overflow:hidden;min-height:650px;border:1px solid var(--line);border-radius:18px;background:radial-gradient(ellipse at 75% 40%,#182535 0%,#0b121d 48%,#0b111a 75%)}.landing-scene{position:absolute;right:-100px;top:20px;width:75%;height:570px;opacity:.9}.hero-content{position:relative;z-index:1;max-width:570px;padding:75px 44px}.hero-content h1{font-size:69px;letter-spacing:-3px;line-height:1.03;margin-top:23px}.hero-content h1 em{font-style:normal;color:var(--lime)}.hero-content p{margin-top:26px;max-width:390px;font-size:14px;line-height:1.8}.hero-buttons{display:flex;gap:10px;margin-top:28px}.hero-meta{display:flex;gap:26px;margin-top:35px;font-size:10px;color:var(--muted)}.hero-meta strong{display:block;font-size:17px;color:var(--text);letter-spacing:-.3px;margin-bottom:3px}.landing-bottom{position:relative;display:grid;grid-template-columns:repeat(3,1fr);padding:0 40px 26px;gap:26px}.landing-step{border-top:1px solid #394652;padding-top:17px}.landing-step span{font:10px monospace;color:var(--lime)}.landing-step h3{font-size:13px;margin:7px 0}.landing-step p{font-size:11px;line-height:1.7}
@@ -392,36 +392,10 @@ const MARS_DATA={
   {id:'apogee',label:'Far Earth–Mars range scenario',value:400200000,unit:'km',source:'relay',use:'Reference far separation and light-time'}
  ]
 };
-// Dataset for the data panel of any body. Moon and Mars keep their original snapshot objects (rows, URLs, dates);
-// every other body is built from the registry in bodies.js with a per-row source URL, verified date and unverified flag.
-const GENERIC_DATASETS={};
-function bodyDataset(id){
- if(GENERIC_DATASETS[id])return GENERIC_DATASETS[id];
- const b=BODIES[id],rows=bodyRows(id),dates=rows.map(r=>r.verifiedOn).sort();
- return GENERIC_DATASETS[id]={body:id,verified:dates.at(-1),factSheetUpdated:'Snapshot verified '+dates.at(-1),
-  factURL:rows.find(r=>r.id==='radius').url,jplURL:rows.find(r=>r.id==='mu').url,rows,
-  note:'Values marked unverified are game assumptions; they have no NASA source. Earth ranges are 2026-2056 Horizons minimum and maximum.'};
-}
-const nasaDataset=d=>{const id=isBodyId(d?.destination)?d.destination:'moon';return id==='mars'?MARS_DATA:id==='moon'?NASA_DATA:bodyDataset(id);};
-const named=(id,kind)=>({near:'Near · Horizons minimum',mean:'Reference · derived midpoint, game assumption',far:'Far · Horizons maximum'}[kind]);
-const distanceOptions=d=>{
- const id=isBodyId(d?.destination)?d.destination:'moon';
- if(id==='mars')return {near:{name:'Near · NASA reference',km:54600000},mean:{name:'Teaching reference · assumed',km:225000000},far:{name:'Far · NASA reference',km:400200000}};
- if(id==='moon')return DISTANCES;
- const r=BODIES[id].earthRange,earth=id==='earth';
- return {near:{name:earth?'Overhead pass · geometry':named(id,'near'),km:r.near},mean:{name:earth?'30° elevation · geometry, game choice':named(id,'mean'),km:r.mean},far:{name:earth?'10° elevation mask · geometry, game choice':named(id,'far'),km:r.far}};
-};
-
-// CSV of every sourced value for a body (RFC 4180 quoting). unverified=true rows are game assumptions with no NASA number behind them.
-const csvCell=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
-function datasetCSV(destination){
- const id=isBodyId(destination)?destination:'moon',rows=bodyRows(id),b=BODIES[id];
- const head=['parameter','value','unit','evidence','source_url','verified_utc','unverified','note'];
- const lines=[head.map(csvCell).join(',')];
- for(const r of rows)lines.push([r.id,r.value,r.unit,r.kind==='direct'?'NASA/JPL':r.kind==='derived'?'DERIVED from NASA/JPL data':'GAME ASSUMPTION',r.url,r.verifiedOn,r.unverified?'true':'false',r.note].map(csvCell).join(','));
- lines.push(['body',b.name,'','','','','false',''].map(csvCell).join(','));
- return lines.join('\r\n')+'\r\n';
-}
+const nasaDataset=d=>d?.destination==='mars'?MARS_DATA:NASA_DATA;
+const distanceOptions=d=>d?.destination==='mars'?{
+ near:{name:'Near · NASA reference',km:54600000},mean:{name:'Teaching reference · assumed',km:225000000},far:{name:'Far · NASA reference',km:400200000}
+}:DISTANCES;
 
 // Mission board data: scenarios, difficulty tiers and the four crew roles.
 // Values are educational assumptions; each scenario states what it changes.
@@ -451,106 +425,9 @@ const SCENARIOS = {
     budget: 150, scienceTarget: 560, referenceAltitude: 400, polarExp: 1, altitudeExp: 1, critical: 'power',
     weather: { kind: 'dust', title: 'Regional dust storm', solar: 0.4, quality: 1, duration: 90, from: 60, span: 80 },
     why: 'Teaches energy margin under changing environmental conditions.'
-  },
-  // ---- NASA-grounded destinations (engine v7). Each says which numbers are real, derived or game assumptions. ----
-  'earth-observer': {
-    id: 'earth-observer', destination: 'earth', title: 'Earth Observer on a Clock', tag: 'Beginner · Earth',
-    summary: 'Image land from a Landsat-class orbit near 705 km. Sunlight is plentiful, but the ground station is only overhead for a short pass each orbit.',
-    subtitle: 'Many short orbits. Make every pass count.',
-    budget: 150, scienceTarget: 800, referenceAltitude: 705, polarExp: 1, altitudeExp: 1, weather: null, critical: 'data',
-    duration: 300, contactMinutes: 12,
-    presets: {balanced: {arrayScale: 1, batteryScale: 1}, resilient: {arrayScale: 1, batteryScale: 1}, fragile: {arrayScale: 1, batteryScale: 1}},
-    realMission: 'landsat-9',
-    why: 'Teaches that an observer in low orbit circles the Earth about every 99 minutes, so it cycles its battery through shadow dozens of times and can only send data in short ground passes.',
-    assumptions: 'Ground-pass length (12 minutes, unverified) and the 300-minute campaign are game assumptions. Real Earth observers fly sun-synchronous orbits that avoid most eclipse; the central-shadow model overstates it here. Inclinations are folded to 0-90 degrees (Landsat 9 flies 98.2).',
-    realNumbers: [
-      {label: 'Landsat 9 orbit', value: '705 km, 98.2°, 99 min, 14 orbits per day', source: 'https://pubs.usgs.gov/fs/2019/3008/fs20193008.pdf'},
-      {label: 'PACE orbit and instrument', value: '676.5 km, 98.3 min; OCI 260 kg / 280 W', source: 'https://ntrs.nasa.gov/citations/20190030760'},
-      {label: 'Eclipse battery cycles', value: 'about 5,300 per year (derived from the 99 min period)', source: 'https://pubs.usgs.gov/fs/2019/3008/fs20193008.pdf'}
-    ]
-  },
-  'mercury-thermal': {
-    id: 'mercury-thermal', destination: 'mercury', title: 'Mercury Thermal Squeeze', tag: 'Advanced · Mercury',
-    summary: 'Map Mercury from a low orbit. Sunlight is nearly seven times Earth’s, so power is easy and heat is the enemy: a sunshade costs mass and a sunward heat load can strike mid-campaign.',
-    subtitle: 'Plenty of sunlight. Survive it.',
-    budget: 150, scienceTarget: 700, referenceAltitude: 200, polarExp: 1, altitudeExp: 1, critical: 'mass',
-    duration: 240, arrayEfficiency: 0.12, thermalMass: 30,
-    weather: {kind: 'thermal', title: 'Sunward heat load', solar: 0.5, quality: 0.75, duration: 90, from: 60, span: 80, aftermath: 0.8},
-    presets: {balanced: {arrayScale: 1, batteryScale: 1}, resilient: {arrayScale: 1, batteryScale: 1}, fragile: {arrayScale: 1, batteryScale: 1}},
-    realMission: 'messenger',
-    why: 'Teaches that more sunlight is not always better: heat limits the arrays and instruments, and thermal protection takes mass away from propellant and payload.',
-    assumptions: 'Array efficiency 12% (arrays are turned off the Sun and run hot) and the 30 kg sunshade are game assumptions; hardware temperature limits were not read from a NASA source. The heat-load event (power to 50%, observations 75% as useful, instruments 20% less sensitive afterwards if you keep observing) is a game assumption. Real MESSENGER flew a 12-hour elliptical orbit; the game flies a circular one.',
-    realNumbers: [
-      {label: 'Mercury sunlight', value: '9,082.7 W/m² (about 6.7 times Earth)', source: 'https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html'},
-      {label: 'Sunward surface', value: '590-725 K', source: 'https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html'},
-      {label: 'MESSENGER', value: '485.2 kg dry, 607.8 kg propellant, 450 W at Mercury, 200 x 15,193 km orbit', source: 'https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2004-030A'}
-    ]
-  },
-  'venus-radar': {
-    id: 'venus-radar', destination: 'venus', title: 'Venus Radar Cycles', tag: 'Advanced · Venus',
-    summary: 'Map Venus through its clouds with a radar-class imager. Power is abundant, but the data are heavy and every orbit passes through a long shadow.',
-    subtitle: 'Cloud-piercing radar. A flood of data.',
-    budget: 150, scienceTarget: 1000, referenceAltitude: 300, polarExp: 1, altitudeExp: 1, weather: null, critical: 'data',
-    duration: 360, contactMinutes: 20,
-    presets: {balanced: {arrayScale: 1, batteryScale: 1}, resilient: {arrayScale: 1, batteryScale: 1}, fragile: {arrayScale: 1, batteryScale: 1}},
-    realMission: 'magellan',
-    why: 'Teaches that coverage is limited by how fast data can reach Earth, the lesson of Magellan, which returned 1,200 Gbit over 4,225 radar orbits.',
-    assumptions: 'The 20-minute contact, the 360-minute campaign and the 700 science-unit target are game assumptions. Real Magellan flew an elliptical 294 x 8,463 km orbit and aerobraked to a circular one in 1993; the game flies a circular orbit. Venus has an atmosphere that the game does not model.',
-    realNumbers: [
-      {label: 'Venus sunlight', value: '2,601.3 W/m² (1.9 times Earth)', source: 'https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html'},
-      {label: 'Magellan', value: '3,445 kg launch, 85.5°, 243-day cycles, 98% coverage, 1,200 Gbit returned', source: 'https://nssdc.gsfc.nasa.gov/planetary/magellan.html'}
-    ]
-  },
-  'dawn-vesta': {
-    id: 'dawn-vesta', destination: 'vesta', title: 'Dawn at Vesta', tag: 'Advanced · Vesta',
-    summary: 'Orbit the asteroid Vesta at Dawn’s 210 km altitude. Sunlight is 18% of Earth’s, so the arrays must be much larger, and a 4-hour orbit leaves few contacts.',
-    subtitle: 'Weak sunlight. Few windows to call home.',
-    budget: 150, scienceTarget: 1500, referenceAltitude: 210, polarExp: 1, altitudeExp: 1, weather: null, critical: 'power',
-    duration: 600, arrayScaleMax: 4,
-    presets: {balanced: {storage: 'medium', arrayScale: 2.5, batteryScale: 1.25}, resilient: {payload: 'survey', storage: 'medium', arrayScale: 2.5, batteryScale: 1.5}, fragile: {arrayScale: 2, batteryScale: 1}},
-    realMission: 'dawn',
-    why: 'Teaches the power-versus-distance trade: at 2.4 AU the same array makes about one fifth of the power, so power systems grow heavy.',
-    assumptions: 'The array may be scaled up to 4 times the standard kit (game assumption; Dawn’s arrays produced 10.3 kW at 1 AU and 1.3 kW at 3 AU). The 600-minute campaign covers about 2.3 orbits at 210 km and a 1,500 science-unit target reflects that length; the recorder must hold the data between the few contacts. Vesta is modelled as a sphere of its mean radius; the real figure is irregular.',
-    realNumbers: [
-      {label: 'Dawn orbits at Vesta', value: '2,750 km (69 h), 680 km (12.3 h), 210 km (4.3 h)', source: 'https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2007-043A'},
-      {label: 'Sunlight at Vesta', value: '244 W/m² (derived 1361 / a²)', source: 'https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=4&phys-par=1&full-prec=1'},
-      {label: 'Dawn power', value: '10.3 kW at 1 AU; 1.3 kW end of life at 3 AU', source: 'https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2007-043A'}
-    ]
-  },
-  'dawn-ceres': {
-    id: 'dawn-ceres', destination: 'ceres', title: 'Dawn at Ceres', tag: 'Expert · Ceres',
-    summary: 'Orbit the dwarf planet Ceres at 375 km. Sunlight is 13% of Earth’s and a 5-hour orbit leaves very few chances to send data home.',
-    subtitle: 'The far end of the belt.',
-    budget: 150, scienceTarget: 1800, referenceAltitude: 375, polarExp: 1, altitudeExp: 1, weather: null, critical: 'power',
-    duration: 720, arrayScaleMax: 5,
-    presets: {balanced: {storage: 'medium', arrayScale: 2.5, batteryScale: 1.25}, resilient: {payload: 'survey', storage: 'medium', arrayScale: 2.5, batteryScale: 1.5}, fragile: {arrayScale: 2, batteryScale: 1}},
-    realMission: 'dawn',
-    why: 'Teaches that deep-space missions are power-starved and contact-starved at the same time.',
-    assumptions: 'The array may be scaled up to 5 times the standard kit (game assumption). The 720-minute campaign covers about 2.2 orbits at 375 km. The Dawn ion engine is not modelled; the chemical thruster classes stay.',
-    realNumbers: [
-      {label: 'Dawn at Ceres', value: 'first science orbit 13,500 km; final circular 375 km', source: 'https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2007-043A'},
-      {label: 'Sunlight at Ceres', value: '178 W/m² (derived 1361 / a²)', source: 'https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=1&phys-par=1&full-prec=1'}
-    ]
-  },
-  'europa-flyby': {
-    id: 'europa-flyby', destination: 'europa', title: 'Europa Clipper-style Orbiter', tag: 'Expert · Europa',
-    summary: 'Study Europa from a low circular orbit as a stand-in for the Europa Clipper flyby tour. Sunlight is 3.7% of Earth’s and Jupiter’s radiation belts will strike.',
-    subtitle: 'Tiny sunlight. Brutal radiation.',
-    budget: 190, scienceTarget: 560, referenceAltitude: 50, polarExp: 1, altitudeExp: 1, critical: 'power',
-    duration: 300, arrayScaleMax: 6, thermalMass: 20,
-    presets: {balanced: {launch: 'dedicated', fuel: 60, arrayScale: 4, batteryScale: 1.5, storage: 'medium'}, resilient: {payload: 'survey', launch: 'dedicated', fuel: 65, arrayScale: 5, batteryScale: 1.5, storage: 'medium'}, fragile: {launch: 'dedicated', fuel: 60, arrayScale: 2, batteryScale: 1}},
-    weather: {kind: 'radiation', title: 'Jupiter radiation belt pass', solar: 1, quality: 0.4, duration: 60, from: 50, span: 90, aftermath: 0.85},
-    realMission: 'europa-clipper',
-    why: 'Teaches the extreme end of the power trade, and that radiation, not distance, can limit a mission.',
-    assumptions: 'The budget is raised to 190 credits and the array may be scaled up to 6 times the standard kit (game assumptions; a real flagship costs billions); the radiation event (observations 40% as useful, stored data at risk) is a relative game assumption; no dose in rads is modelled. The 20 kg thermal and radiation mass is a game assumption. Real Europa Clipper never orbits Europa: it flies nearly 50 flybys as low as 25 km, so this circular orbit is a simplification.',
-    realNumbers: [
-      {label: 'Europa Clipper', value: '5,800 kg at launch, 2,750 kg propellant, 102 m² arrays, at least 700 W at Jupiter, vault up to 9.2 mm', source: 'https://www.jpl.nasa.gov/press-kits/europa-clipper/quick-facts/'},
-      {label: 'Real array efficiency', value: '14% of gross area at Jupiter (700 W / 102 m² / 50.26 W/m²)', source: 'https://www.jpl.nasa.gov/press-kits/europa-clipper/quick-facts/'},
-      {label: 'Sunlight at Jupiter', value: '50.26 W/m²', source: 'https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html'}
-    ]
   }
 };
-const DEFAULT_SCENARIO = { moon: 'lunar-polar', mars: 'mars-polar', earth: 'earth-observer', mercury: 'mercury-thermal', venus: 'venus-radar', vesta: 'dawn-vesta', ceres: 'dawn-ceres', europa: 'europa-flyby' };
+const DEFAULT_SCENARIO = { moon: 'lunar-polar', mars: 'mars-polar' };
 
 const DIFFICULTY = {
   cadet: { id: 'cadet', label: 'Cadet', blurb: 'More budget, forgiving objective, coaching on.', budgetScale: 1.25, deadlineScale: 1.25, success: 70, weather: false, factors: { solar: 1, link: 1 } },
@@ -601,15 +478,6 @@ const SOURCES = [
   { id:'small', title:'NASA · State-of-the-Art of Small Spacecraft Technology', url:'https://www.nasa.gov/smallsat-institute/sst-soa/', use:'Subsystem framing: avionics, communications, pointing and launch. Fictional component classes and cost credits support learning; they are not flight hardware or market prices.', type:'Design reference' },
   { id:'se', title:'NASA · Systems Engineering Handbook appendix', url:'https://www.nasa.gov/reference/system-engineering-handbook-appendix/', use:'Trade studies, margins and technical performance measures inform readiness checks and comparison of alternative designs.', type:'Design reference' }
 ];
-// Sources for the Sources screen of any destination: the shared engineering references plus every distinct body URL
-// from the registry with its verified date and an unverified flag. For the Moon this is exactly SOURCES.
-function sourcesFor(destination='moon'){
- const id=getBody(destination)?destination:'moon';if(id==='moon')return SOURCES;
- const b=BODIES[id],seen=new Map();
- for(const [field,p] of Object.entries(b.provenance)){if(!p.url)continue;const e=seen.get(p.url)||{fields:[],unverified:true,verified:p.verified,kind:p.kind};e.fields.push(field);e.unverified=e.unverified&&p.unverified===true;seen.set(p.url,e);}
- const own=[...seen].map(([url,e])=>({id:'body-'+id+'-'+e.fields[0],title:b.name+' · '+e.fields.join(', '),url,use:'Provenance of '+e.fields.join(', ')+' ('+e.kind+'). Verified '+e.verified+'.'+(e.unverified?' GAME ASSUMPTION: no NASA number behind this value.':''),type:e.unverified?'Game assumption':e.kind==='derived'?'Derived from NASA/JPL data':'NASA/JPL data',verified:e.verified,unverified:e.unverified}));
- return [...own,...SOURCES.slice(1)];
-}
 const a = { source_type:'Educational assumption', source_note:'Fictional teaching component. Numerical values tuned for transparent trade-offs; NASA references inform the subsystem concepts, not these exact specifications.' };
 const CATALOG = {
   bus: [
@@ -646,8 +514,7 @@ const CATALOG = {
 };
 // Development lead time (months) and launch-orbit envelope: educational assumptions.
 const LEAD={bus:{compact:5,precision:8},payload:{survey:4,hires:9},power:{balanced:5,compact:3,endurance:6},propulsion:{standard:4,efficient:7},comms:{medium:4,compact:3,highgain:6},storage:{medium:2,standard:2,expanded:3},launch:{rideshare:2,dedicated:5}};
-const altMaxFor=k=>Object.fromEntries(Object.values(BODIES).map(b=>[b.id,b.launchAltMax[k]]));
-const ENVELOPE={rideshare:{altMax:altMaxFor('rideshare'),incMin:45},dedicated:{altMax:altMaxFor('dedicated'),incMin:0}};
+const ENVELOPE={rideshare:{altMax:{moon:150,mars:600},incMin:45},dedicated:{altMax:{moon:200,mars:1000},incMin:0}};
 for(const [k,list] of Object.entries(CATALOG))for(const c of list){c.lead=LEAD[k][c.id];if(k==='launch')c.envelope=ENVELOPE[c.id];}
 CATALOG.launch[0].note+=' Shared rides serve inclinations of 45° or more and orbits up to 150 km (Moon) or 600 km (Mars).';
 CATALOG.launch[1].note+=' Can fly any inclination and the full altitude range.';
@@ -669,44 +536,29 @@ const PRESETS = {
 };
 const UNCERTAINTY = {seed:4385,samples:200,solar:[0.8,1],link:[0.65,1],isp:[0.95,1],pointing:[1,1.25]};
 
-// Default array efficiency (cell efficiency x packing): a GAME ASSUMPTION. Real arrays deliver about 13-17% of
-// irradiance x gross area (Juno 17% at Earth, 13% at Jupiter; Europa Clipper 17% and 14%; derived from NASA press kits).
-// The game keeps 28% so Moon and Mars balance is unchanged; scenarios may set arrayEfficiency and say so.
-const ARRAY_EFFICIENCY=0.28;
-const ARRAY_SCALE_MAX=1.5;
 function missionFor(d={}){
- const body=getBody(d.destination)||BODIES.moon,destination=body.id,mars=destination==='mars';
+ const mars=d.destination==='mars',destination=mars?'mars':'moon';
  const scenario=SCENARIOS[d.scenario]?.destination===destination?SCENARIOS[d.scenario]:SCENARIOS[DEFAULT_SCENARIO[destination]];
  const diff=DIFFICULTY[d.difficulty]||DIFFICULTY.engineer;
  const common={...MISSION,scenarioId:scenario.id,difficulty:diff.id,difficultyLabel:diff.label,sandbox:d.sandbox===true,
   budget:d.sandbox===true?999:Math.round(scenario.budget*diff.budgetScale),scienceTarget:scenario.scienceTarget,scienceSuccess:diff.success,
   referenceAltitude:scenario.referenceAltitude,polarExp:scenario.polarExp,altitudeExp:scenario.altitudeExp,
-  duration:scenario.duration??MISSION.duration,contactMinutes:scenario.contactMinutes??MISSION.contactMinutes,maneuver:scenario.maneuver??MISSION.maneuver,thermalMass:scenario.thermalMass??MISSION.thermalMass,reserve:scenario.reserve??MISSION.reserve,
-  arrayScaleMax:scenario.arrayScaleMax??ARRAY_SCALE_MAX,arrayEfficiency:scenario.arrayEfficiency??ARRAY_EFFICIENCY,
-  weather:scenario.weather||(diff.weather&&body.directorWeather?{...body.directorWeather}:null),
-  factorScale:diff.factors,deadline:Math.round(22*diff.deadlineScale),critical:scenario.critical,title:scenario.title,scenarioTag:scenario.tag,scenarioSummary:scenario.summary,
-  bodyId:destination,hazards:body.hazards,simplification:body.simplification||null,realMission:scenario.realMission||body.realReference?.mission||null};
+  weather:scenario.weather||(diff.weather?(mars?{kind:'dust',title:'Regional dust storm',solar:.4,quality:1,duration:90,from:60,span:80}:{kind:'particle',title:'Solar particle event',solar:1,quality:.5,duration:45,from:70,span:90}):null),
+  factorScale:diff.factors,deadline:Math.round(22*diff.deadlineScale),critical:scenario.critical,title:scenario.title,scenarioTag:scenario.tag,scenarioSummary:scenario.summary};
  const orbitAltitude=(lo,hi,fallback)=>Math.min(hi,Math.max(lo,Number.isFinite(Number(d.altitude))?Number(d.altitude):fallback));
- const altitude=orbitAltitude(body.altitudeMin,body.altitudeMax,body.defaultAltitude);
- const orbit={destination,bodyName:destination==='earth'?'Earth':body.name,radius:body.radius,mu:body.mu,solarIrradiance:body.solarIrradiance,referenceDistance:body.referenceDistance,altitudeMin:body.altitudeMin,altitudeMax:body.altitudeMax,
-  eclipseMinutes:shadowMinutes(body.radius,body.mu,altitude),eclipseModel:'Central cylindrical-shadow bound; zero solar beta angle',source:nasaDataset(d)};
- if(destination==='moon')return {...common,...orbit,
+ if(!mars){
+  const radius=nasaValue('radius'),mu=nasaValue('mu'),altitude=orbitAltitude(50,200,100);
+  return {...common,destination:'moon',bodyName:'Moon',radius,mu,solarIrradiance:nasaValue('solar'),referenceDistance:nasaValue('mean'),altitudeMin:50,altitudeMax:200,eclipseMinutes:shadowMinutes(radius,mu,altitude),eclipseModel:'Central cylindrical-shadow bound; zero solar beta angle',source:NASA_DATA,
    note:scenario.summary+' Educational mission: 4 hours of orbital operations after a compressed launch and capture phase. Return at least '+Math.round(scenario.scienceTarget*diff.success/100)+' of '+scenario.scienceTarget+' science units.'};
- if(mars)return {...common,...orbit,id:'mars-polar-mapper',subtitle:'Budget sunlight. Plan the return link.',
+ }
+ const radius=MARS_DATA.rows.find(r=>r.id==='radius').value,mu=MARS_DATA.rows.find(r=>r.id==='mu').value,altitude=orbitAltitude(200,1000,400);
+ return {...common,id:'mars-polar-mapper',destination:'mars',bodyName:'Mars',subtitle:'Budget sunlight. Plan the return link.',radius,mu,solarIrradiance:MARS_DATA.rows.find(r=>r.id==='solar').value,referenceDistance:225000000,altitudeMin:200,altitudeMax:1000,eclipseMinutes:shadowMinutes(radius,mu,altitude),eclipseModel:'Central cylindrical-shadow bound; zero solar beta angle',source:MARS_DATA,
  note:'Mars orbital-operations teaching scenario. Circular orbit uses NASA/JPL values; pre-arranged interplanetary transport and deep-space network support are assumed. No cruise, landing, launch window or n-body solution is calculated.',
  assumption:MISSION.assumption.replace(' Eclipse time is calculated from the orbit.','')+' Mars and Moon use the same central cylindrical-shadow bound for shadow duration. Contact remains an assumed 25-minute teaching window. A separately engineered fictional link is normalized at 225 million km, a game reference distance rather than a measured average; this is not the same Moon antenna maintaining its rate at Mars. Displayed light-time does not delay player controls.'};
- const minutes=Math.round(common.duration/60*10)/10;
- return {...common,...orbit,id:scenario.id,subtitle:scenario.subtitle||MISSION.subtitle,
-  note:scenario.summary+' Educational mission: '+minutes+' hours of orbital operations after a compressed launch and capture phase. Return at least '+Math.round(scenario.scienceTarget*diff.success/100)+' of '+scenario.scienceTarget+' science units.',
-  assumption:'Duration ('+common.duration+' minutes), the '+scenario.scienceTarget+' science-unit target, '+common.maneuver+' m/s capture/correction, '+common.reserve+' m/s reserve, '+common.contactMinutes+'-minute contact, costs, array efficiency ('+Math.round(common.arrayEfficiency*100)+'%) and component values are educational assumptions. '+(scenario.assumptions||'')+' Orbit uses a circular two-body model with the central cylindrical-shadow bound for eclipse. Circular orbit uses NASA/JPL body constants; pre-arranged transport is assumed. Link normalised to a game reference distance, not an observed average. Values flagged unverified in the data panel are game assumptions.'};
 }
-function presetFor(destination='moon',key='balanced',scenarioId=null){
- const base={...(PRESETS[key]||PRESETS.balanced)},body=getBody(destination);
- if(!body||destination==='moon')return {...base,destination:'moon'};
- if(destination==='mars')return {...base,destination:'mars',altitude:400,arrayScale:1.5,batteryScale:1.5,duty:1,name:'Mars Polar Mapper'};
- const scenario=SCENARIOS[scenarioId]?.destination===destination?SCENARIOS[scenarioId]:SCENARIOS[DEFAULT_SCENARIO[destination]];
- const tuned=scenario.presets?.[key]||scenario.presets?.balanced||{};
- return {...base,destination,scenario:scenario.id,altitude:Math.min(body.altitudeMax,Math.max(body.altitudeMin,scenario.referenceAltitude??body.defaultAltitude)),arrayScale:1.5,batteryScale:1.5,duty:1,name:scenario.title,...tuned};
+function presetFor(destination='moon',key='balanced'){
+ const base={...(PRESETS[key]||PRESETS.balanced)};
+ return destination==='mars'?{...base,destination:'mars',altitude:400,arrayScale:1.5,batteryScale:1.5,duty:1,name:'Mars Polar Mapper'}:{...base,destination:'moon'};
 }
 
 const M = MISSION;
@@ -715,24 +567,24 @@ const clone = v => JSON.parse(JSON.stringify(v));
 const finite=(value,fallback)=>Number.isFinite(Number(value))?Number(value):fallback;
 function components(d) {
   const c=Object.fromEntries(Object.keys(CATALOG).map(k=>[k,{...(CATALOG[k].find(c=>c.id===d[k])||CATALOG[k].find(c=>c.id===PRESETS.balanced[k])||CATALOG[k][0])}]));
-  const M=missionFor(d),arrayScale=clamp(finite(d.arrayScale,1),0.75,M.arrayScaleMax),batteryScale=clamp(finite(d.batteryScale,1),0.75,1.5);
+  const arrayScale=clamp(finite(d.arrayScale,1),0.75,1.5),batteryScale=clamp(finite(d.batteryScale,1),0.75,1.5);
   c.power.arrayArea=c.power.solar/(nasaValue('solar')*0.28)*arrayScale;
-  c.power.solar=M.solarIrradiance*c.power.arrayArea*M.arrayEfficiency;
+  c.power.solar=missionFor(d).solarIrradiance*c.power.arrayArea*0.28;
   c.power.battery*=batteryScale;
   c.power.mass*=0.55*arrayScale+0.45*batteryScale;
   c.power.cost=Math.round(c.power.cost*(0.55*arrayScale+0.45*batteryScale)*10)/10;
   return c;
 }
 function normalize(raw) {
-  const d=raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{},dest=isBodyId(d.destination)?d.destination:'moon',scenarioId=SCENARIOS[d.scenario]?.destination===dest?d.scenario:DEFAULT_SCENARIO[dest],n=presetFor(dest,'balanced',scenarioId),m=missionFor({...n,scenario:scenarioId});
+  const d=raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{},n=presetFor(d.destination==='mars'?'mars':'moon'),m=missionFor(n);
   for(const k of Object.keys(CATALOG))n[k]=CATALOG[k].some(c=>c.id===d[k])?d[k]:n[k];
   n.fuel=clamp(finite(d.fuel,n.fuel),0,CATALOG.propulsion.find(c=>c.id===n.propulsion).maxFuel);
   n.altitude=clamp(finite(d.altitude,n.altitude),m.altitudeMin,m.altitudeMax);n.inclination=clamp(finite(d.inclination,n.inclination),0,90);
-  n.arrayScale=clamp(finite(d.arrayScale,n.arrayScale||1),0.75,m.arrayScaleMax);n.batteryScale=clamp(finite(d.batteryScale,n.batteryScale||1),0.75,1.5);
+  n.arrayScale=clamp(finite(d.arrayScale,n.arrayScale||1),0.75,1.5);n.batteryScale=clamp(finite(d.batteryScale,n.batteryScale||1),0.75,1.5);
   n.duty=clamp(finite(d.duty,1),0.25,1);n.distance=Object.hasOwn(DISTANCES,d.distance)?d.distance:'mean';
   n.name=String(d.name||m.title).replace(/[\u0000-\u001f\u007f<>]/g,'').slice(0,40);
   n.livery=['gold','cyan','coral'].includes(d.livery)?d.livery:'gold';
-  n.scenario=scenarioId;n.difficulty=Object.hasOwn(DIFFICULTY,d.difficulty)?d.difficulty:'engineer';n.sandbox=d.sandbox===true;return n;
+  n.scenario=SCENARIOS[d.scenario]?.destination===n.destination?d.scenario:DEFAULT_SCENARIO[n.destination];n.difficulty=Object.hasOwn(DIFFICULTY,d.difficulty)?d.difficulty:'engineer';n.sandbox=d.sandbox===true;return n;
 }
 function linkEnvironment(d){const options=distanceOptions(d),distance=options[d.distance]||options.mean,m=missionFor(d);return {distance:distance.km,factor:(m.referenceDistance/distance.km)**2,delay:distance.km/299792.458,referenceDistance:m.referenceDistance};}
 function rocketDeltaV(wet,dry,isp) {return [wet,dry,isp].every(Number.isFinite)&&wet>dry&&dry>0&&isp>0 ? isp*9.80665*Math.log(wet/dry) : 0;}
@@ -763,21 +615,13 @@ function calculate(raw) {
     {id:'pointing',name:'Pointing precision',status:pointingFactor<1?'warn':'pass',value:`${c.bus.pointing}″ / ${c.payload.pointingMax}″ allowed`,why:'Poor pointing reduces useful science quality; it does not change raw generated bytes.'},
     {id:'orbit',name:'Polar coverage',status:d.inclination<85?'warn':'pass',value:`${d.inclination}° · ${period.toFixed(1)} min orbit`,why:'Polar coverage is modeled as min(inclination / 85°, 1). Period is derived from NASA/JPL body constants; illumination/contact geometry is simplified.'}
   ];
-  // Educational hints from real mission design rules. They never block launch and never count as warnings.
-  const cal=REAL_MISSIONS_CALIBRATION,propFraction=d.fuel/wet,massMarginFrac=margins.mass/c.launch.capacity,powerMarginFrac=(c.power.solar*0.85-peak)/Math.max(1e-9,c.power.solar*0.85);
-  const hints=[
-   {id:'propellant',title:'Propellant fraction',value:`${(propFraction*100).toFixed(0)}% of injected mass`,status:propFraction<0.3||propFraction>0.7?'note':'ok',text:cal.propellantHint+` Yours is ${(propFraction*100).toFixed(0)}%.`,source:cal.propellantSource,basis:'Real missions: derived arithmetic on NASA masses. The game band is an educational comparison.'},
-   {id:'massMargin',title:'Mass margin',value:`${(massMarginFrac*100).toFixed(0)}% of launcher capacity`,status:massMarginFrac<0.1?'note':'ok',text:cal.massMarginHint,source:cal.marginSource,basis:'GSFC-STD-1000 Rev I applies margin to dry mass by design phase; the game applies it to injected mass as an analogy.'},
-   {id:'powerMargin',title:'Power margin',value:`${(powerMarginFrac*100).toFixed(0)}% of usable array output`,status:powerMarginFrac<0.1?'note':'ok',text:cal.powerMarginHint,source:cal.marginSource,basis:'GSFC-STD-1000 Rev I power margin = (available - estimated) / available. The game compares peak load with 85% of array output.'}
-  ];
   const risk=checks.filter(x=>x.status==='warn').length;
-  return {d,c,m:M,dry,wet,period,base,scienceLoad,peak,eclipseEnergy,usableBattery,deltaV,cost,scienceDuty,dataGenerated,dataDownlink,pointingFactor,polarFactor,altitudeFactor,potential,months,contactStart,fillMinutes,margins,checks,hints,risk,launchable:!checks.some(x=>x.status==='fail')};
+  return {d,c,m:M,dry,wet,period,base,scienceLoad,peak,eclipseEnergy,usableBattery,deltaV,cost,scienceDuty,dataGenerated,dataDownlink,pointingFactor,polarFactor,altitudeFactor,potential,months,contactStart,fillMinutes,margins,checks,risk,launchable:!checks.some(x=>x.status==='fail')};
 }
 function log(s,type,title,detail){s.logs.push({minute:s.minute,type,title,detail});}
 let probing=false;
-const particleKind=k=>k==='particle'||k==='radiation';
 // Replay a paused state under every available response with the default policy: used only to judge whether a decision matters.
-function quickFinish(state){let r=state;for(let i=0;i<600&&!r.done;i++){if(r.crisis){const open=r.crisis.actions.filter(x=>!x.disabled),pick=open.find(x=>x.id==='ride')||open.find(x=>x.id==='continue')||open.find(x=>x.id==='wait')||open[0];r=resolve(r,pick.id);}else r=advance(r);}return r;}
+function quickFinish(state){let r=state;for(let i=0;i<260&&!r.done;i++){if(r.crisis){const open=r.crisis.actions.filter(x=>!x.disabled),pick=open.find(x=>x.id==='ride')||open.find(x=>x.id==='continue')||open.find(x=>x.id==='wait')||open[0];r=resolve(r,pick.id);}else r=advance(r);}return r;}
 function decisionMatters(s){
   if(probing||!s.crisis)return true;probing=true;
   try{const open=s.crisis.actions.filter(x=>!x.disabled);if(open.length<2)return false;
@@ -851,7 +695,7 @@ function advanceSlice(input,dt,copy=true,calculation=null) {
   const wasSafe=s.safe,net=(generatedPower-load)*dt/60;s.battery=clamp(s.battery+net,0,c.power.battery);
   if(wasSafe)s.safeSteps+=dt/M.step;
   if(activeScience){
-    const bytes=effectiveRate*dt*60/8;const value=c.payload.value*clamp(c.payload.pointingMax/(c.bus.pointing*s.factors.pointing),0.15,1)*a.polarFactor*a.altitudeFactor*s.orbitPenalty*s.qualityHit*(wx?.choice==='ride'?wx.quality:wx?.choice==='reduce'&&particleKind(wx.kind)?0.8:1);
+    const bytes=effectiveRate*dt*60/8;const value=c.payload.value*clamp(c.payload.pointingMax/(c.bus.pointing*s.factors.pointing),0.15,1)*a.polarFactor*a.altitudeFactor*s.orbitPenalty*s.qualityHit*(wx?.choice==='ride'?wx.quality:wx?.choice==='reduce'&&wx.kind==='particle'?0.8:1);
     const science=dt*10*value*thr;const room=Math.max(0,c.storage.capacity-s.backlog),kept=Math.min(room,bytes),ratio=bytes?kept/bytes:0;
     s.generatedScience+=science;s.generated+=bytes;s.backlog+=kept;s.qualityBacklog+=science*ratio;s.lostMB+=bytes-kept;s.lostScience+=science*(1-ratio);
   }
@@ -880,13 +724,13 @@ function advanceSlice(input,dt,copy=true,calculation=null) {
     {id:'pause',name:'Pause collection',effect:'Drain the recorder before collecting new observations. Saves battery; science only grows if the recorder was the limit.',disabled:false}
   ]);}
   else if(M.weather&&s.weatherAt!==null&&s.minute>=s.weatherAt&&!s.seen.includes('weather')){
-    const W=M.weather,dust=!particleKind(W.kind),heat=W.kind==='thermal',pct=v=>Math.round(v*100);
-    crisis(s,'weather',W.title,heat?`A sunward heat load will cut solar output to ${pct(W.solar)}% and make observations ${pct(W.quality)}% as useful for ${W.duration} minutes (a game assumption: arrays are turned away from the Sun and instruments run hot). Battery is ${Math.round(s.battery/c.power.battery*100)}%.`:dust?`A regional dust storm will cut solar output to ${Math.round(W.solar*100)}% for ${W.duration} minutes. Battery is ${Math.round(s.battery/c.power.battery*100)}%. Sunlight alone may not cover the operating load.`:W.kind==='radiation'?`Radiation trapped in the planet’s magnetic field will corrupt measurements and stored data for ${W.duration} minutes. Observations collected during the event are only ${Math.round(W.quality*100)}% as useful (a relative game assumption, not a dose in rads).`:`Energetic particles will corrupt measurements for ${W.duration} minutes. Observations collected during the event are only ${Math.round(W.quality*100)}% as useful.`,heat?['Heat load rises','Arrays are turned off the Sun and power falls',`${c.power.name}: ${Math.round(c.power.solar*0.85*s.factors.solar*W.solar)} W available`,'Instruments run hot and observations lose quality']:dust?['Dust in the atmosphere','Solar generation falls',`${c.power.name}: ${Math.round(c.power.solar*0.85*s.factors.solar*W.solar)} W available`,'Battery drains faster than it charges']:[W.kind==='radiation'?'Trapped radiation belt':'Solar particle event','Detector noise rises','Observations lose quality','Science per minute drops'],[
+    const W=M.weather,dust=W.kind==='dust';
+    crisis(s,'weather',W.title,dust?`A regional dust storm will cut solar output to ${Math.round(W.solar*100)}% for ${W.duration} minutes. Battery is ${Math.round(s.battery/c.power.battery*100)}%. Sunlight alone may not cover the operating load.`:`Energetic particles will corrupt measurements for ${W.duration} minutes. Observations collected during the event are only ${Math.round(W.quality*100)}% as useful.`,dust?['Dust in the atmosphere','Solar generation falls',`${c.power.name}: ${Math.round(c.power.solar*0.85*s.factors.solar*W.solar)} W available`,'Battery drains faster than it charges']:['Solar particle event','Detector noise rises','Observations lose quality','Science per minute drops'],[
     {id:'shield',name:'Safe the instruments',effect:`Pause science and transmission for ${W.duration} minutes. Nothing is lost to the event, but the collection time is.`,disabled:false},
-    {id:'reduce',name:'Reduce instrument duty',effect:dust?(heat?'Halve instrument duty during the heat load. Cuts load and heat, keeps part of the science.':'Halve instrument duty during the event. Cuts load, keeps part of the science.'):'Halve duty and use a low-gain mode: half the observations, 80% as useful.',disabled:false},
-    {id:'ride',name:'Keep observing',effect:dust?(heat?`Full science through the heat load. The battery may drain, observations count at ${pct(W.quality)}%${W.aftermath?` and the hot instruments stay ${Math.round((1-W.aftermath)*100)}% less sensitive for the rest of the campaign (a game assumption)`:''}.`:'Full science through the storm. The battery may drain.'):`Keep collecting. Observations during the event count only ${Math.round(W.quality*100)}%. Data already on the recorder can be corrupted.`,disabled:false}
+    {id:'reduce',name:'Reduce instrument duty',effect:dust?'Halve instrument duty during the event. Cuts load, keeps part of the science.':'Halve duty and use a low-gain mode: half the observations, 80% as useful.',disabled:false},
+    {id:'ride',name:'Keep observing',effect:dust?'Full science through the storm. The battery may drain.':`Keep collecting. Observations during the event count only ${Math.round(W.quality*100)}%. Data already on the recorder can be corrupted.`,disabled:false}
   ]);
-    if(!decisionMatters(s)){s.crisis=null;s.weather={kind:W.kind,solar:W.solar,quality:W.quality,start:s.minute,end:s.minute+W.duration,choice:'ride'};if(W.aftermath)s.qualityHit*=W.aftermath;log(s,'info',`${W.title} passed`,`The ${c.power.name.toLowerCase()} and your margins absorbed it: every response would have ended about the same, so no decision was needed.`);}}
+    if(!decisionMatters(s)){s.crisis=null;s.weather={kind:W.kind,solar:W.solar,quality:W.quality,start:s.minute,end:s.minute+W.duration,choice:'ride'};log(s,'info',`${W.title} passed`,`The ${c.power.name.toLowerCase()} and your margins absorbed it: every response would have ended about the same, so no decision was needed.`);}}
   if(s.mode==='downlink'&&s.backlog<c.storage.capacity*0.25)s.mode='science';
   return s;
 }
@@ -904,8 +748,8 @@ function resolve(input,actionId){const s=clone(input);if(s.done||!s.crisis)retur
   if(e.id==='eclipse'){if(actionId==='conserve'){s.mode='coast';s.autoResume=true;}if(actionId==='throttle')s.throttle*=0.5;}
   if(e.id==='storage'){if(actionId==='downlink')s.mode='downlink';if(actionId==='compress')s.throttle*=0.5;}
   if(e.id==='link'){if(actionId==='boost'){s.linkBoost=2;s.qualityHit=0.9;}if(actionId==='pause')s.mode='downlink';}
-  if(e.id==='weather'){const W=M.weather;s.weather={kind:W.kind,solar:W.solar,quality:W.quality,start:s.minute,end:s.minute+W.duration,choice:actionId};if(W.aftermath&&actionId==='ride')s.qualityHit*=W.aftermath;
-    const hit=particleKind(W.kind)?({ride:0.35,reduce:0.15,shield:0}[actionId]||0):0;
+  if(e.id==='weather'){const W=M.weather;s.weather={kind:W.kind,solar:W.solar,quality:W.quality,start:s.minute,end:s.minute+W.duration,choice:actionId};
+    const hit=W.kind==='particle'?({ride:0.35,reduce:0.15,shield:0}[actionId]||0):0;
     if(hit>0&&s.backlog>0){const mb=s.backlog*hit,q=s.qualityBacklog*hit;s.backlog-=mb;s.qualityBacklog-=q;s.lostMB+=mb;s.lostScience+=q;log(s,'warning','Recorder data corrupted',`${Math.round(mb)} MB of stored observations were corrupted by energetic particles.`);}}
   s.crisis=null;return s;
 }
@@ -913,7 +757,7 @@ function finish(s,a,abort=false,reason='Capture aborted'){const M=a.m;s.done=tru
   s.outcome={completion,rawCompletion:s.science/M.scienceTarget*100,achieved,status:abort?reason:achieved?'Objective achieved':'Objective incomplete',science:s.science,returned:s.returned,lostMB:s.lostMB,retainedMB:s.backlog,finalBattery:s.battery/a.c.power.battery*100,cost:a.cost,mass:a.wet,efficiency:s.science/Math.max(1,a.cost),safeMinutes:s.safeSteps*M.step,deltaVRemaining:rocketDeltaV(a.dry+s.fuel,a.dry,a.c.propulsion.isp*s.factors.isp),contactCapacityMB:s.contactCapacityMB,contactIdleMin:s.contactIdleMin,pausedMin:s.pausedMin,linkUtilization:s.contactCapacityMB>0?s.returned/s.contactCapacityMB*100:0};
   log(s,achieved?'success':'warning',s.outcome.status,`${s.outcome.rawCompletion.toFixed(1)}% target attainment. ${s.science.toFixed(0)} science units downlinked.`);
 }
-function runToEnd(d,options={}) {let s=newRun(d,options.seed??4385,options.factors);s.mode=options.mode??'science';for(let i=0;i<(options.maxSteps??400)&&!s.done;i++){if(s.crisis){const preferred=options.policy==='conservative'?({propulsion:'nominal',eclipse:'conserve',storage:'downlink',link:'wait',weather:'shield'}[s.crisis.id]):({propulsion:'nominal',eclipse:'continue',storage:'continue',link:'wait',weather:'ride'}[s.crisis.id]);const available=s.crisis.actions.find(x=>x.id===preferred&&!x.disabled)||s.crisis.actions.find(x=>!x.disabled);s=resolve(s,available.id);}else s=advance(s);}return s;}
+function runToEnd(d,options={}) {let s=newRun(d,options.seed??4385,options.factors);s.mode=options.mode??'science';for(let i=0;i<150&&!s.done;i++){if(s.crisis){const preferred=options.policy==='conservative'?({propulsion:'nominal',eclipse:'conserve',storage:'downlink',link:'wait',weather:'shield'}[s.crisis.id]):({propulsion:'nominal',eclipse:'continue',storage:'continue',link:'wait',weather:'ride'}[s.crisis.id]);const available=s.crisis.actions.find(x=>x.id===preferred&&!x.disabled)||s.crisis.actions.find(x=>!x.disabled);s=resolve(s,available.id);}else s=advance(s);}return s;}
 function seededRandom(seed){let n=seed>>>0;return()=>{n=(1664525*n+1013904223)>>>0;return n/4294967296;};}
 function robustness(d,seed=UNCERTAINTY.seed,samples=UNCERTAINTY.samples){samples=Math.floor(clamp(finite(samples,UNCERTAINTY.samples),1,1000));const a=calculate(d);if(!a.launchable)return {index:0,passed:0,samples,seed,meanCompletion:0,blocked:true};const rng=seededRandom(seed);let passed=0,total=0;const results=[];for(let i=0;i<samples;i++){const f=Object.fromEntries(['solar','link','isp','pointing'].map(k=>[k,UNCERTAINTY[k][0]+rng()*(UNCERTAINTY[k][1]-UNCERTAINTY[k][0])]));const r=runToEnd(d,{factors:f,policy:'conservative'});passed+=Number(r.outcome.achieved);total+=r.outcome.completion;results.push(r.outcome.completion);}return {index:passed/samples*100,passed,samples,seed,meanCompletion:total/samples,results,blocked:false};}
 // Root-cause analysis. Every candidate cause is expressed in the same unit (science units lost), so the
@@ -960,7 +804,7 @@ const DEFAULT_POLICY = {propulsion: 'nominal', eclipse: 'continue', storage: 'co
 
 function finishFrom(state, policy) {
   let r = clone(state);
-  for (let i = 0; i < 600 && !r.done; i++) {
+  for (let i = 0; i < 260 && !r.done; i++) {
     if (r.crisis) {
       const open = r.crisis.actions.filter(x => !x.disabled);
       const pick = open.find(x => x.id === policy[r.crisis.id]) || open[0];
@@ -1227,9 +1071,7 @@ const fromB64 = text => { const bin = atob(text.replace(/-/g, '+').replace(/_/g,
 function encodeDesign(raw, meta = {}) {
   const d = normalize(raw), design = {};
   for (const k of SHARE_FIELDS) design[k] = d[k];
-  // Format v1 (Moon and Mars) is byte-identical to the original TQ6 codes. Other bodies use v2, which older readers reject
-  // as an unsupported format instead of silently turning the design into a Moon mission.
-  const payload = {v: LEGACY_BODY_IDS.includes(design.destination) ? 1 : 2, d: design};
+  const payload = {v: 1, d: design};
   if (Number.isFinite(meta.score)) payload.s = Math.round(meta.score);
   if (typeof meta.team === 'string') payload.t = meta.team.replace(/[\u0000-\u001f\u007f<>]/g, '').slice(0, 28);
   return CODE_PREFIX + toB64(JSON.stringify(payload));
@@ -1242,12 +1084,7 @@ function decodeDesign(text) {
   if (!/^[A-Za-z0-9_-]+$/.test(raw.slice(CODE_PREFIX.length))) return {ok: false, error: 'This code contains invalid characters.'};
   let payload;
   try { payload = JSON.parse(fromB64(raw.slice(CODE_PREFIX.length))); } catch { return {ok: false, error: 'This code is damaged and could not be read.'}; }
-  if (!payload || typeof payload !== 'object' || Array.isArray(payload) || (payload.v !== 1 && payload.v !== 2) || !payload.d || typeof payload.d !== 'object' || Array.isArray(payload.d)) return {ok: false, error: 'This code uses an unsupported format.'};
-  const strict = payload.v === 2 || Object.hasOwn(payload.d, 'destination');
-  if (strict) {
-    const problem = validateDestinationFields(payload.d, payload.v);
-    if (problem) return {ok: false, error: problem};
-  }
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload) || payload.v !== 1 || !payload.d || typeof payload.d !== 'object' || Array.isArray(payload.d)) return {ok: false, error: 'This code uses an unsupported format.'};
   // Only whitelisted keys reach the engine; normalize() clamps every value and rejects unknown part ids.
   const picked = {};
   for (const k of SHARE_FIELDS) if (Object.hasOwn(payload.d, k)) picked[k] = payload.d[k];
@@ -1263,32 +1100,6 @@ function verifyDesign(raw, policy = 'ordinary') {
   return {launchable: true, science: r.science, achieved: r.outcome.achieved, battery: r.outcome.finalBattery, cost: a.cost, mass: a.wet, status: r.outcome.status};
 }
 
-// Strict validation for any code that names a destination: unknown bodies, scenarios of another body, unknown part ids and
-// out-of-range numbers are rejected rather than silently repaired. Version 1 codes may only name the Moon or Mars.
-const NUMERIC_RANGES = {fuel: [0, 90], inclination: [0, 90], arrayScale: [0.75, null], batteryScale: [0.75, 1.5], duty: [0.25, 1]};
-function validateDestinationFields(d, version) {
-  const dest = d.destination;
-  if (version === 2 && !Object.hasOwn(d, 'destination')) return 'This code does not name a destination.';
-  if (Object.hasOwn(d, 'destination')) {
-    if (typeof dest !== 'string' || !isBodyId(dest)) return 'This code names a destination this version does not know.';
-    if (version === 1 && !LEGACY_BODY_IDS.includes(dest)) return 'This code names a destination its format version cannot carry.';
-  }
-  const body = BODIES[isBodyId(dest) ? dest : 'moon'];
-  if (version === 2) {
-    if (Object.hasOwn(d, 'scenario') && !(typeof d.scenario === 'string' && Object.hasOwn(SCENARIOS, d.scenario) && SCENARIOS[d.scenario].destination === body.id)) return 'This code names a scenario that does not belong to its destination.';
-    if (Object.hasOwn(d, 'difficulty') && !(typeof d.difficulty === 'string' && Object.hasOwn(DIFFICULTY, d.difficulty))) return 'This code names an unknown difficulty.';
-    for (const kind of Object.keys(CATALOG)) if (Object.hasOwn(d, kind) && !(typeof d[kind] === 'string' && CATALOG[kind].some(c => c.id === d[kind]))) return 'This code names a part this version does not know.';
-    const m = missionFor({destination: body.id, scenario: d.scenario});
-    for (const [k, [lo, hi]] of Object.entries(NUMERIC_RANGES)) {
-      if (!Object.hasOwn(d, k)) continue;
-      const max = k === 'arrayScale' ? m.arrayScaleMax : hi;
-      if (typeof d[k] !== 'number' || !Number.isFinite(d[k]) || d[k] < lo || d[k] > max) return `This code has a ${k} value outside the allowed range.`;
-    }
-    if (Object.hasOwn(d, 'altitude') && (typeof d.altitude !== 'number' || !Number.isFinite(d.altitude) || d.altitude < body.altitudeMin || d.altitude > body.altitudeMax)) return 'This code has an orbit altitude outside the range of its destination.';
-  }
-  return null;
-}
-
 
 // Deterministic reasoning tools. Predictions always execute the same game engine.
 const cpNum=(v,p=1)=>Number(v).toLocaleString('en-US',{maximumFractionDigits:p});
@@ -1300,7 +1111,7 @@ const EXPERIMENT_FIELDS=[
 function continuePreview(input,firstAction=null){
  let r=clone(input);
  if(firstAction)r=resolve(r,firstAction);
- for(let i=0;i<600&&!r.done;i++){
+ for(let i=0;i<180&&!r.done;i++){
   if(r.crisis){const options=r.crisis.actions.filter(x=>!x.disabled);const chosen=options.find(x=>x.id===cpPolicy[r.crisis.id])||options[0];if(!chosen)throw new Error('No valid recovery option');r=resolve(r,chosen.id);}
   else r=advance(r);
  }
@@ -1320,7 +1131,7 @@ const cpRank=(a,b)=>a.failures-b.failures||Number(b.achieved)-Number(a.achieved)
 function reviewDesign(raw){
  const d=normalize(raw),m=calculate(d).m,base=designPreview(d,'Current design'),candidates=[];
  for(const [key,parts] of Object.entries(CATALOG))for(const part of parts)if(part.id!==d[key])candidates.push({patch:{[key]:part.id},label:part.name});
- for(const [key,values]of Object.entries({fuel:[35,45,55,65],altitude:[m.altitudeMin,m.referenceAltitude,(m.altitudeMin+m.altitudeMax)/2],inclination:[85,90],arrayScale:[1,1.25,1.5,...(m.arrayScaleMax>1.5?[m.arrayScaleMax/2,m.arrayScaleMax]:[])],batteryScale:[1,1.25,1.5],duty:[.5,.75,1]}))
+ for(const [key,values]of Object.entries({fuel:[35,45,55,65],altitude:[m.altitudeMin,m.referenceAltitude,(m.altitudeMin+m.altitudeMax)/2],inclination:[85,90],arrayScale:[1,1.25,1.5],batteryScale:[1,1.25,1.5],duty:[.5,.75,1]}))
   for(const value of values)if(value!==d[key])candidates.push({patch:{[key]:value},label:`${key} = ${value}`});
  const trials=candidates.map(c=>({...designPreview({...d,...c.patch},c.label),patch:c.patch}));
  const better=trials.filter(c=>cpRank(c,base)<0).sort(cpRank);
@@ -1349,7 +1160,7 @@ function cpPatch(q,d){
   const key=fields[0][0],f=EXPERIMENT_FIELDS.find(x=>x[0]===key);let value=Number(numbers[0]);if(['duty','arrayScale','batteryScale'].includes(key)&&/%|percent|শতাংশ/.test(clean))value/=100;
   if(/%|percent|শতাংশ/.test(clean)&&!['duty','arrayScale','batteryScale'].includes(key))return {error:'Percent units are supported only for battery size, array size and instrument duty.'};
   if(/\bkm\b/.test(clean)&&key!=='altitude'||/\bkg\b/.test(clean)&&key!=='fuel'||/\bdegrees?\b/.test(clean)&&key!=='inclination')return {error:'That unit does not match the selected field.'};
-  const assessment=calculate(d),min=key==='altitude'?assessment.m.altitudeMin:f[2],max=key==='fuel'?assessment.c.propulsion.maxFuel:key==='altitude'?assessment.m.altitudeMax:key==='arrayScale'?assessment.m.arrayScaleMax:f[3];
+  const assessment=calculate(d),min=key==='altitude'?assessment.m.altitudeMin:f[2],max=key==='fuel'?assessment.c.propulsion.maxFuel:key==='altitude'?assessment.m.altitudeMax:f[3];
   if(!Number.isFinite(value)||value<min||value>max)return {error:`${f[1]} must be between ${min} and ${max}. No value was changed.`};
   return {patch:{[key]:value},label:`${f[1]} = ${value}${['arrayScale','batteryScale'].includes(key)?` (${cpNum(value*100)}%)`:''}`};
  }
@@ -1448,7 +1259,6 @@ const intentRules=[
  ['camera',/\b(3d|rotate|zoom|drag|camera view|view controls|animation|graphics|webgl)\b|ঘোরাব|ক্যামেরা ভিউ/],
  ['commands',/\b(command|commands|controls|buttons|schedule|map in sunlight|map through shadow|return priority|conserve energy|coast|aggressive)\b|বোতাম|কমান্ড|চালাব/],
  ['crisis',/\b(crisis|crises|emergency|recovery|recover|warning|disabled choice|disabled option)\b|বিপদ|রিকভারি/],
- ['realmission',/\b(real missions?|real spacecraft|real orbiters?|which real|inspired by|based on)\b|\b(odyssey|magellan|messenger|landsat|grail|clipper|dawn)\b/],
  ['nasa',/\b(nasa|jpl)\b.*\b(data|dataset|source|sources|reference|references|constants|used|use|facts)\b|\b(data|dataset|source|sources|reference|references|constants)\b.*\b(nasa|jpl)\b|\b(dataset|sources|provenance)\b|নাসা.*(?:তথ্য|ডেটা|সূত্র)|তথ্যের সূত্র/],
  ['distance',/\b(distance|perigee|apogee|latency|signal delay|communication delay|light time)\b|দূরত্ব|সিগন্যাল দেরি/],
  ['assumptions',/\b(assumptions|assumption|accuracy|accurate|realistic|simplified|simplification|flight grade|certification|certified|endorsement|endorsed|approved|limitations)\b|অনুমান|নির্ভুল|বাস্তব/],
@@ -1472,7 +1282,6 @@ const intentRules=[
  ['help',/\b(assistant|assistance|mentor|support|help)\b|সহকারী|সাহায্য/]
 ];
 const practical={
- realmission:['How does this compare with real missions?','','' ],
  restart:['How do I restart safely?','An active flight locks design changes and another launch. Finish it or use the explicit end/discard confirmation before starting over or entering Pitch mode. Cancel keeps your mission. A camera reset only changes the view, not the mission.','চলমান flight থাকলে design ও নতুন launch বন্ধ থাকে। মিশন শেষ করুন, অথবা end/discard confirmation দিয়ে তবেই নতুন মিশন বা Pitch mode নিন। Cancel দিলে বর্তমান মিশন থাকে। Camera reset মিশন মুছে না।'],
  repair:['Can I repair hardware during flight?','Hardware is locked after launch. You cannot install a new battery, antenna or engine during an active flight. Use operational commands: Conserve energy pauses science and transmission; Return priority drains storage during contact. A crisis offers only available responses. Assistant design previews are studies for your next launch, not midflight repairs.','Launch-এর পরে battery, antenna বা engine বদলানো যায় না। Conserve energy দিয়ে শক্তি বাঁচান; Return priority দিয়ে contact-এ ডেটা পাঠান। Crisis-এর চালু option বেছে নিন। Assistant-এর নতুন design preview পরের launch-এর জন্য।'],
  screens:['How do I use the game on my device?','Use the labeled buttons if dragging or 3D navigation is difficult. If WebGL is unavailable, the 2D fallback preserves gameplay controls. Use Focus mode for more room, close open dialogs, and use your browser zoom for readable text. Reduced motion is available in Customize. A blank screen or clipped control is a bug: note the page, device/browser version and steps. Physical Android, iOS and macOS devices have not all been certified; do not assume universal compatibility.','Drag বা 3D অসুবিধা হলে লেখা-দেওয়া button ব্যবহার করুন। WebGL না চললে 2D view-তেও খেলার controls থাকে। Focus mode নিন, dialog বন্ধ করুন; Customize-এ Reduced motion আছে। ফাঁকা screen বা কাটা button দেখলে device/browser, page ও কী করেছেন জানান। সব Android/iOS/macOS device-এ পরীক্ষা হয়েছে—এমন দাবি নেই।']
@@ -1481,7 +1290,7 @@ const broadFiller=new Set('how what why when where which do does did can could s
 // Every content word must belong to project/control language; unsupported nouns cannot borrow a match.
 const scopeWords=new Set((HELP_TOPICS.map(t=>t[1]+' '+t[4]).join(' ')+' '+
  'review improve fix best upgrade recommend better tested compare presets preset versus vs experiment simulate change set increase decrease equals equal kg km degrees degree percent x whatif mission status diagnose diagnosis doing next step track current state fill time endurance why explain more korle barale komale valo thik কমছে কেন কি কী কিভাবে কীভাবে কেমন কত কখন কোথায় করে করবেন করব করি করলে হলে হবে হয় হচ্ছে আমার আমি আমরা এই এটা গেমের মিশনের একটি আরও দিন থেকে মধ্যে আছে নেই যায় যাবে চাই চান কিভাবে কতক্ষণ কতটা হয় না এ ও এর করতে শুরু করতে পারি আমাকে বুঝাও বুঝিয়ে এখন চলছে কম ভরে ডেটার পাওয়ার ব্যাটারির সোলার প্যানেল সাইজ পার্ট বদলানো যাবে মোবাইলে ফোনে কম্পিউটার অফলাইনে মঙ্গলে যাবো জাবো খেলতে বন্ধুর সাথে সবাই সংরক্ষণ অসমাপ্ত ফেরত পাঠাবো সেভ করা রিফ্রেশ খেলি কমে গেলো repair save saving saved unfinished checkpoint autosave refresh offline export download restore import restart reset new start over discard pitch mode another launch live online network coop multiplayer multi player friends friend together midflight mid flight during after while flying hardware lock locked repair replace install swapped supported android iphone ipad ios safari mac mobile phone tablet screen overlap overflow small text black blank compatibility compatible device on-device destination option options switch planet other planets solar panel array size battery percentage percent units watts kilometers real science score amount dropping drains drain depleting low why falling fill storage filled fast breaks broken failed failure energy conserve shadow platform payload antenna transmission contact windows one way signal light time source sources verified physics limits limitations data provenance resume paused continue controls control hide modal focus read only report download json local browser close closure lost remains refreshes crash app keno ki kibhabe kivabe khelbo kheli korbo komche shuru ase ache koto lagbe hobe kore korle barale komale bhalo valo thik ekhon fresh cost cheaper best mission length six members project equations returned observations designed hardware specifications spec base '.split(' ').join(' ')).split(/[^\p{L}\p{M}\p{N}]+/u).filter(Boolean).map(x=>x.toLowerCase()));
-for(const word of 'forecast forecasts ranges link exported গেছে orbital delta v near mean far choices responses response select selected reduce reduced reducing increase increasing solar array battery instrument duty fraction multiplier percentage certification certified endorsement endorsed approve share sharing shares checkpoint unfinished size arrayscale batteryscale ১২৫ যদি শতাংশ কেজি কিমি how-to night one another real price prices dollars usd taka bdt money purchase buying repair orbiting why earth mars lunar lower higher rotation rotate spacecraft real missions orbiters odyssey magellan messenger landsat grail clipper dawn inspired based compare comparison mass fraction'.split(' '))scopeWords.add(word);
+for(const word of 'forecast forecasts ranges link exported গেছে orbital delta v near mean far choices responses response select selected reduce reduced reducing increase increasing solar array battery instrument duty fraction multiplier percentage certification certified endorsement endorsed approve share sharing shares checkpoint unfinished size arrayscale batteryscale ১২৫ যদি শতাংশ কেজি কিমি how-to night one another real price prices dollars usd taka bdt money purchase buying repair orbiting why earth mars lunar lower higher rotation rotate spacecraft'.split(' '))scopeWords.add(word);
 function scopedQuestion(q){
  const tokens=canonical(q.replace(/[০-৯]/g,c=>String('০১২৩৪৫৬৭৮৯'.indexOf(c)))).split(' ').filter(Boolean);
 
@@ -1505,15 +1314,6 @@ function decisionAnswer(q,{run=null,language='en'}={}){
  const live=pick.options.filter(o=>!o.disabled);
  return {...base,title:(bn?'সিদ্ধান্তের বিশ্লেষণ · ':'Decision review · ')+pick.title,text:`${pick.explanation}\nReplayed from the paused moment, returned science: ${live.map(o=>`${o.name} ${n(o.science)}`).join(' · ')}.\nEach alternative is an isolated test: later choices are held equal, so the differences come from this decision alone.`};
 }
-// Scenario hazards (heat load, radiation) are game assumptions. Answered only when the current scenario has such an event, and always labelled.
-function hazardAnswer(q,a,bn){
- const W=a.m.weather;
- if(!W||!['thermal','radiation'].includes(W.kind)||!/\b(radiation|thermal|heat)\b/i.test(q)||/forecast|news|president|stock|football|salary|recipe|horoscope/i.test(q))return null;
- const body=BODIES[a.m.destination],real=body.hazards[W.kind==='radiation'?'radiation':'thermal'];
- const dataset=nasaDataset(a.d);
- const text=`In this scenario the game includes a "${W.title}" event: ${W.kind==='thermal'?`solar output falls to ${Math.round(W.solar*100)}% and observations are ${Math.round(W.quality*100)}% as useful`:`observations are ${Math.round(W.quality*100)}% as useful and stored data can be corrupted`} for ${W.duration} minutes, once, somewhere in the campaign. This is a GAME ASSUMPTION, not a NASA measurement. No absolute ${W.kind==='thermal'?'temperature limit':'dose in rads'} was read from a NASA source, so I will not quote one.\nReal context for ${body.name}: ${real}\nThe game does not simulate heat transfer, shielding mass or total dose; it models the consequence as a power and data-quality event you respond to.`;
- return {known:true,title:bn?'Scenario hazard · game assumption':'Scenario hazard · game assumption',text,sources:[{title:'NASA/JPL data for '+body.name,url:dataset.factURL}],topic:'hazard',evidence:'GAME ASSUMPTION · NASA CONTEXT',suggestions:['Which NASA data is actually used?','Which values are game assumptions?']};
-}
 function answerQuestion(question,{design=PRESETS.balanced,run=null,language='en',history=[]}={}){
  let q=String(question||'').slice(0,500).trim().replace(/\bbat+e?r+y\b/gi,'battery').replace(/\bbatery\b/gi,'battery').replace(/\bbuget\b/gi,'budget').replace(/\bstorge\b/gi,'storage');
  const priorAnswer=history.at(-1)?.answer,previous=priorAnswer?.topic;
@@ -1531,7 +1331,6 @@ function answerQuestion(question,{design=PRESETS.balanced,run=null,language='en'
  const unknown=(detail='')=>({known:false,title:bn?'এটার যাচাই করা উত্তর আমার জানা নেই':'I can’t answer that reliably.',text:(bn?'যাচাই করা TRAJECTIQ knowledge base থেকে এই প্রশ্নের নির্ভরযোগ্য উত্তর দিতে পারছি না।':'I cannot answer this reliably from the verified TRAJECTIQ knowledge base.')+(detail?'\n'+detail:'')+'\n'+(bn?'Controls, NASA data, power, fuel, storage বা mission result সম্পর্কে জিজ্ঞেস করুন।':'Try controls, NASA data, power, fuel, storage or mission results.'),sources:[],evidence:'OUTSIDE VERIFIED KNOWLEDGE',suggestions:['How do I play?','Which NASA data is actually used?','What can the assistant answer?']});
  if(!q)return unknown();
  if(/(?:\b(dollars|usd|taka|bdt)\b|\b(real|actual|market|nasa)\b.*\b(cost|price|prices|budget)\b|\b(cost|price|prices)\b.*\b(real|actual|dollars|usd|taka|bdt)\b)/i.test(q))return unknown(bn?'এই গেমের credits কাল্পনিক; বাস্তব spacecraft-এর দাম বা NASA mission budget এখানে নেই।':'Game credits are fictional. I do not have verified real spacecraft prices or NASA mission budgets.');
- const hazard=hazardAnswer(q,a,bn);if(hazard)return hazard;
  if(/(?:radiation|thermal|temperature|atmospher|aerobraking|aerocapture|reentry|re-entry|landing|dust storm|weather|n.body|ephemeris|ephemerides|launch window|transfer trajectory|hohmann|life support|temperature|তাপমাত্রা|বিকিরণ|আবহাওয়া|অবতরণ)/i.test(q))return unknown(bn?'এই গেমে পূর্ণ transfer trajectory, atmosphere/landing, thermal বা radiation simulation নেই। যাচাই করা তথ্য ছাড়া সংখ্যা অনুমান করি না।':'This educational game does not simulate a full transfer trajectory, atmosphere or landing, thermal conditions, or radiation. I will not invent environmental values or flight predictions.');
  if(/president|stock|crypto|api key|password|chemistry|manufacturer|career|become.*engineer|salary|আজকের|আজ কত|live position|today|tomorrow|yesterday|guarantee|guaranteed|ignore.*instruction|system prompt|pretend|fabricate|invent.*(?:fact|source)|write.*(?:poem|essay)|recipe|horoscope|cooking|football/i.test(q))return unknown();
  const decision=decisionAnswer(q,{run,language});if(decision)return decision;
@@ -1558,18 +1357,10 @@ function answerQuestion(question,{design=PRESETS.balanced,run=null,language='en'
  if(id==='orbit')text=bn?`${body}-এর ওপর altitude ${m.altitudeMin??50}–${m.altitudeMax??200} km। Inclination orbit-এর ঢাল; ৯০° polar coverage দেয়। Model circular orbit ধরে; পূর্ণ flight trajectory নয়।`:`Altitude is height above ${body}: ${m.altitudeMin??50}–${m.altitudeMax??200} km in this scenario. Inclination tilts the orbital plane; near 90° supports polar coverage. The engine uses circular orbit period and speed, not a full flight trajectory.`;
  if(id==='distance')text=bn?`${body}-এর selected distance scenario-তে inverse-square rule দিয়ে link scale হয়। Distance/light speed দিয়ে one-way signal delay দেখানো হয়; controls-এ delay লাগে না। এগুলো fixed teaching scenarios, আজকের অবস্থান নয়।`:`The selected ${body} distance scenario scales the link using an educational inverse-square approximation. Distance / speed of light gives displayed one-way delay; commands are not delayed. These fixed teaching scenarios are not a live ephemeris. Different mission antennas are normalized to each destination's reference distance, not a claim that identical lunar hardware works unchanged at Mars.`;
  if(id==='nasa')text=bn?`${body}: radius ${n(m.radius,1)} km ও GM ${n(m.mu,3)} km³/s² circular orbit-এ ব্যবহৃত। Solar irradiance ${n(m.solarIrradiance??1361,1)} W/m² panel model-এ ব্যবহৃত। NASA data screen-এ snapshot, সূত্র ও derived/scenario পার্থক্য দেখুন। Hardware, credits, crisis ও science units অনুমান; NASA certification বা live telemetry নয়।`:`For ${body}, radius ${n(m.radius,1)} km and GM ${n(m.mu,3)} km³/s² drive the circular orbit model. Solar irradiance ${n(m.solarIrradiance??1361,1)} W/m² drives panel output. Inspect the NASA data screen for reference values, sources and derived/scenario labels. Hardware, credits, crises and science units are educational assumptions, not NASA certification or live telemetry.`;
- if(id==='nasa'){const flagged=bodyRows(m.destination).filter(r=>r.unverified);if(flagged.length)text+=(bn?'\nGame assumption হিসেবে চিহ্নিত: ':'\nGame assumptions in the data panel (no NASA source): ')+flagged.map(r=>r.label.replace(' · GAME ASSUMPTION','')).join('; ')+'.';}
- if(id==='realmission'){
-  const rm=getRealMission(m.realMission);
-  if(!rm)text='No real mission is linked to this scenario.';
-  else{const prop=rm.propellant_kg&&rm.launch_mass_kg?Math.round(rm.propellant_kg/rm.launch_mass_kg*100):null,cost=rm.cost_musd?.value;
-   text=`This scenario is inspired by ${rm.name} (launched ${rm.launch_date}). Launch mass ${rm.launch_mass_kg?n(rm.launch_mass_kg,1)+' kg':'not found'}${rm.dry_mass_kg?', dry mass '+n(rm.dry_mass_kg,1)+' kg':''}${prop!==null?', propellant about '+prop+'% of launch mass':''}${cost?', estimated cost $'+n(cost)+' million (year basis not stated)':''}. Real orbiters carry about half their launch mass as propellant (Odyssey ${Math.round(PROPELLANT_FRACTIONS.odyssey*100)}%, MRO ${Math.round(PROPELLANT_FRACTIONS.mro*100)}%, Juno ${Math.round(PROPELLANT_FRACTIONS.juno*100)}%). A real 725 kg orbiter, Mars Odyssey, split its dry mass roughly: power ${Math.round(ODYSSEY_SUBSYSTEMS.fractionOfDry.electrical_power*100)}%, propulsion hardware ${Math.round(ODYSSEY_SUBSYSTEMS.fractionOfDry.propulsion*100)}%, telecom ${Math.round(ODYSSEY_SUBSYSTEMS.fractionOfDry.telecommunications*100)}%, command and data ${Math.round(ODYSSEY_SUBSYSTEMS.fractionOfDry.command_and_data_handling*100)}%. Your game spacecraft is a fictional small orbiter, not a copy. Fields NASA pages did not give: ${(rm.provenance.unverified||[]).join('; ')||'none listed'}.`;
-   sources.push(...rm.provenance.sources.map(u=>({title:rm.name+' source',url:u})));}
- }
- if(id==='assumptions')text=bn?`Hardware specification, credit, science units, ২৮% cell efficiency, ৮৫% derating, ${n(m.eclipseMinutes,1)} মিনিট shadow, ${m.contactMinutes} মিনিট contact ও capture requirement শিক্ষামূলক অনুমান। Model full transfer trajectory, thermal বা radiation simulation করে না।`:`Hardware specifications, credits, science units, ${m.arrayEfficiency===0.28?'28% cell efficiency':n(m.arrayEfficiency*100)+'% array efficiency (scenario assumption)'}, 85% operating derating, ${n(m.eclipseMinutes,1)}-minute shadow (${m.eclipseModel}), ${m.contactMinutes}-minute contact, capture requirements and link degradation are educational assumptions. Real arrays deliver about ${REAL_ARRAY_EFFICIENCY.juno.jupiterPct}-${REAL_ARRAY_EFFICIENCY.juno.earthPct}% of irradiance times gross area (Juno, Europa Clipper); the game's value is an assumption kept so Moon and Mars balance stays comparable. Selected environmental constants are sourced. This is not a full transfer, thermal, radiation, atmosphere or landing simulation; NASA has not certified this game.`;
+ if(id==='assumptions')text=bn?`Hardware specification, credit, science units, ২৮% cell efficiency, ৮৫% derating, ${n(m.eclipseMinutes,1)} মিনিট shadow, ${m.contactMinutes} মিনিট contact ও capture requirement শিক্ষামূলক অনুমান। Model full transfer trajectory, thermal বা radiation simulation করে না।`:`Hardware specifications, credits, science units, 28% cell efficiency, 85% operating derating, ${n(m.eclipseMinutes,1)}-minute shadow (${m.eclipseModel}), ${m.contactMinutes}-minute contact, capture requirements and link degradation are educational assumptions. Selected environmental constants are sourced. This is not a full transfer, thermal, radiation, atmosphere or landing simulation; NASA has not certified this game.`;
  if(id==='time')text=bn?`Launch/transfer/capture সংক্ষিপ্ত game stage। Capture-এর পরে ${m.duration} মিনিট campaign শুরু। +5 min সর্বোচ্চ পাঁচ simulated মিনিট চলে, crisis-এ থামে। Pause-এ clock থামে; speed playback বদলায়, physics নয়।`:`Launch, transfer and capture are compressed game stages. The ${m.duration}-minute campaign starts after capture. +5 min advances at most five simulated minutes and stops for a crisis. Physics steps split at contact and shadow boundaries. Pause freezes mission time; playback speed does not change the physics.`;
- if(id==='custom')text=text.replace(/Earth–Moon distance scenario/,'destination (Moon, Mars, Earth orbit, Mercury, Venus, Ceres, Vesta or Europa) and distance scenario');
- if(id==='destination')text=bn?`বর্তমান destination ${body}। Design করার সময় Moon বা Mars বেছে নিতে পারেন; active flight-এ বদলানো যায় না। প্রতিটি destination-এর radius, GM, sunlight ও distance দিয়ে model চলে। Mars হলো circular-orbit educational scenario; বাস্তব launch window, transfer, landing, thermal বা radiation simulation নয়। আরও destination (Earth, Mercury, Venus, Ceres, Vesta, Europa) game-এর তালিকায় আছে।`:`Current destination: ${body}. Choose a destination while designing (${listBodies().map(x=>x.name).join(', ')}); an active flight locks the destination. Each destination supplies its radius, GM, solar input and distance scenarios to the engine. Every destination is a circular-orbit educational scenario, not a real launch-window, transfer, landing, thermal or radiation simulation. Phobos, Bennu, Ganymede and Titan are not available because the circular-orbit model cannot represent them honestly.`;
+ if(id==='custom')text=text.replace(/Earth–Moon distance scenario/,'Moon or Mars destination and distance scenario');
+ if(id==='destination')text=bn?`বর্তমান destination ${body}। Design করার সময় Moon বা Mars বেছে নিতে পারেন; active flight-এ বদলানো যায় না। প্রতিটি destination-এর radius, GM, sunlight ও distance দিয়ে model চলে। Mars হলো circular-orbit educational scenario; বাস্তব launch window, transfer, landing, thermal বা radiation simulation নয়। অন্য planet এই version-এ নেই।`:`Current destination: ${body}. Choose Moon or Mars while designing; an active flight locks the destination. Each destination supplies its radius, GM, solar input and distance scenarios to the engine. Mars is a circular-orbit educational scenario, not a real launch-window, transfer, landing, thermal or radiation simulation. Other planets are not available in this version.`;
  if(id.startsWith('category-')){const k=id.slice(9),c=a.c[k];text+=`\nInstalled: ${c.name}. ${c.mass.toFixed(1)} kg, ${c.cost.toFixed(1)} credits, ${c.power} W base load. Options: ${CATALOG[k].map(x=>x.name).join(', ')}. ${k==='propulsion'?`Specific impulse: ${c.isp} s; tank limit: ${c.maxFuel} kg.`:k==='bus'?`Pointing: ${c.pointing} arcsec; recorder limit: ${c.storageMax} MB.`:k==='storage'?`Capacity: ${c.capacity} MB.`:k==='power'?`Solar: ${n(c.solar)} W; battery: ${n(c.battery)} Wh.`:k==='comms'?`Nominal rate: ${c.downlinkMbps} Mb/s at reference distance.`:k==='payload'?`Data rate: ${c.dataMbps} Mb/s at full duty; load: ${c.power} W.`:`Injected mass limit: ${c.capacity} kg.`}`;}
  if(id==='battery')text+=`\n${bn?'আপনার design':'Your design'}: ${n(a.c.power.solar)} W solar, ${n(a.c.power.battery)} Wh battery, ${n(a.base)} W platform load.${run?` Battery now ${n(run.battery,1)} Wh (${n(run.battery/a.c.power.battery*100)}%).`:''}`;
  if(id==='data')text+=`\n${a.c.payload.name}: ${n(a.c.payload.dataMbps*(run?.throttle??a.d.duty),2)} Mb/s. ${a.c.storage.name}: ${a.c.storage.capacity} MB. ${a.c.comms.name}: ${n(a.c.comms.downlinkMbps*env.factor,2)} Mb/s before event penalties.${run?` Stored ${n(run.backlog,1)} MB; returned ${n(run.returned,1)} MB; discarded ${n(run.lostMB,1)} MB.`:''}`;
@@ -1579,7 +1370,7 @@ function answerQuestion(question,{design=PRESETS.balanced,run=null,language='en'
  if(id==='distance')text+=`\n${n(env.distance)} km; ${n(env.delay,3)} s one way; ${n(env.factor*100,1)}% reference link rate.`;
  if(id==='crisis'&&run?.crisis)text+=`\n${run.crisis.title}: ${run.crisis.body}\n`+run.crisis.actions.filter(x=>!x.disabled).map(x=>x.name+' — '+x.effect).join('\n');
  if(id==='report')text+=run?.done?`\n${run.outcome.status}: ${n(run.science,1)} / ${n(m.scienceTarget)} units. ${diagnose(run).primary?.what||''} ${debrief(run).tips.join(' ')}`:bn?'\nএখনো এই মিশনের final result নেই।':'\nThere is no completed result for the current mission yet.';
- if(['nasa','distance','battery','orbit','assumptions','destination'].includes(id))sources.push({title:body==='Mars'?'NASA Mars Fact Sheet':body==='Moon'?'NASA Moon Fact Sheet':'NASA/JPL data for '+body,url:nasaDataset(a.d).factURL});
+ if(['nasa','distance','battery','orbit','assumptions','destination'].includes(id))sources.push({title:body==='Mars'?'NASA Mars Fact Sheet':'NASA Moon Fact Sheet',url:nasaDataset(a.d).factURL});
  if(['nasa','orbit'].includes(id))sources.push({title:'NASA/JPL physical parameters',url:nasaDataset(a.d).jplURL});
  return {known:true,title:bn?'Mission সহকারী · '+title:title,text,sources,topic:id,evidence:sources.length?'PROJECT KNOWLEDGE · SOURCE LINKED':'PROJECT KNOWLEDGE · CURRENT CONTEXT',suggestions:id==='start'?['What counts as success?','Mission status']:['Review my design','Compare crisis choices']};
 }
