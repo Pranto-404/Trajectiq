@@ -158,3 +158,8 @@ asa\Trajectiq\.claude\worktreesgent-aacb668532c1702d9` (branch `nasa-bodies`) h
 - Owner pasted a Gemini key in chat and asked to set it up securely. The key was NOT written to any file, commit, log or Vercel by me; the owner adds it as `GEMINI_API_KEY` in Vercel. Recommend rotating it, since it appeared in chat.
 - Built: `server/assist-core.js` + `api/assist.js` (same-origin, rate-limited, sanitised, key in header), `src/store/aiBackup.js`, `askAI` store action, button on refusals in AnswerCard. Default model `gemini-3.5-flash-lite` (Google docs, 2026-11-07). Header auth `x-goog-api-key` is Google's documented form but was not exercised against the live API (no key available to me).
 - Not verified: a real call to Gemini end to end; rate limiting across serverless instances.
+
+## 2026-11-07 (6): automatic AI backup (branch ai-auto)
+- Owner wanted the backup to feel like the same assistant: auto-switch on refusal, clean chat UI, can answer anything but link back to the game.
+- Done: `runAI` in the store fires automatically on a refusal (pref `aiBackup`, default on, toggle in Tools & preferences, notice under the input); thinking bubble then the AI answer as a normal card with a small badge; refusal card + retry only if the backup fails. Server prompt rewritten (any topic, tie back to the game, decline harm), plus the last 3 questions as context.
+- Tradeoff owner accepted by asking: questions are now sent without a per-question button (disclosed in the panel, switchable off).

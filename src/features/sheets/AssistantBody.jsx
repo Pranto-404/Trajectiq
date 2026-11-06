@@ -72,7 +72,7 @@ function Experiments({ctx, onAsk, busy}) {
 /** The assistant: local reasoning plus the game engine, no generative AI and no network. */
 export function AssistantBody() {
   const t = useT();
-  const ctx = useGame(selectAssistantContext), chat = useGame(st => st.chat), level = useGame(st => st.mentorLevel), crisis = useGame(selectCrisis), language = useGame(st => st.prefs.language);
+  const ctx = useGame(selectAssistantContext), chat = useGame(st => st.chat), level = useGame(st => st.mentorLevel), crisis = useGame(selectCrisis), language = useGame(st => st.prefs.language), aiAuto = useGame(st => st.prefs.aiBackup !== false);
   const locked = useGame(st => !!(st.run && !st.run.done));
   const act = useGame.getState().actions;
   const [q, setQ] = useState('');
@@ -122,6 +122,10 @@ export function AssistantBody() {
       </div>
       <details className={s.disclosure}>
         <summary>{t('Tools & preferences')}</summary>
+        <label className={s.switchRow} data-testid="ai-auto">
+          <input type="checkbox" checked={aiAuto} onChange={e => act.setPref('aiBackup', e.target.checked)} />
+          <span><strong>{t('Automatic AI backup')}</strong><small className={s.muted}>{t('When the verified assistant cannot answer, an AI model answers instead. Your question and a short mission summary are sent to Google Gemini through this site. Turn off to be asked first.')}</small></span>
+        </label>
       <div className={s.row}>
         <Segmented size="sm" label={t('Level')} value={level} onChange={v => act.setMentorLevel(v)} options={[{value: 'Beginner', label: t('Beginner'), hint: t('Plain language; tables folded')}, {value: 'Engineer', label: t('Engineer'), hint: t('Evidence class and full tables')}]} />
         <LanguagePicker />
@@ -133,6 +137,7 @@ export function AssistantBody() {
       </details>
       </div>
       <div role="alert">{error}</div>
+      {aiAuto ? <small className={s.muted} data-testid="ai-notice">{t('If I cannot answer, an AI backup may reply. Answers from it are labelled.')}</small> : null}
       <form onSubmit={onSubmit} className={s.askForm}>
         <label className={s.field} htmlFor={inputId}>{t('Your question')}
           <input id={inputId} name="question" maxLength={500} autoComplete="off" placeholder={t('e.g. Am I ready to launch?')} value={q} onChange={e => setQ(e.target.value)} required />

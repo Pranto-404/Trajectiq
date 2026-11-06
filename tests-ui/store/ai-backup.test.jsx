@@ -42,45 +42,75 @@ describe('AI backup client', () => {
   });
 });
 
-describe('AI backup in the store and card', () => {
-  it('stores the AI answer on the refused question only after askAI, and never for a verified answer', async () => {
+const waitAI = async (h, i, status) => { for (let n = 0; n < 50 && h.get().chat[i]?.ai?.status !== status; n++) await new Promise(r => setTimeout(r, 5)); };
+const design = () => presetFor('moon', 'balanced');
+const card = (answer, props = {}) => <AnswerCard answer={answer} index={0} design={design()} level="Beginner" onApply={() => {}} onAsk={() => {}} language="en" {...props} />;
+const refused = {known: false, evidence: 'OUTSIDE VERIFIED KNOWLEDGE', title: 'I can’t answer that reliably.', text: 'I cannot answer this reliably', sources: [], suggestions: ['Review my design']};
+
+describe('automatic AI backup in the store', () => {
+  it('switches to the backup by itself when the verified assistant refuses, and never for a verified answer', async () => {
     const h = makeStore();
     vi.stubGlobal('fetch', reply({ok: true, text: 'A general principle: drag lowers orbits.'}));
-    const known = await h.a.ask('How do I play?'); expect(known.known).toBe(true);
-    await h.a.askAI(0); expect(fetch).not.toHaveBeenCalled(); expect(h.get().chat[0].ai).toBeUndefined();
-    const refused = await h.a.ask('What is the capital of France?'); expect(refused.known).toBe(false);
-    expect(fetch).not.toHaveBeenCalled();
-    await h.a.askAI(1);
+    expect((await h.a.ask('How do I play?')).known).toBe(true);
+    expect(fetch).not.toHaveBeenCalled(); expect(h.get().chat[0].ai).toBeUndefined();
+    expect((await h.a.ask('What is the capital of France?')).known).toBe(false);
+    expect(h.get().chat[1].ai).toEqual({status: 'loading'});
+    await waitAI(h, 1, 'done');
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(h.get().chat[1].ai).toEqual({status: 'done', text: 'A general principle: drag lowers orbits.'});
-    expect(JSON.parse(fetch.mock.calls[0][1].body).question).toBe('What is the capital of France?');
+    const sent = JSON.parse(fetch.mock.calls[0][1].body);
+    expect(sent.question).toBe('What is the capital of France?'); expect(sent.context.recent).toEqual(['How do I play?']);
     h.a.dispose();
   });
 
-  it('records an error state and lets the player retry', async () => {
+  it('asks first when the player turned the automatic switch off, and remembers the choice', async () => {
+    const h = makeStore();
+    vi.stubGlobal('fetch', reply({ok: true, text: 'Fine.'}));
+    h.a.setPref('aiBackup', false); expect(h.get().prefs.aiBackup).toBe(false); expect(h.stored().prefs.aiBackup).toBe(false);
+    await h.a.ask('What is the capital of France?');
+    await new Promise(r => setTimeout(r, 20));
+    expect(fetch).not.toHaveBeenCalled(); expect(h.get().chat[0].ai).toBeUndefined();
+    await h.a.askAI(0); expect(fetch).toHaveBeenCalledTimes(1); expect(h.get().chat[0].ai.status).toBe('done');
+    h.a.setPref('aiBackup', true); expect(h.stored().prefs.aiBackup).toBeUndefined();
+    h.a.dispose();
+  });
+
+  it('records an error state when the backup is unavailable', async () => {
     const h = makeStore();
     vi.stubGlobal('fetch', reply({ok: false, error: 'not_configured'}, 503));
-    await h.a.ask('What is the capital of France?'); await h.a.askAI(0);
+    await h.a.ask('What is the capital of France?'); await waitAI(h, 0, 'error');
     expect(h.get().chat[0].ai).toEqual({status: 'error', error: 'not_configured'});
     h.a.dispose();
   });
+});
 
-  it('shows the button with a privacy note on a refusal, the loading state, and the labelled answer', async () => {
-    const onAI = vi.fn(), refused = {known: false, evidence: 'OUTSIDE VERIFIED KNOWLEDGE', title: 'I can’t answer that reliably.', text: 'x', sources: [], suggestions: []};
-    const {rerender} = render(<AnswerCard answer={refused} index={0} design={presetFor('moon', 'balanced')} level="Beginner" onApply={() => {}} onAsk={() => {}} onAI={onAI} language="en" />);
-    expect(screen.getByText(/Nothing is sent until you press the button/)).toBeTruthy();
-    await userEvent.setup().click(screen.getByRole('button', {name: /Ask the AI backup/})); expect(onAI).toHaveBeenCalledTimes(1);
-    rerender(<AnswerCard answer={refused} index={0} design={presetFor('moon', 'balanced')} level="Beginner" onApply={() => {}} onAsk={() => {}} onAI={onAI} ai={{status: 'loading'}} language="en" />);
-    expect(screen.getByTestId('ai-loading')).toBeTruthy();
-    rerender(<AnswerCard answer={refused} index={0} design={presetFor('moon', 'balanced')} level="Beginner" onApply={() => {}} onAsk={() => {}} onAI={onAI} ai={{status: 'done', text: '<img src=x onerror=alert(1)> Hello'}} language="en" />);
-    const done = screen.getByTestId('ai-answer');
-    expect(within(done).getByText(/NOT VERIFIED/)).toBeTruthy(); expect(done.querySelector('img')).toBeNull(); expect(done.textContent).toContain('<img src=x onerror=alert(1)> Hello');
-    rerender(<AnswerCard answer={refused} index={0} design={presetFor('moon', 'balanced')} level="Beginner" onApply={() => {}} onAsk={() => {}} onAI={onAI} ai={{status: 'error', error: 'not_configured'}} language="en" />);
-    expect(screen.getByRole('alert').textContent).toMatch(/not set up/); expect(screen.getByRole('button', {name: /again/})).toBeTruthy();
+describe('AI backup in the answer card', () => {
+  it('shows a thinking bubble instead of the refusal while the backup answers', () => {
+    render(card(refused, {ai: {status: 'loading'}, onAI: () => {}}));
+    expect(screen.getByTestId('ai-loading')).toBeTruthy(); expect(screen.queryByText(/I can’t answer/)).toBeNull();
   });
 
-  it('never offers the AI backup on a verified answer', () => {
-    render(<AnswerCard answer={{known: true, evidence: 'PROJECT KNOWLEDGE', title: 't', text: 'x', sources: [], suggestions: []}} index={0} design={presetFor('moon', 'balanced')} level="Beginner" onApply={() => {}} onAsk={() => {}} onAI={() => {}} language="en" />);
+  it('shows the AI answer like any other answer, with a small badge and no refusal text', () => {
+    render(card(refused, {ai: {status: 'done', text: '<img src=x onerror=alert(1)> Hello'}, onAI: () => {}}));
+    const done = screen.getByTestId('ai-answer');
+    expect(within(done).getByText(/AI backup · not verified/)).toBeTruthy(); expect(done.querySelector('img')).toBeNull(); expect(done.textContent).toContain('<img src=x onerror=alert(1)> Hello');
+    expect(screen.queryByText(/I can’t answer/)).toBeNull(); expect(screen.getByRole('button', {name: 'Review my design'})).toBeTruthy();
+  });
+
+  it('keeps the refusal and offers a retry when the backup failed', async () => {
+    const onAI = vi.fn();
+    render(card(refused, {ai: {status: 'error', error: 'rate_limited'}, onAI}));
+    expect(screen.getByText(/I can’t answer/)).toBeTruthy(); expect(screen.getByRole('alert').textContent).toMatch(/Too many AI requests/);
+    await userEvent.setup().click(screen.getByRole('button', {name: /again/})); expect(onAI).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows the ask-first button with the privacy note when there is no AI state yet, and never on a verified answer', async () => {
+    const onAI = vi.fn();
+    const {unmount} = render(card(refused, {onAI}));
+    expect(screen.getByText(/Nothing is sent until you press the button/)).toBeTruthy();
+    await userEvent.setup().click(screen.getByRole('button', {name: /Ask the AI backup/})); expect(onAI).toHaveBeenCalledTimes(1);
+    unmount();
+    render(card({known: true, evidence: 'PROJECT KNOWLEDGE', title: 't', text: 'x', sources: [], suggestions: []}, {onAI}));
     expect(screen.queryByRole('button', {name: /AI backup/})).toBeNull();
   });
 });

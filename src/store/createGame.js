@@ -95,6 +95,7 @@ export function createGame(options = {}) {
     function snapshot(s) {
       const prefs = {language: s.prefs.language, guided: s.prefs.guided, reducedMotion: s.prefs.reducedMotion};
       if (s.prefs.overviewSeen) prefs.overviewSeen = true;
+      if (s.prefs.aiBackup === false) prefs.aiBackup = false;
       if (s.prefs.theme === 'light') prefs.theme = 'light';
       if (s.prefs.sound) prefs.sound = true; // additive keys appear only once the player opts in, so legacy blobs round-trip with the same shape
       if (s.prefs.haptics) prefs.haptics = true;
@@ -433,23 +434,32 @@ export function createGame(options = {}) {
       const {answerQuestion} = await import('@engine/assistant.js');
       const ctx = assistantContext();
       const answer = answerQuestion(canonicalQuestion(ctx.language, String(q).trim().slice(0, 500)), ctx);
-      set(s => ({chat: [...s.chat, {q: String(q).slice(0, 500), answer}].slice(-12),
+      const auto = !answer.known && answer.evidence === 'OUTSIDE VERIFIED KNOWLEDGE' && get().prefs.aiBackup !== false;
+      const entry = {q: String(q).slice(0, 500), answer, ...(auto ? {ai: {status: 'loading'}} : {})};
+      set(s => ({chat: [...s.chat, entry].slice(-12),
         ...(answer.consumesForecast && s.run?.crisis ? {run: {...s.run, forecasts: (s.run.forecasts || 0) + 1}} : {})}));
       persist();
+      if (auto) void runAI(entry);
       if (get().sheet?.id !== 'assistant') openSheet('assistant');
       return answer;
     }
-    // Optional AI backup: runs only when the player presses the button on a refusal. The result is stored on that chat entry.
+    // AI backup. When the verified assistant refuses, the question is sent to this site's /api/assist (unless the player turned the
+    // automatic switch off in Tools & preferences, in which case a button asks first). The result is stored on that chat entry.
+    async function runAI(first) {
+      let cur = first;
+      const put = ai => { const next = {...cur, ai}; set(s => ({chat: s.chat.map(e => (e === cur ? next : e))})); cur = next; };
+      const idx = get().chat.indexOf(first);
+      const ctx = assistantContext();
+      const a = calculate(ctx.run?.design || ctx.design);
+      const recent = get().chat.slice(0, idx < 0 ? undefined : idx).slice(-3).map(e => e.q);
+      if (cur.ai?.status !== 'loading') put({status: 'loading'});
+      const result = await askAIBackup({question: first.q, language: ctx.language, context: {...aiContext({a, run: ctx.run, neededScience}), recent}});
+      put(result.ok ? {status: 'done', text: result.text} : {status: 'error', error: result.error});
+    }
     async function askAI(index) {
       const first = get().chat[Number(index)];
       if (!first || first.answer?.known || first.ai?.status === 'loading') return;
-      let cur = first;
-      const put = ai => { const next = {...cur, ai}; set(s => ({chat: s.chat.map(e => (e === cur ? next : e))})); cur = next; };
-      put({status: 'loading'});
-      const ctx = assistantContext();
-      const a = calculate(ctx.run?.design || ctx.design);
-      const result = await askAIBackup({question: first.q, language: ctx.language, context: aiContext({a, run: ctx.run, neededScience})});
-      put(result.ok ? {status: 'done', text: result.text} : {status: 'error', error: result.error});
+      await runAI(first);
     }
     function applyAssistant(index) {
       const s = get(), proposal = s.chat[Number(index)]?.answer?.proposal;
@@ -691,7 +701,7 @@ export function createGame(options = {}) {
 
       // preferences
       setPref(key, value) {
-        if (!['language', 'guided', 'reducedMotion', 'sound', 'haptics', 'theme', 'overviewSeen'].includes(key)) return;
+        if (!['language', 'guided', 'reducedMotion', 'sound', 'haptics', 'theme', 'overviewSeen', 'aiBackup'].includes(key)) return;
         const v = key === 'language' ? normalizeLanguage(value) : key === 'theme' ? (value === 'light' ? 'light' : 'dark') : !!value;
         set(s => ({prefs: {...s.prefs, [key]: v}})); persist();
       },
@@ -725,6 +735,6 @@ function hydrate(saved, env) {
     team: loadTeam(saved.team),
     board: (Array.isArray(saved.board) ? saved.board : []).filter(validBoardEntry).slice(0, 30),
     runs: (Array.isArray(saved.runs) ? saved.runs : []).filter(validSavedRun).slice(-20),
-    prefs: {overviewSeen: saved.prefs?.overviewSeen === true, theme: saved.prefs?.theme === 'light' ? 'light' : 'dark', language: normalizeLanguage(saved.prefs?.language), guided: saved.prefs?.guided !== false, reducedMotion: reduced, sound: saved.prefs?.sound === true, haptics: saved.prefs?.haptics === true}
+    prefs: {overviewSeen: saved.prefs?.overviewSeen === true, theme: saved.prefs?.theme === 'light' ? 'light' : 'dark', language: normalizeLanguage(saved.prefs?.language), guided: saved.prefs?.guided !== false, reducedMotion: reduced, sound: saved.prefs?.sound === true, haptics: saved.prefs?.haptics === true, aiBackup: saved.prefs?.aiBackup !== false}
   };
 }
