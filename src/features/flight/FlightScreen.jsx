@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {motion} from 'motion/react';
 import {Button, Panel, useAnnounce, useReducedMotion} from '@/ds/index.js';
+import {useMediaQuery} from '@/shell/hooks.js';
 import {useGame, selectTelemetry, selectCrisis, selectObjective, analyze} from '@/store/index.js';
 import {useT} from '@/i18n/index.js';
 import {CrewStrip} from '../crew/CrewStrip.jsx';
@@ -51,6 +52,7 @@ function FlightLive({run}) {
   const a = analyze(run.design);
   const [scrub, setScrub] = useState(null);
   const crisisRef = useRef(null);
+  const tight = useMediaQuery('(max-height: 960px)');
   const last = run.history.length - 1;
   useEffect(() => { if (scrub != null && scrub >= last) setScrub(null); }, [scrub, last]);
   const entry = scrub != null ? run.history[scrub] : null;
@@ -61,7 +63,7 @@ function FlightLive({run}) {
   const afterResolve = () => setTimeout(() => document.querySelector('[data-flight-play]')?.focus(), 80);
 
   return (
-    <div className={s.flight} data-screen="flight" data-crew={crew || undefined} data-crisis={crisis ? 'true' : undefined}>
+    <div className={s.flight} data-screen="flight" data-crew={crew || undefined} data-tight={tight || undefined} data-crisis={crisis ? 'true' : undefined}>
       {crew ? <div className={s.crew}><CrewStrip /></div> : null}
       <div className={`${s.top} ${s.topbar}`}>
         <PhaseRibbon phase={run.phase} />
