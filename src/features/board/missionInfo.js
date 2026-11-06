@@ -1,7 +1,10 @@
 // Read-only helpers over the engine's public API (dist/engine/api.js). Nothing here names a body or counts scenarios:
 // bodies, scenarios, colours, provenance and simplification notes all come from the engine, so a body or scenario added to
 // the engine appears on the board without a UI change.
-import {listScenarios, getBody, bodyRows, DEFAULT_SCENARIO, SCENARIOS, DIFFICULTY} from '@engine/api.js';
+// Imports the data modules directly (not engine/api.js) so the assistant stays a lazy chunk and the first load stays small.
+import {getBody, bodyRows} from '@data/bodies.js';
+import {SCENARIOS, DEFAULT_SCENARIO, DIFFICULTY} from '@data/scenarios.js';
+import {missionFor, neededScience} from '@data/catalog.js';
 import {LEARN} from '@data/learn.js';
 
 export const CRITICAL_LABEL = {data: 'Data & recorder', mass: 'Mass', comms: 'Communications', power: 'Power', budget: 'Budget', time: 'Schedule'};
@@ -24,11 +27,25 @@ export const bodyLabel = destination => getBody(destination)?.name || cap(destin
 /** Body colours {surface, accent, atmosphere} or null. */
 export const bodyColors = destination => getBody(destination)?.colors || null;
 
+/** Same card shape as the engine's listScenarios() (docs/ENGINE_BODIES.md), built from SCENARIOS, BODIES and missionFor. */
+function buildCards(difficulty) {
+  return Object.values(SCENARIOS).map(s => {
+    const body = getBody(s.destination), m = missionFor({destination: s.destination, scenario: s.id, difficulty});
+    return {
+      id: s.id, title: s.title, tag: s.tag, summary: s.summary, why: s.why, destination: s.destination,
+      body: {id: body?.id || s.destination, name: body?.name || bodyLabel(s.destination), colors: body?.colors || null, order: body?.order ?? 99},
+      budget: m.budget, scienceTarget: s.scienceTarget, scienceNeeded: neededScience(m), durationMinutes: m.duration, critical: s.critical,
+      weather: m.weather ? {kind: m.weather.kind, title: m.weather.title} : null,
+      realMission: s.realMission || body?.realReference?.mission || null, realNumbers: s.realNumbers || [], assumptions: s.assumptions || '', simplification: body?.simplification || null
+    };
+  });
+}
+
 const cardCache = new Map();
 /** Scenario cards for a difficulty (budgets reflect the difficulty), straight from the engine. Cached per difficulty. */
 export function scenarioCards(difficulty = 'engineer') {
   const key = Object.hasOwn(DIFFICULTY, difficulty) ? difficulty : 'engineer';
-  if (!cardCache.has(key)) cardCache.set(key, listScenarios({difficulty: key}));
+  if (!cardCache.has(key)) cardCache.set(key, buildCards(key));
   return cardCache.get(key);
 }
 
