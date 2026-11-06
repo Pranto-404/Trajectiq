@@ -4,7 +4,7 @@ import {useT} from '@/i18n/index.js';
 import {batteryStatus, recorderStatus, linkState} from './flightModel.js';
 import s from './flight.module.css';
 
-const LINK_TEXT = {safe: 'Link suspended', eclipse: 'In shadow', contact: 'In contact', sunlit: 'Out of contact'};
+const LINK_TEXT = {safe: 'Link suspended', eclipse: 'In shadow', contact: 'In contact', sunlit: 'No contact'};
 
 /**
  * Telemetry gauges: battery (arc, safe-mode tick), recorder (segments, 75 % tick), returned science, propellant, plus the
@@ -19,16 +19,18 @@ export function Telemetry({values, run, analysis: a, crisis, past}) {
   const link = linkState(run);
   const safeMin = run.safeSteps * a.m.step;
   return (
-    <Panel kicker={t('Live telemetry')} title={t('Telemetry')} state={crisis ? 'incident' : past ? 'warning' : 'default'} badge={past ? t('Past view') : null} className={s.fill}>
+    <Panel kicker={t('Live telemetry')} title={t('Telemetry')} state={crisis ? 'incident' : past ? 'warning' : 'default'} badge={past ? t('Past view') : null} className={`${s.fill} ${s.tight}`}>
       <div className={s.gaugeBody}>
         <div className={s.gaugeGrid}>
-          <Gauge kind={narrow ? 'linear' : 'arc'} label={t('Battery')} value={battery} max={cap} unit="Wh" digits={1} status={batteryStatus(battery / cap)}
+          <Gauge className={s.gaugeArc} kind={narrow ? 'linear' : 'arc'} label={t('Battery')} value={battery} max={cap} unit="Wh" digits={1} status={batteryStatus(battery / cap)}
             thresholds={[{at: cap * 0.15, label: t('Safe mode 15%')}]} valueText={`${Math.round(battery / cap * 100)} percent, ${battery.toFixed(1)} of ${cap} Wh`} />
           <Gauge kind="segments" label={t('Recorder')} value={backlog} max={mem} unit="MB" digits={0} status={recorderStatus(backlog / mem)}
             thresholds={[{at: mem * 0.75, label: t('Warning 75%')}]} valueText={`${Math.round(backlog / mem * 100)} percent full, ${Math.round(backlog)} of ${mem} MB`} />
-          <Gauge kind="linear" label={t('Returned science')} value={science} max={a.m.scienceTarget} unit={t('units')} digits={0}
+          <div className={s.gaugePair}>
+          <Gauge kind="linear" label={t('Science')} value={science} max={a.m.scienceTarget} unit={t('units')} digits={0}
             thresholds={[{at: a.m.scienceTarget * a.m.scienceSuccess / 100, label: t('Objective')}]} />
           <Gauge kind="linear" label={t('Propellant')} value={fuel} max={Math.max(1, run.design.fuel)} unit="kg" digits={1} />
+          </div>
         </div>
         <dl className={s.readouts}>
           <div className={s.readout} data-warn={run.lostMB > 0 || undefined}><dt>{t('Lost data')}</dt><dd>{Math.round(run.lostMB)} MB</dd></div>

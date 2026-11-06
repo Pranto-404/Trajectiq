@@ -34,8 +34,9 @@ export function OrbitTimeline({run, analysis: a, minute, scrub, setScrub, crisis
   const inOps = run.phase === 'operations';
   const safeY = H - 6 - 15 * 0.88;
   return (
-    <Panel kicker={t('Orbit timeline')} title={t('Campaign')} className={s.fill}
-      badge={!live ? <Chip kind="warn" icon="lock" size="sm">{t('Past view · read-only')}</Chip> : null}>
+    <Panel kicker={t('Orbit timeline')} title={t('Campaign')} className={`${s.fill} ${s.tight}`}
+      badge={!live ? <Chip kind="warn" icon="lock" size="sm">{t('Past view · read-only')}</Chip> : null}
+      actions={live ? <div className={s.headLegend} aria-label={t('Legend')}><Chip kind="info" icon="power" size="sm">{t('Sunlight')}</Chip><Chip kind="info" icon="signal" size="sm">{t('Contact')}</Chip><Chip kind="info" icon="eclipse" size="sm">{t('Shadow')}</Chip></div> : null}>
       <div className={s.tlHead}>
         <span><strong>{inOps ? t('{label} in {n} min', {label: t(next.label), n: next.in.toFixed(1)}) : t('Campaign clock starts after capture at {body}', {body: a.m.bodyName || ''})}</strong></span>
         <span>{run.science.toFixed(1)} {t('returned')} / {Math.round(a.m.scienceTarget * a.m.scienceSuccess / 100)} {t('to succeed')} · {Math.max(0, duration - run.minute).toFixed(0)} min {t('remaining')}</span>
@@ -71,12 +72,7 @@ export function OrbitTimeline({run, analysis: a, minute, scrub, setScrub, crisis
           <span><strong>{entry.mode}</strong>{entry.eclipse ? ` · ${t('shadow')}` : entry.contact ? ` · ${t('contact')}` : ''}</span>
           <Button size="sm" variant="primary" icon="play" onClick={() => setScrub(null)}>{t('Return to live')}</Button>
         </div>
-      ) : (
-        <div className={s.legend} aria-label={t('Legend')}>
-          <Chip kind="info" icon="power" size="sm">{t('Sunlight')}</Chip><Chip kind="info" icon="signal" size="sm">{t('Contact')}</Chip><Chip kind="info" icon="eclipse" size="sm">{t('Shadow')}</Chip>
-          <span className={s.hint}>{t('Repeating teaching schedule. Contact and shadow durations are assumptions.')}</span>
-        </div>
-      )}
+      ) : <p className={s.hint}>{t('Repeating teaching schedule. Contact and shadow durations are assumptions.')}</p>}
     </Panel>
   );
 }

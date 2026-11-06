@@ -41,7 +41,7 @@ export function ResourceFlow({run, analysis: a}) {
   const summary = t('Array {a} W, load {l} W, battery {b} percent ({n}), data in {i} MB/s, downlink {o} MB/s, recorder {r} percent full.', {a: fmt(f.solarW), l: fmt(f.loadW), b: fmt(f.batteryFraction * 100), n: net, i: fmt(f.dataInMBs, 2), o: fmt(f.downMBs, 2), r: fmt(f.fill * 100)});
   const starved = Object.entries(f.status).filter(([, v]) => v === 'starved').map(([k]) => k);
   return (
-    <Panel kicker={t('Resource flow')} title={t('Power and data')} className={s.fill}>
+    <Panel kicker={t('Resource flow')} title={t('Power and data')} className={`${s.fill} ${s.tight}`}>
       <svg className={s.flowSvg} viewBox="0 0 300 152" role="img" aria-labelledby={`${id}-t ${id}-d`}>
         <title id={`${id}-t`}>{t('Resource flow diagram')}</title>
         <desc id={`${id}-d`}>{summary}{starved.length ? ` ${t('Starved')}: ${starved.join(', ')}.` : ''}</desc>

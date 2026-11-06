@@ -11,7 +11,7 @@ export function EventLog({logs}) {
   const reduced = useReducedMotion();
   const items = logs.map((l, i) => ({l, key: `${i}-${l.minute}-${l.title}`})).slice(-30).reverse();
   return (
-    <Panel kicker={t('Mission log')} title={t('Latest events')} className={s.fill}>
+    <Panel kicker={t('Mission log')} title={t('Latest events')} className={`${s.fill} ${s.tight}`}>
       <div className={s.scroll} tabIndex={0} aria-label={t('Mission log')} role="region">
         <ol className={s.logList}>
           <AnimatePresence initial={false}>

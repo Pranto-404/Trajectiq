@@ -20,7 +20,7 @@ export const strings = {
     'Live telemetry': 'সরাসরি টেলিমেট্রি', 'Telemetry': 'টেলিমেট্রি',
     'Battery': 'ব্যাটারি', 'Recorder': 'রেকর্ডার', 'Returned science': 'ফেরত আসা বিজ্ঞান', 'Propellant': 'জ্বালানি',
     'Lost data': 'হারানো ডেটা', 'Safe mode': 'সেফ মোড', 'Link': 'যোগাযোগ', 'ACTIVE': 'চালু',
-    'Link suspended': 'যোগাযোগ স্থগিত', 'In shadow': 'ছায়ায়', 'In contact': 'যোগাযোগে', 'Out of contact': 'যোগাযোগের বাইরে',
+    'Link suspended': 'যোগাযোগ স্থগিত', 'In shadow': 'ছায়ায়', 'In contact': 'যোগাযোগে', 'No contact': 'যোগাযোগ নেই', 'Science': 'বিজ্ঞান',
     'Safe mode 15%': 'সেফ মোড ১৫%', 'Warning 75%': 'সতর্কতা ৭৫%', 'Objective': 'লক্ষ্য', 'units': 'একক',
     'SAFE MODE': 'সেফ মোড', 'IN ECLIPSE': 'গ্রহণে', 'CONTACT WINDOW': 'যোগাযোগের জানালা', 'SUNLIGHT': 'সূর্যালোক',
     'Past view': 'অতীতের দৃশ্য', 'Past view · read-only': 'অতীতের দৃশ্য · শুধু পড়া', 'Simulation paused': 'সিমুলেশন থেমে আছে',

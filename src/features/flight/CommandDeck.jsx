@@ -11,7 +11,7 @@ export function CommandDeck({run, crisis, actions}) {
   const t = useT();
   const lock = commandLock(run, !!crisis);
   return (
-    <Panel kicker={t('Command the spacecraft')} title={t('Operations')} className={s.fill} state={lock ? 'locked' : 'default'}>
+    <Panel kicker={t('Command the spacecraft')} title={t('Operations')} className={`${s.fill} ${s.tight}`} state={lock ? 'locked' : 'default'}>
       <div className={s.cmdGrid} role="group" aria-label={t('Operations commands')}>
         {OPERATION_MODES.map(m => (
           <button key={m.id} type="button" className={s.cmd} aria-pressed={run.mode === m.id} aria-disabled={lock ? true : undefined}
@@ -22,7 +22,7 @@ export function CommandDeck({run, crisis, actions}) {
           </button>
         ))}
       </div>
-      <p className={s.lockLine} id="flight-cmd-reason" role="status">
+      <p className={s.lockLine} id="flight-cmd-reason" role="status" data-open={!lock || undefined}>
         {lock ? <><Icon name="lock" size={14} /> {t(lock)}</> : <>{t('Your schedule changes energy use, data generation and science return.')}</>}
       </p>
     </Panel>
