@@ -163,3 +163,8 @@ asa\Trajectiq\.claude\worktreesgent-aacb668532c1702d9` (branch `nasa-bodies`) h
 - Owner wanted the backup to feel like the same assistant: auto-switch on refusal, clean chat UI, can answer anything but link back to the game.
 - Done: `runAI` in the store fires automatically on a refusal (pref `aiBackup`, default on, toggle in Tools & preferences, notice under the input); thinking bubble then the AI answer as a normal card with a small badge; refusal card + retry only if the backup fails. Server prompt rewritten (any topic, tie back to the game, decline harm), plus the last 3 questions as context.
 - Tradeoff owner accepted by asking: questions are now sent without a per-question button (disclosed in the panel, switchable off).
+
+## 2026-11-07 (7): clean assistant chat and new fonts (branch ui-fonts-chat)
+- Assistant sheet redesigned as a clean chat: greeting + starter cards when empty, one-line context, bubble for the question, plain answer text with the evidence as a small caption, pill composer, Tools & preferences as a small link below it.
+- Fonts replaced (owner: "professional and dotted space-related, not AI-generated looking"): IBM Plex Sans (text), IBM Plex Mono (data), Doto dot-matrix face (kickers, h1 titles, brand, gauge readouts; English only, other languages keep the text face). Vendored OFL woff2 in src/assets/fonts, no CDN. Fonts are not inlined into the CSS. Budgets raised and documented in tests/v7-build.test.mjs (CSS 27 KB gz, fonts 100 KB).
+- Not verified: Doto glyph coverage for rarely used symbols (they fall back to the mono face), all 12 languages with the new text face, a physical phone.

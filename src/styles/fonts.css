@@ -1,15 +1,8 @@
-/* Vendored, OFL-licensed Latin subsets (see src/assets/fonts/README.txt). Served from 'self' (CSP font-src 'self'). */
-@font-face {
-  font-family: "Inter Variable";
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url("../assets/fonts/InterVariable-latin-subset.woff2") format("woff2");
-}
-@font-face {
-  font-family: "JetBrains Mono";
-  font-style: normal;
-  font-weight: 100 800;
-  font-display: swap;
-  src: url("../assets/fonts/JetBrainsMono-latin-subset.woff2") format("woff2");
-}
+/* Vendored, OFL-licensed Latin subsets (see src/assets/fonts/README.txt). Served from 'self' (CSP font-src 'self').
+   IBM Plex Sans for text, IBM Plex Mono for data, Doto (a dot-matrix display face) for kickers, titles and telemetry readouts. */
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fonts/ibm-plex-sans-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 500; font-display: swap; src: url("../assets/fonts/ibm-plex-sans-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 600; font-display: swap; src: url("../assets/fonts/ibm-plex-sans-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Doto"; font-style: normal; font-weight: 700; font-display: swap; src: url("../assets/fonts/doto-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Doto"; font-style: normal; font-weight: 900; font-display: swap; src: url("../assets/fonts/doto-latin-900-normal.woff2") format("woff2"); }
