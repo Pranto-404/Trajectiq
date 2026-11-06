@@ -125,7 +125,7 @@ test('AI backup: answers any ordinary question but is told to tie it back to the
   let sent;
   await call({body: {question: 'Why is the sky blue?', context: {recent: ['How do I play?', '<b>x</b>', 'a'.repeat(400), 'four', 'five'], body: 'Moon'}}, fetchImpl: async (u, init) => { sent = JSON.parse(init.body); return geminiOk('ok')(); }});
   const rules = sent.systemInstruction.parts[0].text, prompt = sent.contents[0].parts[0].text;
-  assert.match(rules, /any ordinary question, on any topic/); assert.match(rules, /ties? the answer back to the game/i); assert.match(rules, /requests for harm/); assert.match(rules, /Never invent numbers/);
+  assert.match(rules, /any ordinary question, on any topic/); assert.match(rules, /connects? the answer to space exploration/i); assert.match(rules, /never claim what the game simulates/i); assert.match(rules, /requests for harm/); assert.match(rules, /Never invent numbers/);
   assert.match(prompt, /earlier questions: a{120} \| four \| five/); assert.ok(!/<b>|How do I play/.test(prompt), 'only the last three are kept'); assert.ok(!/a{121}/.test(prompt), 'each is clipped to 120 characters');
   assert.deepEqual(sanitizeContext({recent: 'not an array'}), {});
   assert.deepEqual(sanitizeContext({recent: []}).recent, []);
