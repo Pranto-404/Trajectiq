@@ -3,7 +3,7 @@ import {screen, within, act, fireEvent, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useGame} from '@/store/index.js';
 import {CrewVote, RollCall, CrewStrip, voteSummary} from '@/features/crew/index.js';
-import {FlightScreen} from '@/features/flight/index.js';
+import {FlightScreen} from '@/features/flight/FlightScreen.jsx';
 import {roleVerdicts, tallyVotes} from '@engine/crew.js';
 import {calculate} from '@engine/model.js';
 import {CATALOG} from '@data/catalog.js';

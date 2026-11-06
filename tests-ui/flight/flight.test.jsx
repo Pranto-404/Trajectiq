@@ -2,7 +2,7 @@ import {describe, it, expect, vi, beforeEach, afterEach} from 'vitest';
 import {screen, within, act, fireEvent, waitFor, renderHook} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useGame} from '@/store/index.js';
-import {FlightScreen} from '@/features/flight/index.js';
+import {FlightScreen} from '@/features/flight/FlightScreen.jsx';
 import {useTickInterpolation} from '@/features/flight/useTickInterpolation.js';
 import {makeStore} from '../store/harness.js';
 import {PRESETS, VERSION} from '@data/catalog.js';
