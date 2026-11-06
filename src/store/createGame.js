@@ -18,7 +18,7 @@ import {reviewDecisions, missionScore} from '@engine/review.js';
 import {encodeDesign, decodeDesign, verifyDesign} from '@engine/share.js';
 import {nasaDataset, datasetCSV} from '@data/nasa.js';
 import {isBodyId} from '@data/bodies.js';
-import {CATALOG, missionFor, presetFor, PRESETS, SOURCES, UNCERTAINTY, VERSION} from '@data/catalog.js';
+import {CATALOG, missionFor, presetFor, PRESETS, SOURCES, UNCERTAINTY, VERSION, neededScience} from '@data/catalog.js';
 import {SCENARIOS, DIFFICULTY, ROLES, ROLE_ORDER} from '@data/scenarios.js';
 import {LEARN} from '@data/learn.js';
 import {announce} from '../ds/announce.js';
@@ -27,6 +27,7 @@ import {defaultIo} from './io.js';
 import {SAVE_KEY, CHECKPOINT_SCHEMA, OPERATION_MODES, validSavedRun, validBoardEntry, validCheckpoint, loadTeam, freshTeam} from './validators.js';
 import {isFlightActive, analyze, crisisAdvice, runScore, runCode, teamLabel, PHASE_LABEL} from './derive.js';
 import {QUESTIONS} from './quiz.js';
+import {askAIBackup, aiContext} from './aiBackup.js';
 
 export const SCREENS = ['board', 'hangar', 'flight', 'report'];
 const CREW_FREE = new Set(['name', 'livery']);
@@ -438,6 +439,18 @@ export function createGame(options = {}) {
       if (get().sheet?.id !== 'assistant') openSheet('assistant');
       return answer;
     }
+    // Optional AI backup: runs only when the player presses the button on a refusal. The result is stored on that chat entry.
+    async function askAI(index) {
+      const first = get().chat[Number(index)];
+      if (!first || first.answer?.known || first.ai?.status === 'loading') return;
+      let cur = first;
+      const put = ai => { const next = {...cur, ai}; set(s => ({chat: s.chat.map(e => (e === cur ? next : e))})); cur = next; };
+      put({status: 'loading'});
+      const ctx = assistantContext();
+      const a = calculate(ctx.run?.design || ctx.design);
+      const result = await askAIBackup({question: first.q, language: ctx.language, context: aiContext({a, run: ctx.run, neededScience})});
+      put(result.ok ? {status: 'done', text: result.text} : {status: 'error', error: result.error});
+    }
     function applyAssistant(index) {
       const s = get(), proposal = s.chat[Number(index)]?.answer?.proposal;
       if (!proposal || (s.run && !s.run.done)) { toast('Finish the current flight before changing hardware.'); return; }
@@ -662,7 +675,7 @@ export function createGame(options = {}) {
 
       // assistant, learning, help (state only; the sheets render them)
       mentor: () => openSheet('assistant'),
-      ask: askAssistant, applyAssistant,
+      ask: askAssistant, askAI, applyAssistant,
       'clear-chat': () => { set({chat: []}); },
       setMentorLevel: mentorLevel => set({mentorLevel}),
       learn: ({topic}) => { if (Object.hasOwn(LEARN, topic)) openSheet('concept', {topic}); },

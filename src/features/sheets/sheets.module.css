@@ -114,3 +114,7 @@
 .track[data-on] > i { transform: translateX(20px); background: var(--on-lime); }
 .menuList { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-1); }
 .menuBtn { width: 100%; justify-content: flex-start; }
+
+.aiAsk { display: grid; gap: var(--space-2); justify-items: start; }
+.aiAnswer { display: grid; gap: var(--space-2); padding: var(--space-3); border: 1px dashed var(--amber-400); border-radius: var(--radius-control); background: color-mix(in srgb, var(--amber-400) 6%, var(--surface-1)); }
+.aiAnswer .answerText { white-space: pre-line; }

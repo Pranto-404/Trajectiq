@@ -4,6 +4,7 @@
   "buildCommand": "npm run build && npm test",
   "installCommand": "npm ci --ignore-scripts",
   "outputDirectory": "site",
+  "functions": {"api/assist.js": {"maxDuration": 20}},
   "headers": [
     {"source": "/(.*)", "headers": [
       {"key": "X-Content-Type-Options", "value": "nosniff"},
