@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Chip, Concept, Panel, Segmented, Slider} from '@/ds/index.js';
 import {useGame, selectActiveDesign, selectAnalysis, selectMission, selectOrbitOptions} from '@/store/index.js';
 import {useT} from '@/i18n/index.js';
-import {destinationOptions, defaultScenarioFor} from '../board/missionInfo.js';
+import {destinationOptions} from '../board/missionInfo.js';
 import {useLocked, fmt} from './hooks.js';
 import s from './hangar.module.css';
 
@@ -38,7 +38,7 @@ export function OrbitPanel() {
       <div className={s.field}>
         <label htmlFor="mission-destination" className={s.fieldLabel}>{t('Choose destination')}</label>
         <select id="mission-destination" className={s.select} value={design.destination} disabled={locked} aria-describedby="destination-help"
-          onChange={e => { const id = defaultScenarioFor(e.target.value); if (id) a['board-scenario']({scenario: id}); }}>
+          onChange={e => a.setDestination(e.target.value)}>
           {dests.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
           {dests.some(d => d.value === design.destination) ? null : <option value={design.destination}>{design.destination}</option>}
         </select>

@@ -2,7 +2,20 @@
 
 Keep this file current. Update it after every milestone, agent launch and agent result. A new session should read it first (see CLAUDE.md), then continue from "Next steps".
 
-Last updated: 2026-11-05. Event: NASA Space Apps, 2026-11-14.
+Last updated: 2026-11-06. Event date below is retained from the owner's project notes, not independently verified.
+
+## Current resume point — 2026-11-06 integration pass
+
+All four feature branches, including the 3D stage, are merged into `ux-v7`. The historical next-steps list below predates that integration. Production still serves v6; do not describe the v7 work as deployed to production.
+
+- Added the persistent interactive 3D spacecraft preview to the mission board, destination filters, earlier difficulty controls, and a phone-only fixed Build this mission action. Brighter assembly lighting keeps the craft readable while it rotates. Mobile header wraps into two usable rows.
+- Fixed architecture presets losing scenario/difficulty/sandbox/name/livery; added all-body destination switching; protected presets against damaged saves; enforced forecast consumption in the store for both entry points, including concurrent requests; kept crew roll call open through sign-offs; made empty-run redesign safe; restarted guided help correctly.
+- Dataset exports now use the canonical quoted CSV with per-row provenance and the correct body filename. NASA imagery credit links now read the stage's source field. Rechecked mean-radius sources for Mercury, Venus, Earth, Mars and Ceres in local Edge against JPL on 2026-11-06; simulation numbers unchanged.
+- Build no longer regenerates the incompatible legacy standalone. `npm run e2e` now fails clearly if the browser suite is absent instead of reporting success with zero tests.
+- Automated verification: 371 Node tests + 342 UI tests passed after lighting and roll-call-navigation polish. Hosted/standalone build succeeded again after the final CSS adjustment. Final verification is recorded in `docs/QA_V7_INTEGRATION.md`.
+- Local Edge: Mars Dust Season board → hangar → launch → dust-storm crisis → one forecast → Keep observing → report completed (669 science, 862 score, grade A). Four-player roll call signed all four roles without switching sheets. Board, hangar and report checked in Edge responsive mode at 375px, each with document scroll width 375px. Real WebGL rendered in board/hangar/flight. No runtime errors observed in the desktop flow; a vendor Three.Clock deprecation warning remains.
+
+Remaining release gates: Linux CI and preview verification, configured browser automation/axe audit, physical-phone full loop and offline test, standalone file:// browser check, production cutover and live headers. The existing release plan requires these before merging to main. No physical-device or comprehensive accessibility result is claimed.
 
 ## Product state
 

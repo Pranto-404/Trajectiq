@@ -100,4 +100,8 @@ export function RollCall({onReady}) {
 }
 
 /** Registered as the `rollcall` sheet. */
-export function RollCallSheet() { return <RollCall />; }
+export function RollCallSheet() {
+  const t = useT();
+  const actions = useGame(st => st.actions);
+  return <><RollCall /><Button variant="primary" icon="launch" onClick={() => actions['game-review']()}>{t('Launch readiness →')}</Button></>;
+}

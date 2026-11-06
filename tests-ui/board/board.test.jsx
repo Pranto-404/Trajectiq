@@ -25,6 +25,16 @@ const board = () => render(<BoardScreen />, {wrapper: ({children}) => <MotionPro
 const cards = () => within(screen.getByRole('group', {name: 'Scenario'})).getAllByRole('button');
 
 describe('scenarios', () => {
+  it('filters destinations without changing the selected mission', async () => {
+    board(); const user = userEvent.setup();
+    const selected = useGame.getState().design.scenario;
+    await user.click(screen.getByRole('button', {name: 'Mars', exact: true}));
+    expect(cards()).toHaveLength(2);
+    expect(cards().every(c => SCENARIOS[c.dataset.scenario].destination === 'mars')).toBe(true);
+    expect(useGame.getState().design.scenario).toBe(selected);
+    await user.click(screen.getByRole('button', {name: 'All destinations', exact: true}));
+    expect(cards()).toHaveLength(Object.keys(SCENARIOS).length);
+  });
   it('lists every scenario the engine offers, grouped by body, with tag, summary and critical resource', () => {
     board();
     const all = Object.values(SCENARIOS);

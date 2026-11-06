@@ -50,7 +50,7 @@ await writeFile(path.join(site, 'TRAJECTIQ_Play.html'), html);
 if (cutover) await writeFile(path.join(root, 'dist/TRAJECTIQ_Play.html'), html);
 
 // ---- 4. legacy standalone (until cutover) --------------------------------------------------------------------------
-if (!cutover) await import('./build-standalone.mjs');
+// Preserve the committed v6 artifact. Its concatenation builder cannot consume the v7 module graph.
 
 // ---- report --------------------------------------------------------------------------------------------------------
 const hostedFiles = sw.assets.filter(a => a !== './');

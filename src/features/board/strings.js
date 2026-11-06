@@ -1,6 +1,10 @@
 // Bengali strings for the board. Keys are the English source text (the project convention), so a missing key shows English.
 // Scenario titles and summaries are engine data and stay in English; every label around them is translated.
 export const BOARD_BN = {
+  'Filter destinations': 'গন্তব্য বাছাই',
+  'Build this mission': 'এই মিশন তৈরি করুন',
+  'All destinations': 'সব গন্তব্য',
+  'Drag to explore your spacecraft': 'মহাকাশযান ঘুরিয়ে দেখতে টানুন',
   'Step 1 / Define your mission': 'ধাপ ১ / আপনার মিশন ঠিক করুন',
   'Plan your mission.': 'আপনার মিশন সাজান।',
   'Pick how you play, choose an objective, then build the spacecraft that can reach it.': 'কীভাবে খেলবেন বাছুন, লক্ষ্য ঠিক করুন, তারপর সেই লক্ষ্যে পৌঁছানোর মহাকাশযান বানান।',

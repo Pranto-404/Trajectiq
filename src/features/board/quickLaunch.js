@@ -1,6 +1,5 @@
 // Quick launch: accept the mission with the Balanced build and open the launch sheet ("three taps to launch").
-// The store's preset action loads the destination's Balanced parts from scratch, which drops the scenario, difficulty and
-// sandbox choices made on the board, so they are re-applied through their own guarded actions afterwards. Nothing here
+// The store preserves scenario, difficulty and sandbox choices. The checks below also tolerate older store adapters. Nothing here
 // writes the design directly: every guard (flight lock, damaged save, crew ownership) still decides.
 
 /** Runs the quick-launch sequence against a store hook. Returns true when the launch sheet was requested. */

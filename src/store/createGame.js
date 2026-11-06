@@ -14,7 +14,8 @@ import {assignRoles, canEdit, ownerOf, roleVerdicts, signoffAllowed, tallyVotes,
 import {normalize, newRun, advance, resolve as engineResolve, runToEnd, seededRandom, clone, debrief, calculate} from '@engine/model.js';
 import {reviewDecisions, missionScore} from '@engine/review.js';
 import {encodeDesign, decodeDesign, verifyDesign} from '@engine/share.js';
-import {nasaDataset} from '@data/nasa.js';
+import {nasaDataset, datasetCSV} from '@data/nasa.js';
+import {isBodyId} from '@data/bodies.js';
 import {CATALOG, missionFor, presetFor, PRESETS, SOURCES, UNCERTAINTY, VERSION} from '@data/catalog.js';
 import {SCENARIOS, DIFFICULTY, ROLES, ROLE_ORDER} from '@data/scenarios.js';
 import {LEARN} from '@data/learn.js';
@@ -260,9 +261,12 @@ export function createGame(options = {}) {
     }
     function preset(name) {
       if (isFlight()) { discardThen(() => preset(name)); return; }
-      if (!PRESET_NAMES.includes(name) || !ownerGuard('destination')) return;
+      if (!PRESET_NAMES.includes(name) || !draftGuard() || !ownerGuard('destination')) return;
       pause();
-      set(s => ({design: normalize(presetFor(s.design.destination, name)), robust: null, category: 'payload', screen: 'hangar'}));
+      set(s => {
+        const {scenario, difficulty, sandbox, livery, name: missionName} = s.design;
+        return {design: normalize({...presetFor(s.design.destination, name, scenario), scenario, difficulty, sandbox, livery, name: missionName}), robust: null, category: 'payload', screen: 'hangar'};
+      });
       persist();
       toast('{name} architecture loaded.'.replace('{name}', name[0].toUpperCase() + name.slice(1)));
     }
@@ -353,9 +357,9 @@ export function createGame(options = {}) {
       return ok;
     }
     function setDestination(destination) {
-      if (!draftGuard() || !['moon', 'mars'].includes(destination) || !ownerGuard('destination')) return;
+      if (!draftGuard() || !isBodyId(destination) || !ownerGuard('destination')) return;
       const old = get().design;
-      set({design: normalize({...presetFor(destination), livery: old.livery, ...(!['Lunar Polar Mapper', 'Mars Polar Mapper'].includes(old.name) ? {name: old.name} : {})}), robust: null, screen: 'hangar'});
+      set({design: normalize({...presetFor(destination), difficulty: old.difficulty, sandbox: old.sandbox, livery: old.livery, ...(!Object.values(SCENARIOS).some(sc => sc.title === old.name) ? {name: old.name} : {})}), robust: null, screen: 'hangar'});
       persist();
       toast('Destination starter design loaded. Review the new power, distance and orbit constraints.');
     }
@@ -423,7 +427,8 @@ export function createGame(options = {}) {
       if (!String(q).trim()) return;
       const {answerQuestion} = await import('@engine/assistant.js');
       const answer = answerQuestion(q, assistantContext());
-      set(s => ({chat: [...s.chat, {q: String(q).slice(0, 500), answer}].slice(-12)}));
+      set(s => ({chat: [...s.chat, {q: String(q).slice(0, 500), answer}].slice(-12),
+        ...(answer.consumesForecast && s.run?.crisis ? {run: {...s.run, forecasts: (s.run.forecasts || 0) + 1}} : {})}));
       openSheet('assistant');
     }
     function applyAssistant(index) {
@@ -583,7 +588,7 @@ export function createGame(options = {}) {
         const v = roleVerdicts(analyze(get().design).checks).find(x => x.role === role);
         if (!v || v.status === 'nogo') return;
         updateTeam(tm => { tm.signed[role] = true; }); persist();
-        gameReview();
+        if (get().sheet?.id !== 'rollcall') gameReview();
       },
       'suggest-accept': ({id}) => suggestAnswer(id, true),
       'suggest-decline': ({id}) => suggestAnswer(id, false),
@@ -604,7 +609,7 @@ export function createGame(options = {}) {
       'game-redesign'() {
         if (!draftGuard()) return;
         resetCrewRound();
-        set(s => ({design: normalize(s.run.design), robust: null, screen: 'hangar'})); persist();
+        set(s => ({design: normalize(s.run?.design || s.design), robust: null, screen: 'hangar'})); persist();
       },
       markScoreSeen: id => set({scoreSeen: id}),
       'board-add': boardAdd,
@@ -616,9 +621,9 @@ export function createGame(options = {}) {
         env.io.download(JSON.stringify(doc, null, 2), 'application/json', 'TRAJECTIQ_mission_report.json');
       },
       'export-nasa'() {
-        const s = get(), d = (assistantContext().run?.design) || s.design, data = nasaDataset(d);
-        const rows = [['parameter', 'value', 'unit', 'evidence', 'source_url', 'verified_utc'], ...data.rows.map(r => [r.id, r.value, r.unit, r.source === 'assumption' ? 'educational assumption' : 'NASA/JPL', r.source === 'assumption' ? '' : r.source === 'relay' ? data.relayURL : r.source === 'jpl' ? data.jplURL : data.factURL, data.verified])];
-        env.io.download(rows.map(r => r.map(x => JSON.stringify(String(x))).join(',')).join('\n'), 'text/csv', `TRAJECTIQ_NASA_${d.destination === 'mars' ? 'Mars' : 'Moon'}_Data.csv`);
+        const s = get(), d = (assistantContext().run?.design) || s.design;
+        const bodyName = d.destination[0].toUpperCase() + d.destination.slice(1);
+        env.io.download(datasetCSV(d.destination), 'text/csv', `TRAJECTIQ_NASA_${bodyName}_Data.csv`);
       },
       'copy-code'() { const s = get(), r = s.run?.done ? s.run : s.runs.at(-1); return copyText(r ? runCode(s, r) : encodeDesign(s.design), 'Mission code copied.'); },
       'copy-design': () => copyText(encodeDesign(get().design, {team: teamLabel(get())}), 'Design code copied.'),
@@ -660,7 +665,7 @@ export function createGame(options = {}) {
       'nasa-data': () => openSheet('nasa'),
       'learn-quiz-reset': () => set({quiz: null}),
       'guide-next': () => set(s => ({guide: Math.min(3, s.guide + 1)})),
-      'guide-toggle'() { set(s => ({prefs: {...s.prefs, guided: !s.prefs.guided}})); persist(); },
+      'guide-toggle'() { set(s => ({guide: 0, prefs: {...s.prefs, guided: !s.prefs.guided}})); persist(); },
 
       // preferences
       setPref(key, value) {

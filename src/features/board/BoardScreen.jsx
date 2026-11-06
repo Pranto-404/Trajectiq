@@ -1,4 +1,4 @@
-import {useMemo, useRef} from 'react';
+import {useMemo, useRef, useState} from 'react';
 import {motion} from 'motion/react';
 import {neededScience, missionFor} from '@data/catalog.js';
 import {Button, Panel, Segmented, useReducedMotion} from '@/ds/index.js';
@@ -12,6 +12,7 @@ import {ScenarioCard} from './ScenarioCard.jsx';
 import {CrewSetup} from './CrewSetup.jsx';
 import {Charter} from './Charter.jsx';
 import {PitchBanner} from './PitchBanner.jsx';
+import {Stage3D} from '../stage/index.js';
 import s from './board.module.css';
 
 /** Mission board: mode, scenarios (every scenario the engine offers, grouped by body), difficulty, charter, crew setup, quick launch. */
@@ -20,6 +21,7 @@ export function BoardScreen() {
   const reduced = useReducedMotion();
   const tilt = useFinePointer();
   const root = useRef(null);
+  const [destination, setDestination] = useState('all');
   const design = useGame(st => st.design), team = useGame(st => st.team), run = useGame(st => st.run), a = useGame(st => st.actions);
   const locked = !!(run && !run.done);
   const mission = useMemo(() => missionFor(design), [design]);
@@ -73,10 +75,21 @@ export function BoardScreen() {
 
           {mode === 'crew' ? <CrewSetup reduced={reduced} locked={locked} /> : null}
 
+          <section className={s.block} aria-label={t('Difficulty')}>
+            <span className="kicker">{t('Difficulty')}</span>
+            <Segmented label={t('Difficulty')} value={mission.difficulty} onChange={v => a['board-difficulty']({difficulty: v})} fullWidth
+              options={diffs.map(d => ({value: d.id, label: d.label, hint: d.blurb, disabled: locked}))} />
+            {diff ? <p className={s.note}>{diff.blurb}</p> : null}
+          </section>
+
           <section className={s.block} aria-label={t('Objective')}>
             <span className="kicker">{t('Objective')}</span>
+            <div className={s.destinations} role="group" aria-label={t('Filter destinations')}>
+              <button type="button" aria-pressed={destination === 'all'} onClick={() => setDestination('all')}>{t('All destinations')}</button>
+              {groups.map(g => <button type="button" key={g.destination} aria-pressed={destination === g.destination} onClick={() => setDestination(g.destination)}>{g.label}</button>)}
+            </div>
             <div className={s.groups} role="group" aria-label={t('Scenario')}>
-              {groups.map(g => (
+              {groups.filter(g => destination === 'all' || g.destination === destination).map(g => (
                 <div key={g.destination} className={s.groupBlock}>
                   <h2 className={s.groupTitle}>{g.label}</h2>
                   <div className={s.cards}>
@@ -91,15 +104,13 @@ export function BoardScreen() {
             </div>
           </section>
 
-          <motion.section className={s.block} aria-label={t('Difficulty')} {...enterProps(2, reduced)}>
-            <span className="kicker">{t('Difficulty')}</span>
-            <Segmented label={t('Difficulty')} value={mission.difficulty} onChange={v => a['board-difficulty']({difficulty: v})} fullWidth
-              options={diffs.map(d => ({value: d.id, label: d.label, hint: d.blurb, disabled: locked}))} />
-            {diff ? <p className={s.note}>{diff.blurb}</p> : null}
-          </motion.section>
         </div>
 
         <motion.aside className={s.side} aria-label={t('Mission charter')} {...enterProps(1, reduced)}>
+          <div className={s.preview}>
+            <Stage3D design={design} phase="board" quality="auto" reduced={reduced} onPick={kind => { if (!locked) { accept(); a.setCategory(kind); } }} />
+            <span className={s.previewCaption}>{t('Drag to explore your spacecraft')}</span>
+          </div>
           <Charter mission={mission} need={need} card={selectedCard} colors={colors} unverified={unverified} sandbox={mode === 'sandbox'}>
             <div className={s.actions}>
               <Button variant="primary" size="lg" iconEnd="arrow-right" onClick={accept} disabled={locked} disabledReason={locked ? lockReason : undefined}>{t('Accept mission · enter hangar')}</Button>
@@ -109,6 +120,10 @@ export function BoardScreen() {
             </div>
           </Charter>
         </motion.aside>
+      </div>
+      <div className={s.mobileAction}>
+        <span>{mission.title}</span>
+        <Button variant="primary" size="sm" iconEnd="arrow-right" disabled={locked} disabledReason={locked ? lockReason : undefined} onClick={accept}>{t('Build this mission')}</Button>
       </div>
     </div>
   );

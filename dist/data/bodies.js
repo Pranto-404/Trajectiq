@@ -77,7 +77,7 @@ export const BODIES = {
     },
     realReference: {mission: 'mro', note: 'MRO 255 x 320 km; Odyssey ~400 km polar; MAVEN 150 km periapsis.'},
     provenance: {
-      radius: P(url.fact('mars'), 'direct', 'Volumetric mean radius.', {verified: '2026-10-10'}),
+      radius: P(url.jplPlanets, 'direct', 'JPL mean radius 3389.50 km.', {verified: '2026-11-06'}),
       mu: P(url.jplSats, 'direct', 'GM from MAR097 (NAIF gm_de440 BODY499_GM = 42828.37362).', {verified: '2026-10-10'}),
       solarIrradiance: P(url.fact('mars'), 'direct', 'Fact-sheet mean; no perihelion or aphelion split.', {verified: '2026-10-10'}),
       earthRangeNear: P('https://science.nasa.gov/mars/mars-relay-network/', 'direct', 'Near range scenario from the NASA relay page. Horizons 30-year minimum is 56,175,217 km.', {verified: '2026-10-10'}),
@@ -106,7 +106,7 @@ export const BODIES = {
     },
     realReference: {mission: 'landsat-9', note: 'Landsat 9 705 km, 98.2 degrees, 99 min; PACE 676.5 km, 98 degrees.'},
     provenance: {
-      radius: P(url.fact('earth'), 'direct', 'Volumetric mean radius.'),
+      radius: P(url.jplPlanets, 'derived', 'JPL mean radius 6371.0084 km, rounded to 6371.0 km for the game.', {verified: '2026-11-06'}),
       mu: P(url.naifGm, 'direct', 'BODY399_GM = 398600.4355 (fact sheet prints 0.39860e6).'),
       solarIrradiance: P(url.fact('earth'), 'direct', 'Solar constant.'),
       earthRangeNear: P(USGS_LANDSAT, 'derived', 'Geometry: slant range straight overhead for a 705 km orbit (Landsat 9 altitude). Elevation is a game choice.'),
@@ -133,7 +133,7 @@ export const BODIES = {
     },
     realReference: {mission: 'messenger', note: 'MESSENGER 200 x 15,193 km, 80 degrees, 12 h (elliptical, not modelled).'},
     provenance: {
-      radius: P(url.jplPlanets, 'direct', 'JPL/IAU 2439.4 km; the fact sheet prints 2439.7 km.'),
+      radius: P(url.jplPlanets, 'direct', 'JPL mean radius 2439.4 km; do not confuse with equatorial radius 2440.53 km.', {verified: '2026-11-06'}),
       mu: P(url.naifGm, 'direct', 'BODY199_GM.'),
       solarIrradiance: P(url.fact('mercury'), 'direct', 'Single printed value; no perihelion or aphelion split.'),
       earthRangeNear: P(url.horizons, 'derived', HORIZONS),
@@ -160,7 +160,7 @@ export const BODIES = {
     },
     realReference: {mission: 'magellan', note: 'Magellan 294 x 8,463 km, 85.5 degrees, 243-day cycles (elliptical, not modelled).'},
     provenance: {
-      radius: P(url.fact('venus'), 'direct', 'Volumetric mean radius.'),
+      radius: P(url.jplPlanets, 'direct', 'JPL mean radius 6051.8 km.', {verified: '2026-11-06'}),
       mu: P(url.naifGm, 'direct', 'BODY299_GM.'),
       solarIrradiance: P(url.fact('venus'), 'direct', 'Fact-sheet value.'),
       earthRangeNear: P(url.horizons, 'derived', HORIZONS),
@@ -187,7 +187,7 @@ export const BODIES = {
     },
     realReference: {mission: 'dawn', note: 'Dawn first science orbit 13,500 km, final circular 375 km.'},
     provenance: {
-      radius: P(url.sbdb(1), 'derived', 'Derived: SBDB diameter 939.4 km divided by 2. NASA Science prints 476 km.'),
+      radius: P(url.jplPlanets, 'direct', 'JPL dwarf-planet table: mean radius 469.7 km; equatorial radius is 482.1 km.', {verified: '2026-11-06'}),
       mu: P(url.sbdb(1), 'direct', 'GM 62.6284 km^3/s^2 from SBDB (Nature 537:515); NAIF gm_de440 prints 62.6289.'),
       solarIrradiance: P(url.sbdb(1), 'derived', 'DERIVED 1361 / a^2 at a = 2.7656 AU (perihelion 210.1, aphelion 152.6 W/m^2). No NASA printed value was read.'),
       earthRangeNear: P(url.horizons, 'derived', HORIZONS),

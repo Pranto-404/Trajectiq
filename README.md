@@ -1,5 +1,7 @@
 # TRAJECTIQ · v6
 
+> **Development branch `ux-v7`:** React redesign with eight destinations, ten scenarios and a persistent 3D stage. Run `npm ci --ignore-scripts`, then `npm run dev`. `npm run build` writes the new app and offline edition to `site/`; `dist/TRAJECTIQ_Play.html` remains the archived v6 file. Production remains v6 until the release gates pass. See [integration QA](docs/QA_V7_INTEGRATION.md) and [progress](docs/plan/PROGRESS.md). The v6 description below documents the live release.
+
 **Space Mission Design Game** · built for the NASA International Space Apps Challenge 2026 challenge of the same name.
 
 > Design a spacecraft, launch it, fly the mission, find out *why* it succeeded or failed, and redesign. Alone, or as a crew of up to four.

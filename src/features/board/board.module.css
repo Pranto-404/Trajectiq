@@ -11,13 +11,28 @@
 @media (min-width: 1000px) { .layout { grid-template-columns: minmax(0, 1fr) minmax(320px, 400px); } .side { position: sticky; top: calc(var(--header-h) + var(--gap)); } }
 .main { display: grid; gap: var(--space-5); min-width: 0; }
 .block { display: grid; gap: var(--space-2); min-width: 0; }
-.side { min-width: 0; }
+.side { min-width: 0; display: grid; gap: var(--space-3); }
+.mobileAction { display: none; }
+@media (max-width: 760px) {
+  .screen { padding-bottom: 90px; }
+  .mobileAction { display: flex; align-items: center; justify-content: space-between; gap: 12px; position: fixed; z-index: var(--z-hud); bottom: 0; left: 0; right: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: #080d15f5; border-top: 1px solid var(--line-2); box-shadow: 0 -8px 24px #0005; }
+  .mobileAction > span { min-width: 0; font-size: var(--text-12); color: var(--text-2); }
+  .mobileAction > button { flex-shrink: 0; }
+}
+.preview { position: relative; height: 260px; border: 1px solid var(--line-2); border-radius: var(--radius-panel); overflow: hidden; box-shadow: 0 16px 48px #0005; }
+.previewCaption { position: absolute; bottom: 12px; left: 12px; pointer-events: none; border-radius: var(--radius-pill); padding: 6px 10px; font-size: var(--text-12); background: #080d15df; color: var(--text-2); }
+.destinations { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 4px 12px; }
+.destinations button { min-height: var(--target-min); padding: 8px 14px; border: 1px solid var(--line-2); border-radius: var(--radius-pill); background: var(--surface-1); color: var(--text-2); transition: transform 160ms ease, background 160ms ease; }
+.destinations button[aria-pressed="true"] { background: var(--cyan-400); border-color: var(--cyan-400); color: var(--bg-0); }
+@media (hover: hover) { .destinations button:hover { transform: translateY(-2px); border-color: var(--cyan-400); } }
+@media (max-width: 999px) { .side { position: static; } .preview { height: 220px; } }
+@media (prefers-reduced-motion: reduce) { .destinations button { transition: none; } .orbSurface { animation: none; } }
 
 .groups { display: grid; gap: var(--space-5); }
 .groupBlock { display: grid; gap: var(--space-3); }
 .groupTitle { font-size: var(--text-14); font-weight: 650; letter-spacing: .02em; color: var(--text-2); display: flex; align-items: center; gap: var(--space-2); }
 .groupTitle::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line-2), transparent); }
-.cards { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); perspective: 900px; }
+.cards { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); perspective: 900px; }
 
 .card {
   position: relative; display: grid; align-content: start; gap: var(--space-2); text-align: left; min-height: 150px; padding: var(--space-4);

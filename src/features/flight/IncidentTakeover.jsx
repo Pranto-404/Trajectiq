@@ -8,13 +8,11 @@ import {CrewVote} from '../crew/CrewVote.jsx';
 import {DirectionChips} from './DirectionChips.jsx';
 import s from './flight.module.css';
 
-/** Spend the one forecast (assistant answer with ranges). The store does not consume it yet (see FEATURE_REQUESTS), so mark it here. */
+/** The store consumes the forecast consistently for both the incident and assistant entry points. */
 export async function spendForecast() {
   const st = useGame.getState();
   if (!st.run?.crisis || (st.run.forecasts || 0) >= 1) return false;
   await st.actions.ask('Use my one forecast');
-  const now = useGame.getState();
-  if (now.chat.at(-1)?.answer?.consumesForecast && now.run?.crisis && (now.run.forecasts || 0) < 1) useGame.setState({run: {...now.run, forecasts: (now.run.forecasts || 0) + 1}});
   return true;
 }
 

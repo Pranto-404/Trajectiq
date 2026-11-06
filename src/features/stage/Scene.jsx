@@ -214,9 +214,10 @@ export function Scene({props, ctx, tier}) {
   return (
     <>
       <color attach="background" args={['#05080f']} />
-      <ambientLight intensity={0.4} color="#9db4d4" />
+      <ambientLight intensity={hangar ? 0.85 : 0.4} color="#9db4d4" />
+      {hangar ? <hemisphereLight args={['#d4eaff', '#536581', 1.4]} /> : null}
       <directionalLight ref={light} intensity={2.2} color="#fff4e0" position={[-8, 10, 12]} />
-      <directionalLight ref={fill} intensity={0.35} color="#6aa7d8" position={[6, 3, -8]} />
+      <directionalLight ref={fill} intensity={hangar ? 1.1 : 0.35} color="#6aa7d8" position={[6, 3, -8]} />
       <Stars count={settings.stars} ctx={ctx} />
       <Planet visual={visual} segments={settings.segments} ctx={ctx} group={n => { refs.body = n; }} />
       <Planet visual={earthVis} segments={Math.max(24, settings.segments - 16)} ctx={ctx} group={n => { refs.earth = n; }} />

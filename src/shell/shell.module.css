@@ -1,4 +1,4 @@
-.shell { min-height: 100dvh; display: grid; grid-template-rows: var(--header-h) 1fr; background: radial-gradient(1200px 600px at 70% -10%, #0f1b2b 0, transparent 60%), var(--bg-1); }
+.shell { min-height: 100dvh; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; background: radial-gradient(1200px 600px at 70% -10%, #0f1b2b 0, transparent 60%), var(--bg-1); }
 .header { position: sticky; top: 0; z-index: var(--z-hud); display: flex; align-items: center; gap: var(--space-4); padding: 0 var(--space-4); background: color-mix(in srgb, var(--bg-0) 88%, transparent); border-bottom: 1px solid var(--line-1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .brand { display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--target-min); font-weight: 700; letter-spacing: .06em; color: var(--text-1); text-decoration: none; border: 0; background: transparent; }
 .brand img { width: 28px; height: 28px; }
@@ -8,10 +8,16 @@
 .navItem[aria-current="step"] { color: var(--on-lime); background: var(--lime-500); }
 .navItem[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
 .navItem:not([aria-current="step"]):not([aria-disabled="true"]):hover { background: var(--surface-3); color: var(--text-1); }
-.right { display: inline-flex; align-items: center; gap: var(--space-2); }
+.right { display: inline-flex; align-items: center; gap: var(--space-2); min-width: 0; }
 .chip { display: none; }
 @media (min-width: 900px) { .chip { display: inline-flex; } }
 @media (max-width: 560px) { .brandText { display: none; } .header { gap: var(--space-2); padding: 0 var(--space-2); } }
+@media (max-width: 760px) {
+  .header { flex-wrap: wrap; padding-block: var(--space-1); }
+  .right { margin-left: auto; }
+  .nav { order: 3; flex-basis: 100%; justify-content: space-between; }
+  .navItem { flex: 1; padding-inline: var(--space-2); }
+}
 
 .main { padding: var(--gap); min-width: 0; outline: none; }
 .screen { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gap); max-width: 1500px; margin: 0 auto; }

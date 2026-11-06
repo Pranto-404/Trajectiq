@@ -12,4 +12,5 @@ const found = import.meta.glob('../stage/credits.js', {eager: true});
 const mod = Object.values(found)[0] || {};
 
 /** @type {{id: string, title: string, credit: string, url?: string, licence?: string}[]} */
-export const ASSET_CREDITS = Array.isArray(mod.ASSET_CREDITS) ? mod.ASSET_CREDITS : [];
+export const ASSET_CREDITS = Array.isArray(mod.ASSET_CREDITS)
+  ? mod.ASSET_CREDITS.map(c => ({...c, url: c.url || c.source})) : [];
