@@ -28,7 +28,7 @@ describe('store action contract', () => {
   it('state has the documented top-level keys', () => {
     const h = makeStore(); h.a.init();
     for (const k of ['screen', 'category', 'design', 'team', 'board', 'runs', 'prefs', 'compare', 'run', 'playing', 'speed', 'pitch', 'robust', 'robustProgress', 'mentorLevel', 'quiz', 'guide', 'chat', 'game', 'pendingImport', 'scoreSeen', 'reportTab', 'launchCount', 'cameraResets', 'sheet', 'toasts', 'preview', 'hidden', 'saveStatus', 'actions']) expect(h.get(), k).toHaveProperty(k);
-    expect(h.get().screen).toBe('board'); expect(Object.keys(h.get().prefs).sort()).toEqual(['guided', 'haptics', 'language', 'reducedMotion', 'sound', 'theme']);
+    expect(h.get().screen).toBe('board'); expect(Object.keys(h.get().prefs).sort()).toEqual(['guided', 'haptics', 'language', 'overviewSeen', 'reducedMotion', 'sound', 'theme']);
   });
 
   it('legacy page names route to the new screens and sheets', () => {

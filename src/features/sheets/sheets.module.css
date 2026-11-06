@@ -47,6 +47,17 @@
 .disclosure[open] > summary { margin-bottom: var(--space-2); }
 
 /* assistant */
+.chatBody { height: 100%; display: flex; flex-direction: column; min-height: 0; gap: 8px; }
+.chatScroll { overflow: auto; min-height: 0; flex: 1; display: flex; flex-direction: column; gap: 14px; padding-right: 4px; overscroll-behavior: contain; }
+.chatIntro { font-size: var(--text-13); color: var(--text-2); line-height: 1.6; }
+.chatBody .askForm { flex: none; padding-top: 12px; border-top: 1px solid var(--line-2); }
+.chatBody .thread { flex: 1; grid-template-columns: minmax(0, 1fr); }
+.chatBody .exchange, .chatBody .answer { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+.chatBody .field input, .chatBody .field select { min-width: 0; width: 100%; }
+.chatBody .evidence { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+.chatBody .chipRow button { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+.chatBody .answer { padding: 14px; }
+.chatBody .context { font-size: var(--text-12); }
 .context { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); align-items: center; padding: var(--space-3); border-radius: var(--radius-control); border: 1px solid var(--line-1); background: var(--surface-2); }
 .context small { flex-basis: 100%; }
 .crisis { display: grid; gap: var(--space-2); padding: var(--space-3); border-radius: var(--radius-control); border: 1px solid var(--amber-400); background: rgb(255 188 110 / .06); }

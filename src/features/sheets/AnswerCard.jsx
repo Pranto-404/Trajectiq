@@ -71,7 +71,7 @@ function ProposalPreview({proposal}) {
  *   changed since the preview (a stale proposal can never overwrite a newer design).
  * - level: Beginner hides tables behind a disclosure; Engineer shows evidence class and tables open.
  */
-export function AnswerCard({answer, index, design, locked, level, onApply, onAsk, language}) {
+export function AnswerCard({answer, index, design, locked, level, onApply, onAsk, language, showSuggestions = true}) {
   const t = useT();
   const bn = language === 'bn';
   const stale = answer.proposal ? proposalStale(answer.proposal, design) : false;
@@ -96,7 +96,7 @@ export function AnswerCard({answer, index, design, locked, level, onApply, onAsk
         </div>
       ) : null}
       {Array.isArray(answer.sources) && answer.sources.length ? <p className={s.links}>{answer.sources.map((x, i) => <ExternalLink key={i} href={x.url}>{clean(x.title, 80)}</ExternalLink>)}</p> : null}
-      {Array.isArray(answer.suggestions) && answer.suggestions.length ? (
+      {showSuggestions && Array.isArray(answer.suggestions) && answer.suggestions.length ? (
         <div className={s.chipRow}>{answer.suggestions.map(q => <Button key={q} size="sm" variant="ghost" onClick={() => onAsk(q)}>{clean(q, 60)}</Button>)}</div>
       ) : null}
       {answer.topic === 'battery' || answer.topic === 'data' ? <Concept id={answer.topic === 'battery' ? 'power' : 'datarate'} label={t('the idea behind this')} /> : null}

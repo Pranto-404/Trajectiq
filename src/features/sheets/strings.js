@@ -1,6 +1,20 @@
 // Bengali strings for the sheets package (key = English source text). Missing keys render in English.
 export const strings = {
   bn: {
+    'Tools & preferences': 'সরঞ্জাম ও পছন্দ',
+    'I read your current mission. Ask what to do next, or why something changed.': 'আমি আপনার বর্তমান মিশন দেখি। পরের ধাপ বা পরিবর্তনের কারণ জানতে চান।',
+    'Explain my result': 'আমার ফলাফল বুঝিয়ে দিন',
+    'Your first mission': 'আপনার প্রথম মিশন', 'WELCOME ABOARD': 'স্বাগতম',
+    'You are the mission designer.': 'আপনিই মিশনের ডিজাইনার।',
+    'No space experience needed. Try a design, see what happens, and improve it.': 'মহাকাশের অভিজ্ঞতা লাগবে না। নকশা বানান, ফল দেখুন, উন্নতি করুন।',
+    '1. Pick a mission': '১. মিশন বেছে নিন',
+    'Start with Lunar Polar Mapper and Cadet difficulty.': 'Lunar Polar Mapper ও Cadet দিয়ে শুরু করুন।',
+    '2. Build and check': '২. বানান ও পরীক্ষা করুন',
+    'Try Balanced build. Keep mass, power and cost within limits.': 'Balanced build নিন। ভর, শক্তি ও খরচ সীমার মধ্যে রাখুন।',
+    '3. Fly, then learn': '৩. উড়ান, তারপর শিখুন',
+    'Launch, respond to events, and return science to Earth. Your report explains the result.': 'উৎক্ষেপণ করুন, সিদ্ধান্ত নিন, বিজ্ঞান পৃথিবীতে ফেরান। রিপোর্ট ফল বুঝিয়ে দেবে।',
+    'Start exploring': 'শুরু করুন',
+    'Need a hand? Your assistant is at the bottom right.': 'সাহায্য লাগলে নিচের ডান পাশে সহকারী আছে।',
     'Appearance': 'থিম', 'Light': 'হালকা', 'Dark': 'গাঢ়',
     'Switch to dark mode': 'গাঢ় থিম চালু করুন', 'Switch to light mode': 'হালকা থিম চালু করুন',
     'Could not prepare an answer. Please try again.': 'উত্তর তৈরি করা যায়নি। আবার চেষ্টা করুন।',

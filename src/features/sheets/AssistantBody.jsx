@@ -10,7 +10,7 @@ import {AnswerCard, DirectionChips} from './AnswerCard.jsx';
 import {clean, fmt} from '../report/format.js';
 import s from './sheets.module.css';
 
-const QUICK = ['Mission status', 'Review my design', 'Compare presets', 'Compare crisis choices', 'How do I play?'];
+const quickQuestions = ctx => ctx.run?.done ? ['Mission status', 'Explain my result'] : ctx.run?.crisis ? ['Mission status', 'Compare crisis choices'] : ctx.run ? ['Mission status', 'Why is my battery dropping?'] : ['Mission status', 'Review my design'];
 
 function ContextCard({ctx}) {
   const t = useT();
@@ -20,6 +20,7 @@ function ContextCard({ctx}) {
       <Chip kind={r ? 'mode' : 'info'} size="sm" icon={r ? 'orbit' : 'assistant'}>{r ? (r.done ? t('Completed mission') : t('Paused mission')) : t('Current draft')}</Chip>
       <strong>{clean(a.d.name, 40)}</strong>
       <span className="num">{r ? `T+${fmt(r.minute, 1)} min · ${fmt(r.science)} ${t('science returned')}` : `${fmt(a.cost, 1)} / ${a.m.budget} cr · ${fmt(a.wet, 1)} kg`}</span>
+      {r ? <span className="num">{t('battery')} {fmt(r.battery / a.c.power.battery * 100)}% · {t('Recorder')} {fmt(r.backlog / a.c.storage.capacity * 100)}%</span> : null}
       <small className={s.muted}>{t('Answers use this context. Older answers are snapshots from when you asked.')}</small>
     </div>
   );
@@ -31,8 +32,9 @@ function Experiments({ctx, onAsk, busy}) {
   const design = ctx.run?.design || ctx.design;
   const a = analyze(design), mission = missionFor(design);
   const [field, setField] = useState(EXPERIMENT_FIELDS[0][0]);
-  const [value, setValue] = useState('45');
-  const def = EXPERIMENT_FIELDS.find(f => f[0] === field);
+  const [value, setValue] = useState(String(design.fuel));
+  const fields = EXPERIMENT_FIELDS.map(f => f[0] === 'altitude' ? [f[0], f[1], mission.altitudeMin, mission.altitudeMax] : f[0] === 'arrayScale' ? [f[0], f[1], f[2], mission.arrayScaleMax] : f[0] === 'fuel' ? [f[0], f[1], f[2], a.c.propulsion.maxFuel] : f);
+  const def = fields.find(f => f[0] === field);
   const submit = e => { e.preventDefault(); if (value === '' || !Number.isFinite(Number(value))) return; onAsk(`What if ${field} = ${value}`); };
   return (
     <details className={s.disclosure}>
@@ -48,8 +50,8 @@ function Experiments({ctx, onAsk, busy}) {
         </label>
         <form onSubmit={submit} className={s.expForm}>
           <label className={s.field} htmlFor={`${id}-f`}>{t('Setting')}
-            <select id={`${id}-f`} value={field} onChange={e => { setField(e.target.value); const f = EXPERIMENT_FIELDS.find(x => x[0] === e.target.value); setValue(String(f[0] === 'fuel' ? 45 : f[2] <= 1 && f[3] <= 2 ? 1 : f[2])); }}>
-              {EXPERIMENT_FIELDS.map(([k, label]) => <option key={k} value={k}>{label}</option>)}
+            <select id={`${id}-f`} value={field} onChange={e => { setField(e.target.value); const f = fields.find(x => x[0] === e.target.value); setValue(String(design[f[0]] ?? f[2])); }}>
+              {fields.map(([k, label]) => <option key={k} value={k}>{label}</option>)}
             </select>
           </label>
           <label className={s.field} htmlFor={`${id}-v`}>{t('New value')}
@@ -85,12 +87,9 @@ export function AssistantBody() {
   const onSubmit = async e => { e.preventDefault(); const text = q; if (await ask(text)) setQ(current => current === text ? '' : current); };
   const design = ctx.run?.design || ctx.design;
   return (
-    <div className={s.sheet}>
-      <p>{t('Ask about playing, your spacecraft, NASA data or a mission problem.')} <strong>{t('Flight pauses while you read.')}</strong> <span className={s.muted}>{t('Local reasoning and the game engine; no generative AI, no API key. I say when I cannot answer.')}</span></p>
-      <div className={s.row}>
-        <Segmented size="sm" label={t('Level')} value={level} onChange={v => act.setMentorLevel(v)} options={[{value: 'Beginner', label: t('Beginner'), hint: t('Plain language; tables folded')}, {value: 'Engineer', label: t('Engineer'), hint: t('Evidence class and full tables')}]} />
-        <Segmented size="sm" label={t('Answer language')} value={language} onChange={v => act.setPref('language', v)} options={[{value: 'en', label: 'English'}, {value: 'bn', label: 'বাংলা'}]} />
-      </div>
+    <div className={s.chatBody}>
+      <div className={s.chatScroll}>
+      <p className={s.chatIntro}>{t('I read your current mission. Ask what to do next, or why something changed.')} <strong>{t('Flight pauses while you read.')}</strong></p>
       <ContextCard ctx={ctx} />
       {crisis ? (
         <section className={s.crisis} aria-label={t('Rough preview of the pending decision')}>
@@ -100,16 +99,27 @@ export function AssistantBody() {
           {crisis.forecastAvailable ? <Button size="sm" variant="secondary" disabled={busy} onClick={() => ask('Use my one forecast')}>{t('Spend my one forecast for ranges')}</Button> : <small className={s.muted}>{t('Your one forecast for this mission is used.')}</small>}
         </section>
       ) : null}
-      <div className={s.chipRow} role="group" aria-label={t('Quick questions')}>{QUICK.map(x => <Button key={x} size="sm" variant="ghost" disabled={busy} onClick={() => ask(x)}>{t(x)}</Button>)}</div>
-      <Experiments ctx={ctx} onAsk={ask} busy={busy} />
+      <div className={s.chipRow} role="group" aria-label={t('Quick questions')}>{quickQuestions(ctx).map(x => <Button key={x} size="sm" variant="ghost" disabled={busy} onClick={() => ask(x)}>{t(x)}</Button>)}</div>
       <div ref={log} className={s.thread} role="log" aria-live="polite" aria-label={t('Conversation')} tabIndex={0}>
         {chat.length ? chat.map((m, i) => (
           <div key={i} className={s.exchange}>
             <p className={s.question}><Icon name="arrow-right" size={12} /> {String(m.q)}</p>
-            <AnswerCard answer={m.answer} index={i} design={design} locked={locked} level={level} language={language} onApply={n => act.applyAssistant(n)} onAsk={ask} />
+            <AnswerCard answer={m.answer} index={i} design={design} locked={locked} level={level} language={language} onApply={n => act.applyAssistant(n)} onAsk={ask} showSuggestions={i === chat.length - 1} />
           </div>
         )) : <p className={s.muted}>{t('I can simulate a change, compare decisions and explain your mission. Try “What if fuel = 45” or “Review my design”.')}</p>}
         {busy ? <p className={s.muted} role="status">{t('Thinking with the game engine…')}</p> : null}
+      </div>
+      <details className={s.disclosure}>
+        <summary>{t('Tools & preferences')}</summary>
+      <div className={s.row}>
+        <Segmented size="sm" label={t('Level')} value={level} onChange={v => act.setMentorLevel(v)} options={[{value: 'Beginner', label: t('Beginner'), hint: t('Plain language; tables folded')}, {value: 'Engineer', label: t('Engineer'), hint: t('Evidence class and full tables')}]} />
+        <Segmented size="sm" label={t('Answer language')} value={language} onChange={v => act.setPref('language', v)} options={[{value: 'en', label: 'English'}, {value: 'bn', label: 'বাংলা'}]} />
+      </div>
+        <Experiments ctx={ctx} onAsk={ask} busy={busy} />
+        <p className={s.muted}>{t('Local reasoning and the game engine; no generative AI, no API key. I say when I cannot answer.')}</p>
+        <Button variant="ghost" size="sm" disabled={!chat.length} onClick={() => act['clear-chat']()}>{t('Clear conversation')}</Button>
+        <details className={s.disclosure}><summary>{t('Browse everything I can explain')}</summary><div className={s.chipRow}>{HELP_TOPICS.map(topic => <Button key={topic[0]} size="sm" variant="ghost" disabled={busy} onClick={() => ask(topic[1])}>{clean(topic[1], 80)}</Button>)}</div></details>
+      </details>
       </div>
       <div role="alert">{error}</div>
       <form onSubmit={onSubmit} className={s.askForm}>
@@ -118,13 +128,6 @@ export function AssistantBody() {
         </label>
         <Button type="submit" variant="primary" loading={busy}>{t('Ask')}</Button>
       </form>
-      <div className={s.row}>
-        <Button variant="ghost" size="sm" disabled={!chat.length} onClick={() => act['clear-chat']()}>{t('Clear conversation')}</Button>
-      </div>
-      <details className={s.disclosure}>
-        <summary>{t('Browse everything I can explain')}</summary>
-        <div className={s.chipRow}>{HELP_TOPICS.map(topic => <Button key={topic[0]} size="sm" variant="ghost" disabled={busy} onClick={() => ask(topic[1])}>{clean(topic[1], 80)}</Button>)}</div>
-      </details>
     </div>
   );
 }

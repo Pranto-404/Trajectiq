@@ -4,6 +4,18 @@ Keep this file current. Update it after every milestone, agent launch and agent 
 
 Last updated: 2026-11-06. Event date below is retained from the owner's project notes, not independently verified.
 
+## Contextual copilot and onboarding — 2026-11-06
+
+Latest follow-up supersedes older assistant placement and release notes below. Publishing feat-contextual-copilot to main after verification.
+
+- Bottom-right responsive chat, pinned composer, two contextual shortcuts, optional advanced tools, and latest-answer follow-ups only. Focus returns to the launcher; opening chat pauses flight.
+- Verified active run takes precedence over draft, answers update with battery/recorder state, and completed runs use their own report. Fixed difficulty-specific science thresholds and scenario-specific experiment bounds.
+- First-visit three-step guide persists dismissal without changing the draft. Aurora and meteor motion respects reduced motion and hidden tabs.
+- Fixed a real viewport-change crash: telemetry short-circuited a React hook. Both media-query hooks now run unconditionally; regression covers width/height transitions. Fixed narrow chat overflow.
+- Validation: 371 Node + 358 UI tests passed (729 total); hosted/standalone build passed. Edge checks include current Mars crisis advice, 375px chat, desktop resize recovery, first-visit dismissal and reload. npm audit reports zero known dependency vulnerabilities.
+- Research: 106 substantive archived project descriptions, 100 current team proposals, and NASA descriptions of ten verified 2024 winners; this is documentation review, not 100 executed games. See [comparison ledger](../COMPARATIVE_RESEARCH_2026.md).
+- Assistant is local rules plus simulation, not a generative language model. Physical-device/screen-reader, load testing and independent penetration testing remain outside this verification. See [copilot QA](../COPILOT_QA_2026.md).
+
 ## Mission experience review — 2026-11-06
 
 Current work supersedes historical production/next-step statements below. The React app was deployed from main at 6aa035d; this follow-up is on feat-mission-experience and is being published after verification.

@@ -20,5 +20,5 @@ export function SheetHost() {
   const title = t(typeof def.title === 'function' ? def.title(shown.props) : def.title || shown.id);
   const body = <Body {...props} close={close} />;
   if (def.variant === 'dialog') return <Dialog open={!!sheet} onClose={close} title={title} size={def.size} dismissible={def.dismissible !== false} alert={!!def.alert} closeLabel={t('Close')}>{body}</Dialog>;
-  return <Sheet open={!!sheet} onClose={close} title={title} placement={def.variant === 'bottom' ? 'bottom' : def.variant === 'side' ? 'side' : 'auto'} dismissible={def.dismissible !== false} closeLabel={t('Close')}>{body}</Sheet>;
+  return <Sheet open={!!sheet} onClose={close} title={title} placement={['bottom', 'side', 'chat'].includes(def.variant) ? def.variant : 'auto'} dismissible={def.dismissible !== false} closeLabel={t('Close')}>{body}</Sheet>;
 }

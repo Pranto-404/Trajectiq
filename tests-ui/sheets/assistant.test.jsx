@@ -79,6 +79,7 @@ describe('assistant: text safety, levels, conversation', () => {
     await ask(user, 'Compare presets');
     const card = await screen.findByTestId('answer');
     expect(within(card).getByText('Show the simulation table')).toBeTruthy();
+    await user.click(screen.getByText('Tools & preferences'));
     await user.click(screen.getByRole('radio', {name: 'Engineer'}));
     expect(useGame.getState().mentorLevel).toBe('Engineer');
     expect(within(await screen.findByTestId('answer')).getByRole('table')).toBeTruthy();
@@ -90,6 +91,7 @@ describe('assistant: text safety, levels, conversation', () => {
     const user = userEvent.setup();
     await ask(user, 'How do I play?');
     await screen.findByTestId('answer');
+    await user.click(screen.getByText('Tools & preferences'));
     await user.click(screen.getByRole('button', {name: 'Clear conversation'}));
     expect(useGame.getState().chat).toHaveLength(0);
     expect(screen.getByRole('button', {name: 'Clear conversation'}).getAttribute('aria-disabled')).toBe('true');
@@ -98,6 +100,7 @@ describe('assistant: text safety, levels, conversation', () => {
   it('the experiment picker and form ask what-if questions without typing the sentence', async () => {
     wrap(<AssistantBody />);
     const user = userEvent.setup();
+    await user.click(screen.getByText('Tools & preferences'));
     await user.click(screen.getByText('Try a change · no typing needed'));
     await user.selectOptions(screen.getByLabelText('Component or distance'), 'What if Compact solar kit');
     await waitFor(() => expect(useGame.getState().chat.length).toBe(1));
@@ -141,4 +144,18 @@ it('retains a question after an assistant failure and permits retry', async () =
   await user.click(screen.getByRole('button', {name: 'Ask'}));
   expect(await screen.findByTestId('answer')).toBeTruthy();
   expect(screen.getByRole('textbox', {name: 'Your question'}).value).toBe('');
+});
+
+it('uses destination-specific experiment bounds instead of Moon limits', async () => {
+  act(() => useGame.setState({design: presetFor('ceres', 'balanced')}));
+  wrap(<AssistantBody />);
+  const user = userEvent.setup();
+  await user.click(screen.getByText('Tools & preferences'));
+  await user.click(screen.getByText('Try a change · no typing needed'));
+  await user.selectOptions(screen.getByLabelText('Setting'), 'altitude');
+  const input = screen.getByLabelText('New value');
+  expect(Number(input.max)).toBeGreaterThan(200);
+  expect(Number(input.value)).toBe(375);
+  await user.selectOptions(screen.getByLabelText('Setting'), 'arrayScale');
+  expect(Number(input.max)).toBeGreaterThan(1.5);
 });

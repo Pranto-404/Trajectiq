@@ -25,7 +25,7 @@ describe('features are discovered by the shell', () => {
   it('registers every WP9 and WP10 sheet id and the report screen', async () => {
     render(<App />);
     for (const id of ['assistant', 'help', 'sources', 'lab', 'nasa', 'history', 'quiz', 'concept', 'menu', 'power-fix']) expect(hasSheet(id), id).toBe(true);
-    expect(getSheet('assistant').variant).toBe('side'); expect(getSheet('sources').size).toBe('lg');
+    expect(getSheet('assistant').variant).toBe('chat'); expect(getSheet('sources').size).toBe('lg');
     const run = makeRun();
     act(() => useGame.setState({run, runs: [run], screen: 'report', reportTab: 'score'}));
     expect(await screen.findByRole('tablist', {name: 'Report sections'})).toBeTruthy();
@@ -33,12 +33,12 @@ describe('features are discovered by the shell', () => {
 });
 
 describe('sheets inside the real shell', () => {
-  it('the assistant opens as a labelled side dialog, traps focus, closes on Escape and returns focus', async () => {
+  it('the assistant opens as a labelled chat dialog, traps focus, closes on Escape and returns focus', async () => {
     render(<App />);
     const user = userEvent.setup(), opener = screen.getByRole('button', {name: /Assistant/});
     await user.click(opener);
     const dialog = await screen.findByRole('dialog', {name: 'Mission assistant'});
-    expect(dialog.dataset.placement).toBe('side');
+    expect(dialog.dataset.placement).toBe('chat');
     await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true));
     expect(await within(dialog).findByRole('textbox', {name: 'Your question'})).toBeTruthy();
     await user.keyboard('{Escape}');

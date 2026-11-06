@@ -31,7 +31,8 @@ export function Sheet({open, onClose, title, placement = 'auto', footer, dismiss
   const id = useId();
   useModal({open, ref, onClose, dismissible});
   if (typeof document === 'undefined') return null;
-  const v = variantsFor(bottom ? variants.bottomSheet : variants.sideSheet, reduced);
+  const chat = placement === 'chat';
+  const v = variantsFor(bottom || chat ? variants.bottomSheet : variants.sideSheet, reduced);
   const drag = bottom && !reduced && dismissible ? {drag: 'y', dragConstraints: {top: 0, bottom: 0}, dragElastic: {top: 0, bottom: 0.6}, dragSnapToOrigin: true, dragTransition: spring.soft, onDragEnd: (_, info) => { if (info.offset.y > 120 || info.velocity.y > 600) onClose?.(); }} : {};
   return createPortal(
     <div data-modal-host>
@@ -39,7 +40,7 @@ export function Sheet({open, onClose, title, placement = 'auto', footer, dismiss
         {open ? (
           <div key="sheet" className={s.layer}>
             <motion.div className={s.scrim} {...variantsFor(variants.scrim, reduced)} onClick={dismissible ? onClose : undefined} aria-hidden="true" />
-            <motion.aside ref={ref} role="dialog" aria-modal="true" aria-labelledby={`${id}-t`} className={`${s.sheet} ${bottom ? s.bottom : s.side} ${className}`} data-placement={bottom ? 'bottom' : 'side'} {...v} {...drag}>
+            <motion.aside ref={ref} role="dialog" aria-modal="true" aria-labelledby={`${id}-t`} className={`${s.sheet} ${chat ? s.chat : bottom ? s.bottom : s.side} ${className}`} data-placement={chat ? 'chat' : bottom ? 'bottom' : 'side'} {...v} {...drag}>
               {bottom ? <span className={s.handle} aria-hidden="true" /> : null}
               <header className={s.header}>
                 <h2 id={`${id}-t`} className={s.title}>{title}</h2>

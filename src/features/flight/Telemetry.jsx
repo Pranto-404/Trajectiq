@@ -13,7 +13,9 @@ const LINK_TEXT = {safe: 'Link suspended', eclipse: 'In shadow', contact: 'In co
  */
 export function Telemetry({values, run, analysis: a, crisis, past}) {
   const t = useT();
-  const narrow = useMediaQuery('(max-width: 899.98px)') || useMediaQuery('(max-height: 760px)'); // the arc dial needs height; short laptops get the linear bar
+  const narrowWidth = useMediaQuery('(max-width: 899.98px)');
+  const shortHeight = useMediaQuery('(max-height: 760px)');
+  const narrow = narrowWidth || shortHeight; // Call both hooks even when the first condition matches.
   const [battery, backlog, science, fuel] = values;
   const cap = a.c.power.battery, mem = a.c.storage.capacity;
   const link = linkState(run);

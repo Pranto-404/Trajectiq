@@ -8,6 +8,7 @@ import {SheetHost} from './SheetHost.jsx';
 import {useDocumentLanguage, useDensity, useHistorySync} from './hooks.js';
 import iconUrl from '../assets/icon.svg';
 import s from './shell.module.css';
+import {FirstVisitGuide} from './FirstVisitGuide.jsx';
 
 const NAV = [['board', 'Board'], ['hangar', 'Hangar'], ['flight', 'Flight'], ['report', 'Report']];
 
@@ -28,7 +29,6 @@ function Header() {
       </nav>
       <div className={s.right}>
         <Chip kind="info" icon="orbit" size="sm" className={s.chip}>{mission.title} · {mission.difficultyLabel}{team.mode === 'crew' ? ' · CREW' : ''}</Chip>
-        <Button variant="ghost" size="sm" icon="assistant" onClick={() => a.mentor()}>{t('Assistant')}</Button>
         <Button variant="ghost" size="sm" iconOnly icon={theme === 'light' ? 'eclipse' : 'power'} label={t(theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode')} onClick={() => a.setPref('theme', theme === 'light' ? 'dark' : 'light')} />
         <Button variant="ghost" size="sm" iconOnly icon="menu" label={t('Menu')} onClick={() => a.openSheet('menu')} />
       </div>
@@ -51,6 +51,7 @@ function Frame() {
   const t = useT();
   const toasts = useGame(st => st.toasts), a = useGame(st => st.actions);
   const theme = useGame(st => st.prefs.theme), hidden = useGame(st => st.hidden);
+  const screen = useGame(st => st.screen);
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#eef3f8' : '#080d15');
@@ -59,10 +60,11 @@ function Frame() {
   useEffect(() => { setConceptOpener(topic => a.openSheet('concept', {topic})); }, [a]);
   return (
     <div className={s.shell} data-background-paused={hidden || undefined}>
-      <div className={s.cosmos} aria-hidden="true" data-paused={hidden || undefined}><div className={s.nebula} /><div className={s.stars} /><div className={s.orbitGlow} /></div>
+      <div className={s.cosmos} aria-hidden="true" data-paused={hidden || undefined}><div className={s.nebula} /><div className={s.stars} /><div className={s.orbitGlow} /><div className={s.aurora} /><div className={s.meteor} /><div className={s.meteorSecond} /></div>
       <a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>{t('Skip to content')}</a>
       <Header />
-      <main id="main" className={s.main} tabIndex={-1}><Screen /></main>
+      <main id="main" className={s.main} tabIndex={-1}>{screen === 'board' ? <FirstVisitGuide /> : null}<Screen /></main>
+      <div className={s.chatLauncher}><Button variant="primary" icon="assistant" onClick={() => a.mentor()}>{t('Assistant')}<span className={s.chatSignal} aria-hidden="true" /></Button></div>
       <SheetHost />
       <ToastViewport toasts={toasts} onDismiss={a.dismissToast} dismissLabel={t('Dismiss')} />
       <LiveRegion />

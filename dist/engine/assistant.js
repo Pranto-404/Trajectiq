@@ -1,4 +1,4 @@
-import {CATALOG,CATEGORIES,MISSION as M,PRESETS} from '../data/catalog.js';
+import {CATALOG,CATEGORIES,MISSION as M,PRESETS,neededScience} from '../data/catalog.js';
 import {NASA_DATA,DISTANCES,nasaValue,nasaDataset} from '../data/nasa.js';
 import {BODIES,bodyRows,listBodies} from '../data/bodies.js';
 import {getRealMission,PROPELLANT_FRACTIONS,ODYSSEY_SUBSYSTEMS,REAL_ARRAY_EFFICIENCY} from '../data/real-missions.js';
@@ -116,6 +116,7 @@ function hazardAnswer(q,a,bn){
 }
 export function answerQuestion(question,{design=PRESETS.balanced,run=null,language='en',history=[]}={}){
  let q=String(question||'').slice(0,500).trim().replace(/\bbat+e?r+y\b/gi,'battery').replace(/\bbatery\b/gi,'battery').replace(/\bbuget\b/gi,'budget').replace(/\bstorge\b/gi,'storage');
+ if (/^(?:what (?:now|should i do(?: now)?|is happening(?: now)?)|how (?:am i doing|is my mission doing)|help me(?: with (?:this|my mission))?|what(?:'s| is) my next (?:step|move))[?!. ]*$/i.test(q)) q='Mission status';
  const priorAnswer=history.at(-1)?.answer,previous=priorAnswer?.topic;
  // Bounded follow-up: repeat only the previous single numeric experiment field.
  // Do not infer a component, unit, or experiment from an unrelated conversation.
@@ -148,7 +149,7 @@ export function answerQuestion(question,{design=PRESETS.balanced,run=null,langua
  }
  if(!id)return unknown();
  let entry=HELP_TOPICS.find(t=>t[0]===id),title=entry?.[1]||practical[id]?.[0]||'Destination options',text=entry?(bn?entry[3]:entry[2]):practical[id]?(bn?practical[id][2]:practical[id][1]):'',sources=[];
- const need=m.scienceTarget*.8;
+ const need=neededScience(m);
  if(id==='start')text=bn?`Balanced build নিন → Launch readiness দেখুন → Authorize launch চাপুন। Map in sunlight দিয়ে শুরু করুন। Crisis এলে সিদ্ধান্ত নিন, তারপর Resume দিন। ${body}-এর ${m.duration} মিনিটে অন্তত ${n(need)} science ফেরত পাঠিয়ে battery শূন্যের ওপরে রাখুন।`:`Choose Balanced build → open Launch readiness → authorize launch. Begin with Map in sunlight. At a crisis read and choose a response, then Resume. For ${body}, return at least ${n(need)} science units within ${m.duration} campaign minutes and finish with battery above zero.`;
  if(id==='goal')text=bn?`${body}-এর লক্ষ্য: ${n(m.scienceTarget)} science target-এর অন্তত ${n(need)} ফেরত পাঠানো ও battery সচল রাখা। Budget ${m.budget} credits। শুধু recorder-এ জমা data score নয়।`:`For ${body}, return at least ${n(need)} of the ${n(m.scienceTarget)} target science units and finish with battery above zero. The design must fit ${m.budget} credits. Science still in storage does not count.`;
  if(id==='goal'&&run)text+=`\nReturned science now: ${n(run.science,1)} / ${n(m.scienceTarget)} units. Need ${n(Math.max(0,need-run.science),1)} more to reach the science threshold.`;

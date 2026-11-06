@@ -56,3 +56,22 @@
 :global([data-motion="reduced"]) .card:hover { transform: none; }
 
 :global([data-background-paused="true"]) * { animation-play-state: paused !important; }
+.chatLauncher { position: fixed; right: 24px; bottom: 24px; z-index: var(--z-hud); filter: drop-shadow(0 8px 24px rgb(0 0 0 / .2)); }
+.chatLauncher > button { border-radius: 999px; min-height: 52px; padding-inline: 20px; }
+.chatSignal { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .7; }
+@media (max-width: 760px) { .chatLauncher { right: 14px; bottom: calc(90px + env(safe-area-inset-bottom)); } }
+.welcome { position: relative; max-width: 1500px; margin: 0 auto 24px; padding: 24px 32px; border: 1px solid var(--cyan-400); border-radius: 24px; background: var(--hero-surface); box-shadow: var(--elevation-panel); }
+.welcome h2 { margin-top: 8px; font-size: clamp(22px, 3vw, 30px); }
+.welcome p { color: var(--text-2); margin-top: 6px; max-width: 70ch; }
+.welcome ol { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 20px 0; margin: 0; list-style: none; }
+.welcome li { display: flex; align-items: flex-start; gap: 12px; }
+.welcome li > svg { flex: none; color: var(--cyan-400); margin-top: 3px; }
+.welcome .row > span { font-size: var(--text-13); color: var(--text-2); }
+@media (max-width: 760px) { .welcome { padding: 20px; } .welcome ol { grid-template-columns: 1fr; gap: 16px; } }
+.aurora { position: absolute; width: 100vmax; height: 38vmax; left: -30vmax; top: 10vh; border-radius: 50%; background: radial-gradient(ellipse, color-mix(in srgb, var(--cyan-400) 15%, transparent), transparent 65%); transform: rotate(-28deg); animation: auroraSweep 18s ease-in-out infinite alternate; }
+.meteor, .meteorSecond { position: absolute; top: 12vh; left: -20vw; width: 180px; height: 2px; border-radius: 50%; background: linear-gradient(90deg, transparent, var(--cyan-400)); opacity: 0; animation: meteorPass 17s ease-out infinite; }
+.meteorSecond { top: 45vh; width: 110px; animation-delay: 7s; animation-duration: 23s; }
+@keyframes auroraSweep { to { transform: translate3d(35vw, 8vh, 0) rotate(-12deg); opacity: .5; } }
+@keyframes meteorPass { 0%, 72% { transform: translate3d(0, 0, 0) rotate(28deg); opacity: 0; } 76% { opacity: .65; } 90%, 100% { transform: translate3d(120vw, 42vh, 0) rotate(28deg); opacity: 0; } }
+:global([data-theme="light"]) .aurora { opacity: .7; }
+@media (max-width: 760px) { .meteorSecond { display: none; } }

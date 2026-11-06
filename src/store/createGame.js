@@ -91,6 +91,7 @@ export function createGame(options = {}) {
     function saveStatus() { return {rejected: rejectedSave !== null, checkpointDamaged: rejectedSave === null && checkpointDamaged()}; }
     function snapshot(s) {
       const prefs = {language: s.prefs.language, guided: s.prefs.guided, reducedMotion: s.prefs.reducedMotion};
+      if (s.prefs.overviewSeen) prefs.overviewSeen = true;
       if (s.prefs.theme === 'light') prefs.theme = 'light';
       if (s.prefs.sound) prefs.sound = true; // additive keys appear only once the player opts in, so legacy blobs round-trip with the same shape
       if (s.prefs.haptics) prefs.haptics = true;
@@ -674,7 +675,7 @@ export function createGame(options = {}) {
 
       // preferences
       setPref(key, value) {
-        if (!['language', 'guided', 'reducedMotion', 'sound', 'haptics', 'theme'].includes(key)) return;
+        if (!['language', 'guided', 'reducedMotion', 'sound', 'haptics', 'theme', 'overviewSeen'].includes(key)) return;
         const v = key === 'language' ? (value === 'bn' ? 'bn' : 'en') : key === 'theme' ? (value === 'light' ? 'light' : 'dark') : !!value;
         set(s => ({prefs: {...s.prefs, [key]: v}})); persist();
       },
@@ -685,7 +686,7 @@ export function createGame(options = {}) {
     });
 
     return {
-      screen: 'board', category: 'payload', ...hydrate(saved, env),
+      screen: 'board', category: 'payload', firstVisit: !saved.design, ...hydrate(saved, env),
       compare: null, run: null, playing: false, speed: 1, pitch: false, robust: null, robustProgress: null,
       mentorLevel: 'Beginner', quiz: null, guide: 0, chat: [], game: {fullscreen: false},
       pendingImport: null, scoreSeen: null, reportTab: 'score', launchCount: 0, cameraResets: 0,
@@ -708,6 +709,6 @@ function hydrate(saved, env) {
     team: loadTeam(saved.team),
     board: (Array.isArray(saved.board) ? saved.board : []).filter(validBoardEntry).slice(0, 30),
     runs: (Array.isArray(saved.runs) ? saved.runs : []).filter(validSavedRun).slice(-20),
-    prefs: {theme: saved.prefs?.theme === 'light' ? 'light' : 'dark', language: saved.prefs?.language === 'bn' ? 'bn' : 'en', guided: saved.prefs?.guided !== false, reducedMotion: reduced, sound: saved.prefs?.sound === true, haptics: saved.prefs?.haptics === true}
+    prefs: {overviewSeen: saved.prefs?.overviewSeen === true, theme: saved.prefs?.theme === 'light' ? 'light' : 'dark', language: saved.prefs?.language === 'bn' ? 'bn' : 'en', guided: saved.prefs?.guided !== false, reducedMotion: reduced, sound: saved.prefs?.sound === true, haptics: saved.prefs?.haptics === true}
   };
 }

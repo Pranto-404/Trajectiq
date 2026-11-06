@@ -21,7 +21,7 @@ const SourcesSheet = lazySheet(() => import('./SourcesSheet.jsx'), 'SourcesSheet
 const NasaSheet = lazySheet(() => import('./NasaSheet.jsx'), 'NasaSheet');
 
 export const sheets = {
-  assistant: {component: AssistantSheet, variant: 'side', title: 'Mission assistant'},
+  assistant: {component: AssistantSheet, variant: 'chat', title: 'Mission assistant'},
   concept: {component: ConceptSheet, variant: 'dialog', title: conceptTitle, size: 'md'},
   quiz: {component: QuizSheet, variant: 'dialog', title: 'Learning check', size: 'md'},
   help: {component: HelpSheet, variant: 'dialog', title: 'How to play', size: 'md'},
