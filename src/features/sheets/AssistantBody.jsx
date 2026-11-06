@@ -53,7 +53,7 @@ function Experiments({ctx, onAsk, busy}) {
             </select>
           </label>
           <label className={s.field} htmlFor={`${id}-v`}>{t('New value')}
-            <input id={`${id}-v`} type="number" step="any" min={def[2]} max={def[3]} value={value} onChange={e => setValue(e.target.value)} required />
+            <input id={`${id}-v`} type="number" step="any" min={def[2]} max={field === 'fuel' ? a.c.propulsion.maxFuel : def[3]} value={value} onChange={e => setValue(e.target.value)} required />
           </label>
           <Button type="submit" variant="primary" size="sm" disabled={busy}>{t('Preview change')}</Button>
         </form>
@@ -71,14 +71,18 @@ export function AssistantBody() {
   const act = useGame.getState().actions;
   const [q, setQ] = useState('');
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const pending = useRef(false);
   const log = useRef(null), inputId = useId();
-  useEffect(() => { log.current?.lastElementChild?.scrollIntoView?.({block: 'nearest'}); }, [chat.length]);
+  useEffect(() => { log.current?.lastElementChild?.scrollIntoView?.({block: 'nearest'}); }, [chat]);
   const ask = async text => {
-    if (!String(text).trim()) return;
-    setBusy(true);
-    try { await act.ask(text); } finally { setBusy(false); }
+    if (!String(text).trim() || pending.current) return false;
+    pending.current = true; setBusy(true); setError('');
+    try { await act.ask(text); return true; }
+    catch { setError(t('Could not prepare an answer. Please try again.')); return false; }
+    finally { pending.current = false; setBusy(false); }
   };
-  const onSubmit = async e => { e.preventDefault(); const text = q; setQ(''); await ask(text); };
+  const onSubmit = async e => { e.preventDefault(); const text = q; if (await ask(text)) setQ(current => current === text ? '' : current); };
   const design = ctx.run?.design || ctx.design;
   return (
     <div className={s.sheet}>
@@ -93,7 +97,7 @@ export function AssistantBody() {
           <span className="kicker">{t('Rough preview · direction only')}</span>
           <DirectionChips directions={crisis.directions} />
           <p className={s.muted}>{t('Provenance: each response was rehearsed to campaign end from this exact paused state by the game engine. Only directions are shown so the decision stays yours.')}</p>
-          {crisis.forecastAvailable ? <Button size="sm" variant="secondary" onClick={() => ask('Use my one forecast')}>{t('Spend my one forecast for ranges')}</Button> : <small className={s.muted}>{t('Your one forecast for this mission is used.')}</small>}
+          {crisis.forecastAvailable ? <Button size="sm" variant="secondary" disabled={busy} onClick={() => ask('Use my one forecast')}>{t('Spend my one forecast for ranges')}</Button> : <small className={s.muted}>{t('Your one forecast for this mission is used.')}</small>}
         </section>
       ) : null}
       <div className={s.chipRow} role="group" aria-label={t('Quick questions')}>{QUICK.map(x => <Button key={x} size="sm" variant="ghost" disabled={busy} onClick={() => ask(x)}>{t(x)}</Button>)}</div>
@@ -107,6 +111,7 @@ export function AssistantBody() {
         )) : <p className={s.muted}>{t('I can simulate a change, compare decisions and explain your mission. Try “What if fuel = 45” or “Review my design”.')}</p>}
         {busy ? <p className={s.muted} role="status">{t('Thinking with the game engine…')}</p> : null}
       </div>
+      <div role="alert">{error}</div>
       <form onSubmit={onSubmit} className={s.askForm}>
         <label className={s.field} htmlFor={inputId}>{t('Your question')}
           <input id={inputId} name="question" maxLength={500} autoComplete="off" placeholder={t('e.g. How can I avoid losing data?')} value={q} onChange={e => setQ(e.target.value)} required />

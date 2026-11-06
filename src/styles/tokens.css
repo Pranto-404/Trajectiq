@@ -114,3 +114,20 @@
   --dur-slow: 1ms;
   --dur-scene: 1ms;
 }
+
+/* Daylight mission control: all text and status hues retain AA contrast. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg-0: #ffffff; --bg-1: #eef3f8;
+  --surface-1: #ffffff; --surface-2: #f4f7fb; --surface-3: #e4ecf4;
+  --line-1: #c2cfdd; --line-2: #879bb0;
+  --text-1: #142438; --text-2: #344b62; --text-3: #4e6278;
+  --lime-500: #326019; --lime-600: #264d12; --on-lime: #ffffff;
+  --cyan-400: #006078; --amber-400: #805000; --red-400: #ae263b; --violet-400: #6044a3;
+  --role-commander: #805000; --role-engineer: #006078; --role-science: #6044a3; --role-power: #984018;
+  --scrim: rgb(20 36 56 / .4); --glass: rgb(255 255 255 / .92);
+  --inner-highlight: inset 0 1px 0 rgb(255 255 255 / .8);
+  --glow-lime: 0 0 0 1px rgb(50 96 25 / .4), 0 4px 20px rgb(50 96 25 / .12);
+  --glow-cyan: 0 0 0 1px rgb(0 96 120 / .4), 0 4px 20px rgb(0 96 120 / .12);
+  --glow-red: 0 0 0 1px rgb(174 38 59 / .4), 0 4px 20px rgb(174 38 59 / .12);
+}

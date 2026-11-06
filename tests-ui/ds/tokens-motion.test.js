@@ -54,3 +54,15 @@ describe('motion presets (plan 2.6)', () => {
     expect(stagger(2)).toBeCloseTo(0.08); expect(stagger(50)).toBeCloseTo(0.2); expect(stagger(3, true)).toBe(0);
   });
 });
+
+
+describe('light theme contrast', () => {
+  const light = css.split(':root[data-theme="light"]')[1];
+  const value = name => light.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})`))?.[1];
+  it('all text and semantic colors meet AA on every light surface', () => {
+    for (const color of ['text-1', 'text-2', 'text-3', 'lime-500', 'cyan-400', 'amber-400', 'red-400', 'violet-400', 'role-commander', 'role-engineer', 'role-science', 'role-power']) {
+      for (const surface of ['bg-0', 'bg-1', 'surface-1', 'surface-2', 'surface-3']) expect(contrast(value(color), value(surface)), `${color} on ${surface}`).toBeGreaterThanOrEqual(4.5);
+    }
+    for (const color of ['lime-500', 'lime-600']) expect(contrast(value('on-lime'), value(color))).toBeGreaterThanOrEqual(4.5);
+  });
+});

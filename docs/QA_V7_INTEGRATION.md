@@ -30,3 +30,10 @@ Final result: **371 Node tests and 342 UI tests passed**. Hosted build passed, i
 `npm run build` and `npm test` verify hosted and single-file output, CSP hashes, security patterns, bundle budgets, engine behavior and UI regressions. The new regression cases cover settings retention, every destination, concurrent forecast use, empty-run redesign, roll-call persistence and filtering.
 
 Not completed: physical devices, Safari, screen readers, axe audit, full crew crisis game in browser, offline reload, opening the standalone via file://, Linux CI, or production deployment. The repository's standalone build excludes WebGL and intentionally uses the SVG fallback. The browser e2e suite is not configured; manual Edge testing does not replace that release gate.
+
+
+## Theme and assistant follow-up
+
+2026-11-06: 371 Node tests and 347 UI tests passed. Added regressions for theme persistence, assistant panel continuity, crew ownership and recoverable answer failure, plus light-palette AA contrast. Build passed with the existing large-chunk advisory; no new runtime dependencies.
+
+Local Edge: toggled light/dark, reloaded to verify saved light preference, requested design review and a fuel=45 preview, checked Menu appearance controls, and toggled reduced motion. DOM-computed styles showed all three background animations stopped when reduced motion was on and resumed when off. Captured console error list was empty. Dark and light screenshots saved locally under test-results. This pass did not repeat the physical-phone/offline/accessibility release gates or claim multiplayer server capacity; crew play remains shared-device coordination.

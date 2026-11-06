@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useLayoutEffect} from 'react';
 import {AnimatePresence, motion} from 'motion/react';
 import {useGame, selectMission} from '../store/index.js';
 import {Button, Chip, LiveRegion, ToastViewport, MotionProvider, useReducedMotion, variants, variantsFor, setConceptOpener} from '../ds/index.js';
@@ -15,6 +15,7 @@ function Header() {
   const t = useT();
   const screen = useGame(st => st.screen), run = useGame(st => st.run), runs = useGame(st => st.runs), team = useGame(st => st.team), a = useGame(st => st.actions);
   const mission = useGame(selectMission);
+  const theme = useGame(st => st.prefs.theme);
   const reason = {flight: run && !run.done ? '' : t('Launch a mission first'), report: run?.done || runs.length ? '' : t('Finish a mission first')};
   return (
     <header className={s.header}>
@@ -28,6 +29,7 @@ function Header() {
       <div className={s.right}>
         <Chip kind="info" icon="orbit" size="sm" className={s.chip}>{mission.title} · {mission.difficultyLabel}{team.mode === 'crew' ? ' · CREW' : ''}</Chip>
         <Button variant="ghost" size="sm" icon="assistant" onClick={() => a.mentor()}>{t('Assistant')}</Button>
+        <Button variant="ghost" size="sm" iconOnly icon={theme === 'light' ? 'eclipse' : 'power'} label={t(theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode')} onClick={() => a.setPref('theme', theme === 'light' ? 'dark' : 'light')} />
         <Button variant="ghost" size="sm" iconOnly icon="menu" label={t('Menu')} onClick={() => a.openSheet('menu')} />
       </div>
     </header>
@@ -48,10 +50,16 @@ function Screen() {
 function Frame() {
   const t = useT();
   const toasts = useGame(st => st.toasts), a = useGame(st => st.actions);
+  const theme = useGame(st => st.prefs.theme), hidden = useGame(st => st.hidden);
+  useLayoutEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#eef3f8' : '#080d15');
+  }, [theme]);
   useDocumentLanguage(); useDensity(); useHistorySync();
   useEffect(() => { setConceptOpener(topic => a.openSheet('concept', {topic})); }, [a]);
   return (
     <div className={s.shell}>
+      <div className={s.cosmos} aria-hidden="true" data-paused={hidden || undefined}><div className={s.nebula} /><div className={s.stars} /><div className={s.orbitGlow} /></div>
       <a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>{t('Skip to content')}</a>
       <Header />
       <main id="main" className={s.main} tabIndex={-1}><Screen /></main>

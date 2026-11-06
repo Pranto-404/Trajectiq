@@ -91,6 +91,7 @@ export function createGame(options = {}) {
     function saveStatus() { return {rejected: rejectedSave !== null, checkpointDamaged: rejectedSave === null && checkpointDamaged()}; }
     function snapshot(s) {
       const prefs = {language: s.prefs.language, guided: s.prefs.guided, reducedMotion: s.prefs.reducedMotion};
+      if (s.prefs.theme === 'light') prefs.theme = 'light';
       if (s.prefs.sound) prefs.sound = true; // additive keys appear only once the player opts in, so legacy blobs round-trip with the same shape
       if (s.prefs.haptics) prefs.haptics = true;
       return {design: s.design, runs: s.runs, prefs, team: s.team, board: s.board, checkpoint: isFlightActive(s) ? {schema: CHECKPOINT_SCHEMA, version: VERSION, run: s.run} : (checkpointDamaged() ? saved.checkpoint : null)};
@@ -426,17 +427,21 @@ export function createGame(options = {}) {
     async function askAssistant(q) {
       if (!String(q).trim()) return;
       const {answerQuestion} = await import('@engine/assistant.js');
-      const answer = answerQuestion(q, assistantContext());
+      const answer = answerQuestion(String(q).trim().slice(0, 500), assistantContext());
       set(s => ({chat: [...s.chat, {q: String(q).slice(0, 500), answer}].slice(-12),
         ...(answer.consumesForecast && s.run?.crisis ? {run: {...s.run, forecasts: (s.run.forecasts || 0) + 1}} : {})}));
-      openSheet('assistant');
+      persist();
+      if (get().sheet?.id !== 'assistant') openSheet('assistant');
+      return answer;
     }
     function applyAssistant(index) {
       const s = get(), proposal = s.chat[Number(index)]?.answer?.proposal;
       if (!proposal || (s.run && !s.run.done)) { toast('Finish the current flight before changing hardware.'); return; }
+      if (!draftGuard() || !Object.keys(proposal.patch).every(ownerGuard)) return;
       const current = normalize(s.design);
       if (Object.keys(proposal.base).some(k => proposal.base[k] !== current[k])) { toast('Your design has changed. Preview this experiment again before applying it.'); return; }
       set({design: normalize({...current, ...proposal.patch}), robust: null, screen: 'hangar'});
+      Object.keys(proposal.patch).forEach(noteContribution);
       persist(); closeSheet();
       toast('Draft updated. Review launch readiness before flying.');
     }
@@ -669,8 +674,8 @@ export function createGame(options = {}) {
 
       // preferences
       setPref(key, value) {
-        if (!['language', 'guided', 'reducedMotion', 'sound', 'haptics'].includes(key)) return;
-        const v = key === 'language' ? (value === 'bn' ? 'bn' : 'en') : !!value;
+        if (!['language', 'guided', 'reducedMotion', 'sound', 'haptics', 'theme'].includes(key)) return;
+        const v = key === 'language' ? (value === 'bn' ? 'bn' : 'en') : key === 'theme' ? (value === 'light' ? 'light' : 'dark') : !!value;
         set(s => ({prefs: {...s.prefs, [key]: v}})); persist();
       },
       'toggle-motion'() { set(s => ({prefs: {...s.prefs, reducedMotion: !s.prefs.reducedMotion}})); persist(); },
@@ -703,6 +708,6 @@ function hydrate(saved, env) {
     team: loadTeam(saved.team),
     board: (Array.isArray(saved.board) ? saved.board : []).filter(validBoardEntry).slice(0, 30),
     runs: (Array.isArray(saved.runs) ? saved.runs : []).filter(validSavedRun).slice(-20),
-    prefs: {language: saved.prefs?.language === 'bn' ? 'bn' : 'en', guided: saved.prefs?.guided !== false, reducedMotion: reduced, sound: saved.prefs?.sound === true, haptics: saved.prefs?.haptics === true}
+    prefs: {theme: saved.prefs?.theme === 'light' ? 'light' : 'dark', language: saved.prefs?.language === 'bn' ? 'bn' : 'en', guided: saved.prefs?.guided !== false, reducedMotion: reduced, sound: saved.prefs?.sound === true, haptics: saved.prefs?.haptics === true}
   };
 }

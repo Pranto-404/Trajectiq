@@ -4,6 +4,14 @@ Keep this file current. Update it after every milestone, agent launch and agent 
 
 Last updated: 2026-11-06. Event date below is retained from the owner's project notes, not independently verified.
 
+## Appearance and assistant follow-up — 2026-11-06
+
+- Persistent light/dark themes, header shortcut and Menu appearance selector, Bengali labels, AA-tested light text/status palette, and a readable caption over the dark 3D stage.
+- Animated nebula, stars and orbital rings use CSS transform/opacity only; hidden tabs pause them and system/in-app reduced motion stops them. Small buttons preserve the 44px coarse-pointer target.
+- Assistant answers retain the existing panel, failures retain typed questions and permit retry, duplicate UI requests are guarded, fuel input reflects the selected tank limit, and applying proposals enforces draft/crew ownership rules and records contributions. Forecast consumption is persisted explicitly.
+- Verification: 371 Node tests and 347 UI tests passed; production build passed. Local Edge verified both themes, persistence after reload, design review and fuel experiment, reduced-motion stop/resume, and no captured console errors. Screenshots: ignored local test-results/trajectiq-light.jpg and trajectiq-dark.jpg.
+- Assistant remains a local rules/simulation assistant, not generative AI. Production is unchanged; release gates below still apply.
+
 ## Current resume point — 2026-11-06 integration pass
 
 All four feature branches, including the 3D stage, are merged into `ux-v7`. The historical next-steps list below predates that integration. Production still serves v6; do not describe the v7 work as deployed to production.

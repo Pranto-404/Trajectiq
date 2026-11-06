@@ -1,4 +1,4 @@
-import {describe, it, expect, beforeEach} from 'vitest';
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 import {screen, within, act, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {presetFor} from '@data/catalog.js';
@@ -127,4 +127,18 @@ describe('assistant: crisis direction chips and the one forecast', () => {
     wrap(<DirectionChips directions={[{id: 'a', name: EVIL, chips: [{key: 'Science returned', dir: 2}, {key: 'Battery at end', dir: -1}, {key: 'Data kept', dir: 0}]}]} />);
     expect(screen.getByText('better', {exact: false})).toBeTruthy(); expect(screen.getByText('worse', {exact: false})).toBeTruthy(); expect(document.querySelector('img,script')).toBeNull();
   });
+});
+
+
+it('retains a question after an assistant failure and permits retry', async () => {
+  wrap(<AssistantBody />);
+  const user = userEvent.setup();
+  const spy = vi.spyOn(acts(), 'ask').mockRejectedValueOnce(new Error('Unavailable'));
+  await ask(user, 'Review my design');
+  expect(await screen.findByText('Could not prepare an answer. Please try again.')).toBeTruthy();
+  expect(screen.getByRole('textbox', {name: 'Your question'}).value).toBe('Review my design');
+  spy.mockRestore();
+  await user.click(screen.getByRole('button', {name: 'Ask'}));
+  expect(await screen.findByTestId('answer')).toBeTruthy();
+  expect(screen.getByRole('textbox', {name: 'Your question'}).value).toBe('');
 });

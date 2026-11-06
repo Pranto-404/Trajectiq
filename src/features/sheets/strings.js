@@ -1,6 +1,9 @@
 // Bengali strings for the sheets package (key = English source text). Missing keys render in English.
 export const strings = {
   bn: {
+    'Appearance': 'থিম', 'Light': 'হালকা', 'Dark': 'গাঢ়',
+    'Switch to dark mode': 'গাঢ় থিম চালু করুন', 'Switch to light mode': 'হালকা থিম চালু করুন',
+    'Could not prepare an answer. Please try again.': 'উত্তর তৈরি করা যায়নি। আবার চেষ্টা করুন।',
     'Mission assistant': 'মিশন সহকারী', 'How to play': 'খেলার নিয়ম', 'Sources & method': 'তথ্যসূত্র ও পদ্ধতি', 'NASA data & credits': 'NASA ডেটা ও কৃতজ্ঞতা', 'Engineering lab': 'প্রকৌশল ল্যাব', 'Run history': 'মিশনের ইতিহাস', 'Learning check': 'শেখার পরীক্ষা', 'Concept cards': 'ধারণা কার্ড', 'Menu': 'মেনু',
     'Level': 'স্তর', 'Beginner': 'শুরুর স্তর', 'Engineer': 'প্রকৌশলী', 'Answer language': 'উত্তরের ভাষা', 'Quick questions': 'দ্রুত প্রশ্ন', 'Your question': 'আপনার প্রশ্ন', 'Ask': 'জিজ্ঞেস করুন', 'Clear conversation': 'কথোপকথন মুছুন', 'Conversation': 'কথোপকথন',
     'Mission status': 'মিশনের অবস্থা', 'Review my design': 'আমার ডিজাইন দেখুন', 'Compare presets': 'প্রিসেট তুলনা', 'Compare crisis choices': 'বিপদের সিদ্ধান্ত তুলনা', 'How do I play?': 'কীভাবে খেলব?',

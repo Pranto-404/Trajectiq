@@ -20,7 +20,7 @@
   .mobileAction > button { flex-shrink: 0; }
 }
 .preview { position: relative; height: 260px; border: 1px solid var(--line-2); border-radius: var(--radius-panel); overflow: hidden; box-shadow: 0 16px 48px #0005; }
-.previewCaption { position: absolute; bottom: 12px; left: 12px; pointer-events: none; border-radius: var(--radius-pill); padding: 6px 10px; font-size: var(--text-12); background: #080d15df; color: var(--text-2); }
+.previewCaption { position: absolute; bottom: 12px; left: 12px; pointer-events: none; border-radius: var(--radius-pill); padding: 6px 10px; font-size: var(--text-12); background: #080d15df; color: #b6c1ce; }
 .destinations { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 4px 12px; }
 .destinations button { min-height: var(--target-min); padding: 8px 14px; border: 1px solid var(--line-2); border-radius: var(--radius-pill); background: var(--surface-1); color: var(--text-2); transition: transform 160ms ease, background 160ms ease; }
 .destinations button[aria-pressed="true"] { background: var(--cyan-400); border-color: var(--cyan-400); color: var(--bg-0); }

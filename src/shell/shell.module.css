@@ -1,4 +1,4 @@
-.shell { min-height: 100dvh; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; background: radial-gradient(1200px 600px at 70% -10%, #0f1b2b 0, transparent 60%), var(--bg-1); }
+.shell { min-height: 100dvh; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; position: relative; isolation: isolate; }
 .header { position: sticky; top: 0; z-index: var(--z-hud); display: flex; align-items: center; gap: var(--space-4); padding: 0 var(--space-4); background: color-mix(in srgb, var(--bg-0) 88%, transparent); border-bottom: 1px solid var(--line-1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .brand { display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--target-min); font-weight: 700; letter-spacing: .06em; color: var(--text-1); text-decoration: none; border: 0; background: transparent; }
 .brand img { width: 28px; height: 28px; }
@@ -37,3 +37,20 @@
 .check { display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-3); align-items: start; }
 .menu { display: grid; gap: var(--space-3); }
 .pre { overflow: auto; padding: var(--space-3); border-radius: var(--radius-control); background: var(--surface-2); font: var(--text-12)/1.4 var(--font-mono); }
+
+/* Three compositor-only layers: no per-frame JS, layout, or network traffic. */
+.cosmos { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: var(--bg-1); }
+.nebula { position: absolute; inset: -20%; background: radial-gradient(ellipse at 20% 25%, color-mix(in srgb, var(--cyan-400) 16%, transparent), transparent 45%), radial-gradient(ellipse at 80% 65%, color-mix(in srgb, var(--violet-400) 14%, transparent), transparent 45%); animation: nebulaDrift 24s ease-in-out infinite alternate; }
+.stars { position: absolute; inset: -60px; opacity: .3; background-image: radial-gradient(circle, var(--text-3) .8px, transparent 1.4px), radial-gradient(circle, var(--cyan-400) 1px, transparent 1.8px); background-size: 107px 113px, 211px 193px; background-position: 0 0, 31px 43px; animation: starDrift 45s linear infinite alternate; }
+.orbitGlow { position: absolute; width: 85vmax; height: 85vmax; top: -55vmax; right: -30vmax; border: 1px solid color-mix(in srgb, var(--cyan-400) 22%, transparent); border-radius: 50%; box-shadow: 0 0 0 45px color-mix(in srgb, var(--cyan-400) 3%, transparent), 0 0 0 90px color-mix(in srgb, var(--violet-400) 3%, transparent); animation: orbitBreathe 16s ease-in-out infinite alternate; }
+@keyframes nebulaDrift { to { transform: translate3d(4%, 3%, 0) rotate(8deg); opacity: .65; } }
+@keyframes starDrift { to { transform: translate3d(35px, 45px, 0); } }
+@keyframes orbitBreathe { to { transform: translate3d(-3%, 5%, 0) scale(1.08); opacity: .5; } }
+.cosmos[data-paused] > div { animation-play-state: paused; }
+:global([data-motion="reduced"]) .cosmos > div { animation: none; }
+@media (prefers-reduced-motion: reduce) { .cosmos > div { animation: none; } }
+@media (hover: hover) {
+  .card { transition: transform var(--dur-base) var(--ease-enter), background var(--dur-base), border-color var(--dur-base); }
+  .card:hover { transform: translateY(-2px); }
+}
+:global([data-motion="reduced"]) .card:hover { transform: none; }
