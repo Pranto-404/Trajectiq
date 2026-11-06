@@ -15,13 +15,18 @@ class StageBoundary extends Component {
 }
 
 /** Stage contract: <Stage3D design selected hoverPart run phase quality reduced onPick onSocketHover />. */
-export function StageSlot({run, design, analysis, reduced}) {
+export function StageSlot(props) {
+  if (!Stage3D) return <FlightSchematic run={props.run} analysis={props.analysis} />;
+  return <StageWithGl {...props} />;
+}
+
+function StageWithGl({run, design, analysis, reduced}) {
   const [webgl, setWebgl] = useState(true);
   useEffect(() => {
     try { const c = document.createElement('canvas'); setWebgl(!!(c.getContext?.('webgl2'))); } catch { setWebgl(false); }
   }, []);
   const fallback = <FlightSchematic run={run} analysis={analysis} />;
-  if (!Stage3D || !webgl) return fallback;
+  if (!webgl) return fallback;
   return (
     <StageBoundary fallback={fallback}>
       <Stage3D design={design} selected={null} hoverPart={null} run={run} phase={run.phase} quality="auto" reduced={reduced} onPick={() => {}} onSocketHover={() => {}} />

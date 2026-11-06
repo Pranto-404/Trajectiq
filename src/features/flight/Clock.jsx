@@ -61,7 +61,7 @@ export function ClockControls({run, crisis, playing, speed, minute, duration, ac
     <div className={`${s.clock} ${className}`} role="toolbar" aria-label={t('Mission clock')}>
       <div className={s.tplus} aria-hidden="true"><strong>T+{minute.toFixed(1)}</strong><span>{t('of {n} min', {n: Math.round(duration)})}</span></div>
       <span className="sr-only">{t('Mission time {m} of {n} minutes', {m: minute.toFixed(1), n: Math.round(duration)})}</span>
-      <Button variant="primary" icon={playing ? 'pause' : 'play'} disabled={!!lock} disabledReason={reason} aria-keyshortcuts="Space K" onClick={() => actions.play()}>{playing ? t('Pause') : t('Play')}</Button>
+      <Button variant="primary" icon={playing ? 'pause' : 'play'} disabled={!!lock} disabledReason={reason} aria-keyshortcuts="Space K" data-flight-play onClick={() => actions.play()}>{playing ? t('Pause') : t('Play')}</Button>
       <Button icon="step" disabled={!!lock} disabledReason={reason} title={t('Advance 5 minutes or to the next phase')} aria-keyshortcuts="." onClick={() => actions.step()}>{t('Step')}</Button>
       <Button icon="fast" disabled={!!lock} disabledReason={reason} aria-keyshortcuts="N" onClick={() => actions.fast()}>{t('Next event')}</Button>
       <Segmented label={t('Speed')} value={speed} onChange={v => actions.setSpeed(v)} options={[1, 3, 10].map(n => ({value: n, label: `${n}×`}))} size="sm" />
