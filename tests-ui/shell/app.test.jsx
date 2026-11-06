@@ -83,12 +83,12 @@ describe('App shell', () => {
 describe('sheet registry and features', () => {
   it('an unregistered sheet id renders a labelled placeholder with its props; registering replaces it without touching shared code', async () => {
     render(<App />);
-    act(() => openSheet('assistant', {question: 'hi'}));
-    const ph = await screen.findByRole('dialog', {name: 'assistant'}); expect(within(ph).getByText(/not built yet/)).toBeTruthy(); expect(within(ph).getByText(/"question": "hi"/)).toBeTruthy();
+    act(() => openSheet('demo-sheet', {question: 'hi'}));
+    const ph = await screen.findByRole('dialog', {name: 'demo-sheet'}); expect(within(ph).getByText(/not built yet/)).toBeTruthy(); expect(within(ph).getByText(/"question": "hi"/)).toBeTruthy();
     act(() => a().closeSheet()); await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
-    registerFeature({sheets: {assistant: {component: ({question}) => <p>Assistant says {question}</p>, variant: 'side', title: 'Mission assistant'}}}, 'test');
-    expect(getSheet('assistant').variant).toBe('side');
-    act(() => openSheet('assistant', {question: 'hello'}));
+    registerFeature({sheets: {'demo-sheet': {component: ({question}) => <p>Assistant says {question}</p>, variant: 'side', title: 'Mission assistant'}}}, 'test');
+    expect(getSheet('demo-sheet').variant).toBe('side');
+    act(() => openSheet('demo-sheet', {question: 'hello'}));
     const real = await screen.findByRole('dialog', {name: 'Mission assistant'}); expect(within(real).getByText('Assistant says hello')).toBeTruthy(); expect(real.dataset.placement).toBe('side');
   });
 

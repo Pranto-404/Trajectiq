@@ -1,6 +1,6 @@
 import {useEffect, useId, useRef, useState} from 'react';
 import {decodeDesign} from '@engine/share.js';
-import {getBody} from '@engine/api.js';
+import {getBody} from '@data/bodies.js';
 import {missionFor} from '@data/catalog.js';
 import {useGame, selectShareCode, runScore} from '@/store/index.js';
 import {defaultIo} from '@/store/io.js';
