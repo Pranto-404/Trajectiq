@@ -51,8 +51,9 @@ describe('hostile text renders as text', () => {
 describe('stage contract', () => {
   it('when WebGL is unavailable the stage falls back to the schematic: one button per subsystem, selection flows through the store', async () => {
     renderIn(<HangarScreen />);
-    await waitFor(() => expect(document.querySelector('[data-kind="comms"]')).toBeTruthy());
-    const spot = document.querySelector('[data-kind="comms"]'); expect(spot.getAttribute('role')).toBe('button');
+    // The 3D stage package renders its own SVG fallback (marked data-part) when WebGL is unavailable, as in jsdom.
+    await waitFor(() => expect(document.querySelector('[data-part="comms"]')).toBeTruthy());
+    const spot = document.querySelector('[data-part="comms"]'); expect(spot.getAttribute('role')).toBe('button');
     act(() => { spot.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true})); });
     await waitFor(() => expect(useGame.getState().category).toBe('comms'));
     expect(spot.getAttribute('aria-label')).toBe('Communications'); // the part name is not in the name, so it never collides with a part card
