@@ -1,6 +1,6 @@
-import {useLayoutEffect, useRef} from 'react';
+import {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {animate, motion} from 'motion/react';
-import {Button, Panel, spring, useReducedMotion} from '@/ds/index.js';
+import {Button, Icon, Panel, spring, useReducedMotion} from '@/ds/index.js';
 import {useGame, selectMission, selectObjective} from '@/store/index.js';
 import {useMediaQuery} from '@/shell/hooks.js';
 import {useT} from '@/i18n/index.js';
@@ -17,7 +17,7 @@ import {MobileInspector} from './MobileInspector.jsx';
 import {Spotlight} from './Spotlight.jsx';
 import {TraySheet} from './TraySheet.jsx';
 import {LaunchPanel, LaunchBar} from './LaunchPanel.jsx';
-import {useLocked, useClearPreviewOn, fmt} from './hooks.js';
+import {useLocked, useClearPreviewOn, useScrollHide, fmt} from './hooks.js';
 import s from './hangar.module.css';
 
 /** The hangar title. When the player arrives from a scenario card it glides from the card's title position (FLIP, shared element). */
@@ -48,6 +48,15 @@ export function HangarScreen() {
   const a = useGame(st => st.actions), guided = useGame(st => st.prefs.guided);
   const mission = useGame(selectMission), objective = useGame(selectObjective);
   const stageRef = useRef(null), trayRef = useRef(null);
+  const [minimized, setMinimized] = useState(false);
+  const scrolledDown = useScrollHide(narrow);
+  const chrome = minimized ? 'min' : scrolledDown ? 'hidden' : 'shown';
+  // Lets shell-level floating controls (the assistant button) move down when the bottom bars are gone.
+  useEffect(() => {
+    if (!narrow) return undefined;
+    document.documentElement.dataset.bars = chrome === 'shown' ? 'shown' : 'gone';
+    return () => { delete document.documentElement.dataset.bars; };
+  }, [narrow, chrome]);
   useClearPreviewOn();
 
   const seat = (kind, id) => {
@@ -95,7 +104,7 @@ export function HangarScreen() {
 
   if (narrow) {
     return (
-      <div className={s.screen} data-screen="hangar" data-layout="mobile">
+      <div className={s.screen} data-screen="hangar" data-layout="mobile" data-chrome={chrome}>
         <Spotlight />
         <PitchBanner />
         {head}
@@ -104,8 +113,11 @@ export function HangarScreen() {
         <div className={s.stageSticky}><StageSlot stageRef={stageRef} onDropPart={drop} compact /></div>
         <MobileInspector presets={presets} />
         <div className={s.mobilePad} aria-hidden="true" />
-        <TraySheet header={<PartsTray part="tabs" />}><div ref={trayRef}><PartsTray part="list" onInstall={install} /></div></TraySheet>
+        <TraySheet onMinimize={() => setMinimized(true)} header={<PartsTray part="tabs" />}><div ref={trayRef}><PartsTray part="list" onInstall={install} /></div></TraySheet>
         <LaunchBar />
+        <button type="button" className={s.restore} onClick={() => setMinimized(false)} aria-hidden={minimized ? undefined : 'true'} tabIndex={minimized ? 0 : -1}>
+          <Icon name="chevron-down" size={16} className={s.flipUp} /> {t('Parts and launch')}
+        </button>
       </div>
     );
   }

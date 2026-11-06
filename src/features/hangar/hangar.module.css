@@ -217,3 +217,18 @@
 @keyframes launchRing { 0% { opacity: .8; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.12); } }
 :global([data-motion="reduced"]) .launchBar button::after { animation: none; display: none; }
 @media (prefers-reduced-motion: reduce) { .launchBar button::after { animation: none; display: none; } }
+
+/* ===== Phone chrome auto-hide: scroll down hides stage, tabs and bottom bars; scroll up (or the restore pill) brings them back ===== */
+.stageSticky, .inspectorTabs, .traySheet, .launchBar { transition: translate .3s var(--ease-enter); }
+.screen[data-chrome="hidden"]:not(:has(.traySheet:not([data-snap="0"]))) .stageSticky { translate: 0 -110%; }
+.screen[data-chrome="hidden"]:not(:has(.traySheet:not([data-snap="0"]))) .inspectorTabs { translate: 0 calc(-1 * (var(--stage-h) + 90px)); }
+.screen[data-chrome="hidden"]:not(:has(.traySheet:not([data-snap="0"]))) .traySheet { translate: 0 calc(100% + var(--launch-bar-h, 64px)); }
+.screen[data-chrome="hidden"]:not(:has(.traySheet:not([data-snap="0"]))) .launchBar { translate: 0 110%; }
+.screen[data-chrome="min"] .traySheet { translate: 0 calc(100% + var(--launch-bar-h, 64px)); }
+.screen[data-chrome="min"] .launchBar { translate: 0 110%; }
+.screen[data-chrome="min"] .mobilePad { height: 72px; }
+.minimize { flex: none; display: inline-grid; place-items: center; width: 44px; height: 44px; margin-right: -8px; border: 0; border-radius: 50%; background: var(--surface-3); color: var(--text-1); touch-action: manipulation; }
+.restore { position: fixed; z-index: calc(var(--z-sheet) + 2); right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 16px; border: 1px solid var(--line-2); border-radius: 999px; background: var(--lime-500); color: var(--on-lime); font: 700 14px var(--font-ui); box-shadow: 0 8px 24px rgb(0 0 0 / .35); translate: 0 160%; opacity: 0; pointer-events: none; transition: translate .3s var(--ease-enter), opacity .2s; }
+.screen[data-chrome="min"] .restore { translate: 0 0; opacity: 1; pointer-events: auto; }
+:global([data-motion="reduced"]) .stageSticky, :global([data-motion="reduced"]) .inspectorTabs, :global([data-motion="reduced"]) .traySheet, :global([data-motion="reduced"]) .launchBar, :global([data-motion="reduced"]) .restore { transition: none; }
+@media (prefers-reduced-motion: reduce) { .stageSticky, .inspectorTabs, .traySheet, .launchBar, .restore { transition: none; } }
