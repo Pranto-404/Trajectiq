@@ -171,9 +171,11 @@ export function ReportScreen() {
   return (
     <div className={s.screen} data-screen="report">
       <Panel kicker={`${t('Mission complete')} / ${clean(run.label, 12)}`} title={achieved ? t('You brought the science home.') : t('Your mission has a lesson.')}
-        badge={<Chip kind={achieved ? 'pass' : 'warn'}>{achieved ? t('Objective achieved') : t('Objective incomplete')}</Chip>} className={s.hero}
-        actions={<span className={s.heroActions}><Button variant="primary" iconEnd="arrow-right" onClick={() => (active ? a['game-redesign']() : a.redesign())}>{t('Redesign & play again →')}</Button><Button variant="ghost" onClick={() => a.start()}>{t('Discard / new mission')}</Button></span>}>
+        className={s.hero}
+>
+        <div><Chip kind={achieved ? 'pass' : 'warn'}>{achieved ? t('Objective achieved') : t('Objective incomplete')}</Chip></div>
         <p className={s.muted}>{clean(m.title, 50)} · {clean(run.design?.name, 40)} · {t('Return threshold')} {neededScience(m)} {t('units')} · {t('Budget')} {fmt(o.cost)} / {m.budget} {t('credits')}</p>
+        <div className={s.heroActions}><Button variant="primary" iconEnd="arrow-right" onClick={() => (active ? a['game-redesign']() : a.redesign())}>{t('Redesign & play again →')}</Button><Button variant="ghost" onClick={() => a.start()}>{t('Discard / new mission')}</Button></div>
         <div className={s.stats}>
           <Stat i={0} label={t('Science returned')} value={o.science} digits={0} unit={`/ ${m.scienceTarget}`} note={`${fmt(finite(o.science) / Math.max(1, m.scienceTarget) * 100, 1)}% ${t('of target')}`} />
           <Stat i={1} label={t('Data returned')} value={o.returned} unit="MB" note={`${fmt(o.retainedMB)} MB ${t('left onboard')} · ${fmt(o.lostMB)} MB ${t('discarded')}`} />

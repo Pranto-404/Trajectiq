@@ -72,7 +72,7 @@ export function AssistantBody() {
   const [q, setQ] = useState('');
   const [busy, setBusy] = useState(false);
   const log = useRef(null), inputId = useId();
-  useEffect(() => { if (log.current) log.current.scrollTop = log.current.scrollHeight; }, [chat.length]);
+  useEffect(() => { log.current?.lastElementChild?.scrollIntoView?.({block: 'nearest'}); }, [chat.length]);
   const ask = async text => {
     if (!String(text).trim()) return;
     setBusy(true);
