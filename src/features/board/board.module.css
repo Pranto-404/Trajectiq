@@ -1,5 +1,5 @@
 /* Board: mission mode, scenario cards, difficulty, charter. Tokens only; transform and opacity are the only animated properties. */
-.screen { display: grid; gap: var(--gap); max-width: 1500px; margin: 0 auto; min-width: 0; }
+.screen { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gap); width: min(100%, calc(100vw - var(--gap) * 2)); max-width: 1500px; margin: 0 auto; min-width: 0; } /* the vw cap works around the shell grid column growing to the widest line of text; see FEATURE_REQUESTS */
 .row { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
 .note { color: var(--text-3); font-size: var(--text-13); }
 .lede { color: var(--text-2); max-width: 60ch; margin-top: var(--space-1); }

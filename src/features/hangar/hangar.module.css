@@ -1,5 +1,5 @@
 /* Hangar. Tokens only. Only transform and opacity animate. Desktop: tray | stage | margins. Phone: stage on top, bottom-sheet tray, sticky launch bar. */
-.screen { display: grid; gap: var(--gap); max-width: 1500px; margin: 0 auto; min-width: 0; }
+.screen { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gap); width: min(100%, calc(100vw - var(--gap) * 2)); max-width: 1500px; margin: 0 auto; min-width: 0; } /* the vw cap works around the shell grid column growing to the widest line of text; see FEATURE_REQUESTS */
 .row { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
 .fine { color: var(--text-3); font-size: var(--text-12); line-height: 1.45; }
 .block { width: 100%; }
@@ -25,6 +25,7 @@
 .dropHint { position: absolute; inset: auto 0 var(--space-3) 0; text-align: center; font-weight: 600; color: var(--lime-500); pointer-events: none; }
 .stageSticky { position: sticky; top: var(--header-h); z-index: 5; margin-inline: calc(var(--gap) * -1); padding-inline: var(--gap); background: var(--bg-1); padding-block: var(--space-1); height: 44dvh; min-height: 260px; }
 .stageSticky .stageSlot { height: 100%; min-height: 0; }
+.schematic[data-compact] .slotRow { display: none; }
 .schematic { display: grid; gap: var(--space-2); padding: var(--space-3); height: 100%; align-content: space-between; }
 .schematicSvg { width: 100%; height: auto; max-height: 100%; min-height: 0; }
 .bgGrid { stroke: var(--line-1); stroke-width: 1; }
@@ -58,7 +59,7 @@
 
 /* margins */
 .gauges { display: grid; gap: var(--space-4); }
-.ghostHint, .ghostSummary { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); min-height: 36px; padding: var(--space-2) var(--space-3); border-radius: var(--radius-control); font-size: var(--text-13); border: 1px dashed var(--line-2); color: var(--text-3); }
+.ghostHint, .ghostSummary { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); min-height: 72px; align-content: center; padding: var(--space-2) var(--space-3); border-radius: var(--radius-control); font-size: var(--text-13); border: 1px dashed var(--line-2); color: var(--text-3); }
 .ghostSummary { border-style: solid; border-color: var(--lime-600); color: var(--text-1); background: color-mix(in srgb, var(--lime-500) 8%, var(--surface-1)); }
 .ghostSummary svg { color: var(--lime-500); flex: none; }
 .warnLine { display: flex; gap: 6px; align-items: flex-start; font-size: var(--text-13); color: var(--amber-400); }
@@ -82,9 +83,9 @@
 
 /* launch */
 .launchPanel { display: grid; gap: var(--space-2); padding: var(--space-4); border: 1px solid var(--line-2); border-radius: var(--radius-panel); background: var(--glass); }
-.launchBar { position: fixed; inset: auto 0 0 0; z-index: calc(var(--z-sheet) + 2); display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) var(--space-3) calc(var(--space-2) + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--bg-0) 94%, transparent); border-top: 1px solid var(--line-2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.launchBar { position: fixed; inset: auto 0 0 0; height: var(--launch-bar-h, 64px); box-sizing: border-box; z-index: calc(var(--z-sheet) + 2); display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) var(--space-3) calc(var(--space-2) + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--bg-0) 94%, transparent); border-top: 1px solid var(--line-2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .launchBarText { font-size: var(--text-13); color: var(--text-2); }
-.mobilePad { height: calc(18dvh + 72px); }
+.mobilePad { height: calc(18dvh + var(--launch-bar-h, 64px) + 16px); }
 
 /* crew */
 .crew { }
@@ -113,7 +114,7 @@
 .tourDots i[data-on] { background: var(--lime-500); }
 
 /* mobile bottom-sheet tray */
-.traySheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: calc(var(--z-sheet) + 1); display: grid; grid-template-rows: auto auto auto 1fr; border-radius: var(--radius-panel) var(--radius-panel) 0 0; border: 1px solid var(--line-2); border-bottom: 0; background: color-mix(in srgb, var(--surface-1) 96%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 -8px 30px rgb(0 0 0 / .4); padding-bottom: 72px; will-change: transform; }
+.traySheet { position: fixed; left: 0; right: 0; bottom: var(--launch-bar-h, 64px); z-index: calc(var(--z-sheet) + 1); display: grid; grid-template-rows: auto auto auto 1fr; border-radius: var(--radius-panel) var(--radius-panel) 0 0; border: 1px solid var(--line-2); border-bottom: 0; background: color-mix(in srgb, var(--surface-1) 96%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 -8px 30px rgb(0 0 0 / .4); will-change: transform; }
 .handle { display: grid; place-items: center; gap: 2px; width: 100%; min-height: var(--target-min); padding: var(--space-2) 0 0; border: 0; background: transparent; color: var(--text-3); touch-action: none; cursor: grab; }
 .grip { width: 44px; height: 4px; border-radius: 2px; background: var(--line-2); }
 .flipUp { transform: rotate(180deg); }

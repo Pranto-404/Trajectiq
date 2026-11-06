@@ -22,14 +22,16 @@ import s from './hangar.module.css';
 function FlipTitle({children}) {
   const ref = useRef(null);
   const reduced = useReducedMotion();
+  const reducedRef = useRef(reduced);
+  reducedRef.current = reduced;
+  // Runs once on mount (the hand-off is consumed once). The animation is left to finish: stopping it mid-flight would strand the title off its place.
   useLayoutEffect(() => {
     const from = takeFlip(), el = ref.current;
-    if (!from || reduced || !el) return;
+    if (!from || reducedRef.current || !el) return;
     const to = el.getBoundingClientRect(); if (!to.width) return;
     const d = flipDelta(from, to);
-    const controls = animate(el, {x: [d.x, 0], y: [d.y, 0], scale: [d.scale, 1]}, spring.soft);
-    return () => controls.stop();
-  }, [reduced]);
+    animate(el, {x: [d.x, 0], y: [d.y, 0], scale: [d.scale, 1]}, spring.soft);
+  }, []);
   return <h1 ref={ref} className={s.title} data-flip-target style={{transformOrigin: '0 0'}}>{children}</h1>;
 }
 

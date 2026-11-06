@@ -32,6 +32,7 @@ export function Charter({mission, need, card, colors, unverified, sandbox, child
           <p>{mission.scenarioSummary}</p>
         </div>
       </div>
+      {children}
       <ul className={s.reqList}>
         {reqs.map(([k, v]) => <li key={k}><span>{k}</span><strong className="num">{v}</strong></li>)}
       </ul>
@@ -61,7 +62,6 @@ export function Charter({mission, need, card, colors, unverified, sandbox, child
           ) : null}
         </details>
       ) : null}
-      {children}
     </Panel>
   );
 }
