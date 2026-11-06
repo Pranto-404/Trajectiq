@@ -171,7 +171,8 @@ export function Scene({props, ctx, tier}) {
     }
     // wings tilt toward the Sun, dish tracks Earth during contact
     tmp.q.copy(craft.quaternion).invert(); tmp.v.copy(A.sunDir).applyQuaternion(tmp.q);
-    const theta = Math.atan2(tmp.v.z, tmp.v.y);
+    // wings track the Sun in flight; in the hangar they rest at a fixed, readable tilt so they stay easy to pick
+    const theta = hangar ? 0.5 : Math.atan2(tmp.v.z, tmp.v.y);
     for (const w of api.wings) { w.rotation.x = damp(w.rotation.x, theta, red ? Infinity : 4, step); const sign = w.position.x < 0 ? -1 : 1; w.position.x = sign * (0.26 + 0.7 * A.explode); }
     if (api.dish) {
       const contact = !!run?.contact && A.mode === 'orbit';

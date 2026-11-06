@@ -2,7 +2,7 @@
 // The ring is schematic (altitude spacing is exaggerated); phases and the eclipse arc come from the engine's numbers.
 import {useEffect, useMemo, useRef} from 'react';
 import {useFrame} from '@react-three/fiber';
-import {BufferAttribute, BufferGeometry, DoubleSide, Line, LineBasicMaterial, Quaternion, Vector3} from 'three';
+import {BufferAttribute, BufferGeometry, CatmullRomCurve3, DoubleSide, Line, LineBasicMaterial, Mesh, MeshBasicMaterial, Quaternion, TubeGeometry, Vector3} from 'three';
 import {orbitPoint, orbitPointAngle} from './orbit.js';
 
 const Y = new Vector3(0, 1, 0), TRAIL = 28;
@@ -21,7 +21,10 @@ export function OrbitLayer({ctx, orbit}) {
   const {rVis, geom, ecl} = orbit;
   const ringPts = useMemo(() => { const out = []; for (let i = 0; i <= 120; i++) out.push(...orbitPoint(i / 120 * geom.period, geom.period, rVis, geom.inclination)); return out; }, [rVis, geom.period, geom.inclination]);
   const arcPts = useMemo(() => { const out = []; const n = 32; for (let i = 0; i <= n; i++) out.push(...orbitPointAngle(ecl.centerAngle - ecl.halfAngle + (2 * ecl.halfAngle * i) / n, rVis, geom.inclination)); return out; }, [ecl, rVis, geom.inclination]);
-  const ring = useLine(ringPts, '#3d7f9c', 0.7), arc = useLine(arcPts, '#ffbc6e', 0.95);
+  const ring = useLine(ringPts, '#3d7f9c', 0.7);
+  // the eclipse arc is a thin tube so it stays visible at any resolution
+  const arc = useMemo(() => { const pts = []; for (let i = 0; i < arcPts.length; i += 3) pts.push(new Vector3(arcPts[i], arcPts[i + 1], arcPts[i + 2])); return new Mesh(new TubeGeometry(new CatmullRomCurve3(pts), 40, 0.03, 5, false), new MeshBasicMaterial({color: '#ffbc6e', transparent: true, opacity: 0.95})); }, [arcPts]);
+  useEffect(() => () => { arc.geometry.dispose(); arc.material.dispose(); }, [arc]);
   const trail = useMemo(() => { const geo = new BufferGeometry(); geo.setAttribute('position', new BufferAttribute(new Float32Array(TRAIL * 3), 3)); return new Line(geo, new LineBasicMaterial({color: '#ccff6b', transparent: true, opacity: 0.8})); }, []);
   useEffect(() => () => { trail.geometry.dispose(); trail.material.dispose(); }, [trail]);
 
@@ -39,7 +42,7 @@ export function OrbitLayer({ctx, orbit}) {
     if (group.current) group.current.visible = fade > 0.01;
     ring.material.opacity = 0.7 * fade; arc.material.opacity = 0.95 * fade * (run?.eclipse && !red ? 0.6 + 0.4 * Math.sin(A.t * 6) : 0.9);
     trail.material.opacity = 0.8 * fade;
-    if (coneMat.current) coneMat.current.opacity = (run?.eclipse ? 0.22 : 0.07) * fade;
+    if (coneMat.current) coneMat.current.opacity = (run?.eclipse ? 0.24 : 0.09) * fade;
     // trail: recent points behind the craft
     const pos = trail.geometry.attributes.position, minute = A.minute;
     for (let i = 0; i < TRAIL; i++) { orbitPoint(Math.max(0, minute - (TRAIL - 1 - i) * geom.period / 110), geom.period, rVis, geom.inclination, p); pos.setXYZ(i, p[0], p[1], p[2]); }
@@ -48,7 +51,7 @@ export function OrbitLayer({ctx, orbit}) {
   return (
     <group ref={group} visible={false}>
       <primitive object={ring} /><primitive object={arc} /><primitive object={trail} />
-      <mesh ref={cone}><cylinderGeometry args={[ecl.shadowRadius, ecl.shadowRadius, CONE_LEN, 28, 1, true]} /><meshBasicMaterial ref={coneMat} color="#0a1228" transparent opacity={0.13} depthWrite={false} side={DoubleSide} /></mesh>
+      <mesh ref={cone}><cylinderGeometry args={[ecl.shadowRadius, ecl.shadowRadius, CONE_LEN, 28, 1, true]} /><meshBasicMaterial ref={coneMat} color="#26407a" transparent opacity={0.09} depthWrite={false} side={DoubleSide} /></mesh>
     </group>
   );
 }

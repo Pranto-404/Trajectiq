@@ -148,7 +148,7 @@ export function Craft({spec, api, hangar, fairing, onPick, onHover}) {
       <group ref={n => { api.root = n; }}>
         <group ref={api.ref('bus')} {...handlers('bus')}><Bus spec={spec} color={spec.busColor} /><mesh position={[0, 0.5, 0]} ref={n => { api.beacon = n; }}><sphereGeometry args={[0.04, 10, 8]} /><meshStandardMaterial color="#ff5a5a" emissive="#ff3030" emissiveIntensity={1} /></mesh></group>
         <group ref={api.ref('payload')} {...handlers('payload')}><Payload spec={spec} />{hit('payload')}</group>
-        <group ref={api.ref('power')} {...handlers('power')}><Wings spec={spec} api={api} /></group>
+        <group ref={api.ref('power')} {...handlers('power')}><Wings spec={spec} api={api} />{[-1, 1].map(s => <mesh key={s} position={[s * (0.4 + spec.wingSpan / 2), 0, 0]} {...handlers('power')}><sphereGeometry args={[Math.max(0.3, spec.wingSpan / 3.2), 8, 6]} /><meshBasicMaterial transparent opacity={0} depthWrite={false} /></mesh>)}</group>
         <group ref={api.ref('propulsion')} {...handlers('propulsion')}><Propulsion spec={spec} api={api} />{hit('propulsion')}</group>
         <group ref={api.ref('comms')} {...handlers('comms')}><Comms spec={spec} api={api} /></group>
         <group ref={api.ref('storage')} {...handlers('storage')}><Storage spec={spec} />{hit('storage')}</group>

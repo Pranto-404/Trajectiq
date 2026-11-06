@@ -7,7 +7,8 @@ import '../../../styles/base.css';
 import {presetFor, CATALOG} from '@data/catalog.js';
 import {BODY_IDS, presetsForScenario, bodyForScenario, scenariosForBody} from '@engine/api.js';
 import {Stage3D} from '../Stage3D.jsx';
-import {configureHost} from '../host.js';
+import {configureHost, disposeHost, getHost} from '../host.js';
+window.__stage = {disposeHost, getHost};
 
 const PHASES = ['board', 'hangar', 'launch', 'transfer', 'capture', 'operations', 'report'];
 const params = new URLSearchParams(location.search);
@@ -50,4 +51,5 @@ function App() {
     </div>
   );
 }
-createRoot(document.getElementById('root')).render(<App />);
+const appRoot = createRoot(document.getElementById('root')); appRoot.render(<App />);
+window.__stage.unmountApp = () => appRoot.unmount();
