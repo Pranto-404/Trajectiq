@@ -4,6 +4,10 @@ Keep this file current. Update it after every milestone, agent launch and agent 
 
 Last updated: 2026-11-06. Event date below is retained from the owner's project notes, not independently verified.
 
+## Production publication — 2026-11-06
+
+Owner explicitly requested publication to GitHub main and Vercel after reviewing the ux-v7 result. Publishing the tested React app to main; Vercel runs build and tests before activation. Earlier statements that production remains v6 describe the prior state. Physical-device, screen-reader and full offline release checks remain outstanding and are not represented as passed. The committed dist standalone remains a v6 archive; Vercel serves the generated site directory and new standalone.
+
 ## Appearance and assistant follow-up — 2026-11-06
 
 - Persistent light/dark themes, header shortcut and Menu appearance selector, Bengali labels, AA-tested light text/status palette, and a readable caption over the dark 3D stage.

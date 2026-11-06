@@ -1,6 +1,26 @@
-# TRAJECTIQ · v6
+# TRAJECTIQ · React mission design game
 
-> **Development branch `ux-v7`:** React redesign with eight destinations, ten scenarios and a persistent 3D stage. Run `npm ci --ignore-scripts`, then `npm run dev`. `npm run build` writes the new app and offline edition to `site/`; `dist/TRAJECTIQ_Play.html` remains the archived v6 file. Production remains v6 until the release gates pass. See [integration QA](docs/QA_V7_INTEGRATION.md) and [progress](docs/plan/PROGRESS.md). The v6 description below documents the live release.
+Interactive spacecraft design, mission simulation and engineering trade-offs for the NASA Space Apps game challenge.
+
+**Play:** https://trajectiq-omega.vercel.app/ · **Production branch:** `main`
+
+The current app includes eight destinations, ten mission scenarios, a persistent interactive 3D spacecraft, light/dark themes, animated space backgrounds, reduced-motion support, and an offline mission assistant. Crew mode supports up to four people sharing one device; it is not network multiplayer. The assistant uses the simulation engine and local rules, not generative AI.
+
+```sh
+npm ci --ignore-scripts
+npm run dev       # local development
+npm test          # Node and UI regression suites
+npm run build     # hosted app and offline edition in site/
+npm run preview   # preview the built app
+```
+
+Vercel builds `main` with `npm run build && npm test` and serves `site/`. The new standalone edition is generated at `site/TRAJECTIQ_Play.html`; `dist/TRAJECTIQ_Play.html` remains the archived v6 artifact. Requires Node >=22.12.
+
+Verification: 718 automated tests passed locally, plus local Edge checks of themes, assistant experiments, mission flow and responsive layouts. Physical-phone, screen-reader and comprehensive offline validation remain outstanding. See [QA](docs/QA_V7_INTEGRATION.md) and [progress](docs/plan/PROGRESS.md).
+
+## Historical v6 documentation
+
+The following records the previous release; scenario counts, setup commands, dependency descriptions and test totals below are historical. Use the current instructions above.
 
 **Space Mission Design Game** · built for the NASA International Space Apps Challenge 2026 challenge of the same name.
 
