@@ -7,12 +7,12 @@ export const KINDS = Object.freeze(['bus', 'payload', 'power', 'propulsion', 'co
 /** Socket (attachment) points, exploded-view offsets and the label of each part group. */
 export const SOCKETS = Object.freeze({
   bus:        {pos: [0, 0, 0],       explode: [0, 0, 0],      label: 'Spacecraft bus'},
-  payload:    {pos: [0, 0.05, 0.28], explode: [0, 0.15, 1.15], label: 'Science payload'},
-  power:      {pos: [0.26, 0, 0],    explode: [1.35, 0, 0],   label: 'Power system'},
-  propulsion: {pos: [0, -0.37, 0],   explode: [0, -1.0, 0],   label: 'Propulsion'},
-  comms:      {pos: [0, 0.37, 0],    explode: [0, 1.1, 0],    label: 'Communications'},
-  storage:    {pos: [0, -0.1, -0.27],explode: [0, -0.1, -1.15], label: 'Avionics and storage'},
-  launch:     {pos: [0, -0.95, 0],   explode: [0, -1.9, 0],   label: 'Launch provider'}
+  payload:    {pos: [0, 0.05, 0.28], explode: [0, 0.1, 0.9], label: 'Science payload'},
+  power:      {pos: [0.26, 0, 0],    explode: [0.7, 0, 0],   label: 'Power system'},
+  propulsion: {pos: [0, -0.37, 0],   explode: [0, -0.8, 0],   label: 'Propulsion'},
+  comms:      {pos: [0, 0.37, 0],    explode: [0, 0.9, 0],    label: 'Communications'},
+  storage:    {pos: [0, -0.1, -0.27],explode: [0, -0.1, -0.9], label: 'Avionics and storage'},
+  launch:     {pos: [0, -0.95, 0],   explode: [0, -1.5, 0],   label: 'Launch provider'}
 });
 
 const LIVERY = {cyan: '#3dc7db', coral: '#e66b52', lime: '#b8e068', white: '#d9e0e6'};

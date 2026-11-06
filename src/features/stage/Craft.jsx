@@ -91,7 +91,7 @@ function Comms({spec, api}) {
     <group>
       <Cyl k="comms" a={[0.018, 0.018, c.mast]} p={[0, y + c.mast / 2, 0]} c="#cdd6dd" m={0.6} r={0.4} seg={10} />
       <group position={[0, y + c.mast, 0]} ref={n => { api.dish = n; }}>
-        <mesh position={[0, 0.02, 0]}><sphereGeometry args={[c.dish, 28, 10, 0, Math.PI * 2, 0, Math.PI / 3.2]} /><Mat k="comms" c="#dfe6eb" m={0.45} r={0.38} side={DoubleSide} /></mesh>
+        <mesh position={[0, 0.02 + c.dish * 0.35, 0]} rotation={[Math.PI, 0, 0]}><sphereGeometry args={[c.dish * 1.6, 28, 10, 0, Math.PI * 2, 0, 0.675]} /><Mat k="comms" c="#dfe6eb" m={0.45} r={0.38} side={DoubleSide} /></mesh>
         <Cyl k="comms" a={[0.012, 0.012, c.dish * 0.7]} p={[0, c.dish * 0.35, 0]} c="#aebbc6" seg={8} />
         {c.feed && <mesh position={[0, c.dish * 0.72, 0]}><sphereGeometry args={[0.04, 12, 8]} /><Mat k="comms" c="#f2c87a" m={0.7} r={0.3} /></mesh>}
       </group>

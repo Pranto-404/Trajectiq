@@ -92,7 +92,7 @@ export function Scene({props, ctx, tier}) {
     if (refs.orbit) refs.orbit.position.copy(tmp.bodyPos);
     if (refs.sun) { refs.sun.visible = orbitMode; refs.sun.position.copy(A.sunDir).multiplyScalar(34); }
     // arrows (Sun and Earth direction), shown in the orbit view
-    const origin = tmp.bodyPos, arrowR = orbit.rVis * 1.2 + 0.5;
+    const origin = tmp.bodyPos, arrowR = orbit.rVis + 0.45;
     for (const [key, dir] of [['sunArrow', A.sunDir], ['earthArrow', tmp.v2.copy(A.earthTarget).sub(origin).normalize()]]) {
       const a = refs[key]; if (!a) continue;
       a.visible = orbitMode && A.orbitFade > 0.5;
@@ -172,7 +172,7 @@ export function Scene({props, ctx, tier}) {
     // wings tilt toward the Sun, dish tracks Earth during contact
     tmp.q.copy(craft.quaternion).invert(); tmp.v.copy(A.sunDir).applyQuaternion(tmp.q);
     const theta = Math.atan2(tmp.v.z, tmp.v.y);
-    for (const w of api.wings) { w.rotation.x = damp(w.rotation.x, theta, red ? Infinity : 4, step); const sign = w.position.x < 0 ? -1 : 1; w.position.x = sign * (0.26 + 1.1 * A.explode); }
+    for (const w of api.wings) { w.rotation.x = damp(w.rotation.x, theta, red ? Infinity : 4, step); const sign = w.position.x < 0 ? -1 : 1; w.position.x = sign * (0.26 + 0.7 * A.explode); }
     if (api.dish) {
       const contact = !!run?.contact && A.mode === 'orbit';
       if (contact) { tmp.v2.copy(A.earthTarget).sub(craft.position).normalize().applyQuaternion(tmp.q); tmp.q.setFromUnitVectors(Yv, tmp.v2); } else tmp.q.identity();
@@ -213,9 +213,9 @@ export function Scene({props, ctx, tier}) {
   return (
     <>
       <color attach="background" args={['#05080f']} />
-      <ambientLight intensity={0.55} color="#9db4d4" />
-      <directionalLight ref={light} intensity={2.9} color="#fff4e0" position={[-8, 10, 12]} />
-      <directionalLight ref={fill} intensity={0.55} color="#6aa7d8" position={[6, 3, -8]} />
+      <ambientLight intensity={0.4} color="#9db4d4" />
+      <directionalLight ref={light} intensity={2.2} color="#fff4e0" position={[-8, 10, 12]} />
+      <directionalLight ref={fill} intensity={0.35} color="#6aa7d8" position={[6, 3, -8]} />
       <Stars count={settings.stars} ctx={ctx} />
       <Planet visual={visual} segments={settings.segments} ctx={ctx} group={n => { refs.body = n; }} />
       <Planet visual={earthVis} segments={Math.max(24, settings.segments - 16)} ctx={ctx} group={n => { refs.earth = n; }} />
@@ -229,7 +229,10 @@ export function Scene({props, ctx, tier}) {
       <group ref={n => { refs.craft = n; }}>
         <Craft spec={spec} api={api} hangar={hangar} fairing={props.selected === 'launch' && hangar} onPick={onPick} onHover={onHover} />
       </group>
-      <mesh ref={n => { refs.pad = n; }} position={[0, -1.75, 0]}><cylinderGeometry args={[2.7, 2.7, 0.05, 56]} /><meshStandardMaterial color="#0d1a27" metalness={0.6} roughness={0.5} /></mesh>
+      <group ref={n => { refs.pad = n; }} position={[0, -1.75, 0]}>
+        <mesh><cylinderGeometry args={[2.3, 2.3, 0.05, 56]} /><meshStandardMaterial color="#14212f" metalness={0.5} roughness={0.55} /></mesh>
+        <mesh position={[0, 0.03, 0]} rotation={[Math.PI / 2, 0, 0]}><torusGeometry args={[2.3, 0.018, 6, 72]} /><meshBasicMaterial color="#7cdbf3" transparent opacity={0.45} /></mesh>
+      </group>
       <Rocket spec={spec} ctx={ctx} group={n => { refs.rocket = n; }} />
       <primitive object={plume.points} /><primitive object={dust.points} />
       <CameraRig ctx={ctx} />

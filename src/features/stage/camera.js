@@ -6,8 +6,8 @@ export const CAMERA_PRESETS = Object.freeze({
   'hangar-launch': {yaw: 0.5, pitch: 0.12, distance: 8.2, target: [0, -0.9, 0], fov: 42},
   launch:  {yaw: 0.25, pitch: 0.08, distance: 8.5,  target: [0, 0.5, 0],  fov: 44},
   transfer:{yaw: 0.1,  pitch: 0.12, distance: 7.2,  target: [0, 0, 0],    fov: 42},
-  flight:  {yaw: 0.65, pitch: 0.28, distance: 9.4,  target: [0, 0, 0],    fov: 42},
-  report:  {yaw: -0.5, pitch: 0.38, distance: 12.5, target: [0, 0, 0],    fov: 42}
+  flight:  {yaw: 0.65, pitch: 0.28, distance: 11.8,  target: [0, 0, 0],    fov: 42},
+  report:  {yaw: -0.5, pitch: 0.38, distance: 14.5, target: [0, 0, 0],    fov: 42}
 });
 export const PRESET_IDS = Object.freeze(Object.keys(CAMERA_PRESETS));
 

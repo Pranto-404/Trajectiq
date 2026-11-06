@@ -32,7 +32,7 @@ export function Planet({visual, segments = 48, ctx, group}) {
     <group ref={group}>
       <mesh ref={spin}>
         <sphereGeometry args={[1, segments, Math.round(segments * 0.75)]} />
-        <meshStandardMaterial map={texture || null} color={texture ? '#ffffff' : visual.color} roughness={1} metalness={0} />
+        <meshStandardMaterial key={texture ? 'map' : 'flat'} map={texture || null} color={texture ? '#ffffff' : visual.color} roughness={1} metalness={0} />
       </mesh>
       {visual.haze && <mesh ref={haze}><sphereGeometry args={[1.018, Math.round(segments * 0.75), 24]} /><meshStandardMaterial color={visual.haze.color} transparent opacity={visual.haze.opacity} roughness={1} depthWrite={false} /></mesh>}
       {atmMat && <mesh ref={atm} scale={1 + visual.atmosphere.thickness * 2.2}><sphereGeometry args={[1, 40, 28]} /><primitive object={atmMat} attach="material" /></mesh>}

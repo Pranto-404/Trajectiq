@@ -39,7 +39,7 @@ export function OrbitLayer({ctx, orbit}) {
     if (group.current) group.current.visible = fade > 0.01;
     ring.material.opacity = 0.7 * fade; arc.material.opacity = 0.95 * fade * (run?.eclipse && !red ? 0.6 + 0.4 * Math.sin(A.t * 6) : 0.9);
     trail.material.opacity = 0.8 * fade;
-    if (coneMat.current) coneMat.current.opacity = (run?.eclipse ? 0.3 : 0.13) * fade;
+    if (coneMat.current) coneMat.current.opacity = (run?.eclipse ? 0.22 : 0.07) * fade;
     // trail: recent points behind the craft
     const pos = trail.geometry.attributes.position, minute = A.minute;
     for (let i = 0; i < TRAIL; i++) { orbitPoint(Math.max(0, minute - (TRAIL - 1 - i) * geom.period / 110), geom.period, rVis, geom.inclination, p); pos.setXYZ(i, p[0], p[1], p[2]); }

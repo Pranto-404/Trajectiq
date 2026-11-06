@@ -4,7 +4,7 @@ export const LAYOUTS = Object.freeze({
   hangar:   {craft: {pos: [0, 0, 0], scale: 1},        body: {pos: [-11, 5, -18], k: 2.0}, earth: {pos: [12, -3, -22], r: 1.7}, sun: [-0.7, 0.8, 1.0]},
   launch:   {craft: {pos: [0, 0, 0], scale: 0.001},    body: {pos: [-11, 5, -18], k: 2.0}, earth: {pos: [0, -6.4, 0], r: 3.4},   sun: [-0.7, 0.8, 1.0]},
   transfer: {craft: {pos: [0, 0, 0], scale: 0.3},      body: {pos: [3.1, 0.8, 0], k: 0.45}, earth: {pos: [-3.1, -0.75, -1], r: 1.15}, sun: [-0.6, 0.7, 1.0]},
-  orbit:    {craft: {pos: [0, 0, 0], scale: 0.26},     body: {pos: [0, 0, 0], k: 1},       earth: {pos: [8.5, -1.5, -7], r: 1.05},  sun: null}
+  orbit:    {craft: {pos: [0, 0, 0], scale: 0.36},     body: {pos: [0, 0, 0], k: 1},       earth: {pos: [8.5, -1.5, -7], r: 1.05},  sun: null}
 });
 
 export const GLIDE_LAMBDA = 5.5;     // 1/s: about 900 ms to settle
