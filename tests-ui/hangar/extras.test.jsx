@@ -49,8 +49,9 @@ describe('hostile text renders as text', () => {
 });
 
 describe('stage contract', () => {
-  it('without the 3D package the built-in schematic is used: one button per subsystem, selection flows through the store', async () => {
+  it('when WebGL is unavailable the stage falls back to the schematic: one button per subsystem, selection flows through the store', async () => {
     renderIn(<HangarScreen />);
+    await waitFor(() => expect(document.querySelector('[data-kind="comms"]')).toBeTruthy());
     const spot = document.querySelector('[data-kind="comms"]'); expect(spot.getAttribute('role')).toBe('button');
     act(() => { spot.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true})); });
     await waitFor(() => expect(useGame.getState().category).toBe('comms'));
