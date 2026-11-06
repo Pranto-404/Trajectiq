@@ -13,7 +13,8 @@
 @media (min-width: 900px) { .chip { display: inline-flex; } }
 @media (max-width: 560px) { .brandText { display: none; } .header { gap: var(--space-2); padding: 0 var(--space-2); } }
 @media (max-width: 760px) {
-  .header { flex-wrap: wrap; padding-block: var(--space-1); }
+  /* On a phone the two-row header scrolls away with the page instead of covering a third of the screen; sticky panels then start at the top edge. */
+  .header { flex-wrap: wrap; padding-block: var(--space-1); position: relative; background: var(--bg-0); backdrop-filter: none; -webkit-backdrop-filter: none; }
   .right { margin-left: auto; }
   .nav { order: 3; flex-basis: 100%; justify-content: space-between; }
   .navItem { flex: 1; padding-inline: var(--space-2); }
@@ -59,7 +60,7 @@
 .chatLauncher { position: fixed; right: 24px; bottom: 24px; z-index: var(--z-hud); filter: drop-shadow(0 8px 24px rgb(0 0 0 / .2)); }
 .chatLauncher > button { border-radius: 999px; min-height: 52px; padding-inline: 20px; }
 .chatSignal { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .7; }
-@media (max-width: 760px) { .chatLauncher { right: 14px; bottom: calc(90px + env(safe-area-inset-bottom)); } }
+@media (max-width: 760px) { .chatLauncher { right: 12px; bottom: calc(136px + env(safe-area-inset-bottom)); } .chatLauncher > button { width: 48px; min-height: 48px; padding: 0; font-size: 0; justify-content: center; gap: 0; } }
 .welcome { position: relative; max-width: 1500px; margin: 0 auto 24px; padding: 24px 32px; border: 1px solid var(--cyan-400); border-radius: 24px; background: var(--hero-surface); box-shadow: var(--elevation-panel); }
 .welcome h2 { margin-top: 8px; font-size: clamp(22px, 3vw, 30px); }
 .welcome p { color: var(--text-2); margin-top: 6px; max-width: 70ch; }

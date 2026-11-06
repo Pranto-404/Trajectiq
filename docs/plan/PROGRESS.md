@@ -138,3 +138,8 @@ asa\Trajectiq\.claude\worktreesgent-aacb668532c1702d9` (branch `nasa-bodies`) h
 - Fix: `MobileInspector` (Margins / Orbit / Advice / Crew tabs, one panel at a time, sliding pill), compact 2-column gauge tiles, 2x2 orbit option cards, compact header and presets row, live header height (`--header-live-h`), stage height variable `--stage-h`. Page is now 1.2-1.6k px, no horizontal overflow at 375 px.
 - Motion added: stage HUD corner brackets + scan line, gauge fill light sweep, staggered tile entrance, tab pill spring, alert-dot pop, launch button ring. All honour reduced motion.
 - Not yet verified: a physical phone, the crowded tray sheet peek (it still covers the lower ~200 px), Flight/Report/Board screens on phone.
+
+## 2026-11-07 (2): phone fixes from the owner's real-device screenshots
+- Seen on the owner's phone: translucent sticky header and tray let scrolling content show through; header + stage + tabs + tray peek + launch bar left ~170 px of usable space.
+- Fix: header scrolls away on phones (opaque), sticky offsets use `--header-live-h` (0 when not sticky), tray collapsed state is a 60 px bar (Parts + live mass/cost) with an opaque sheet, floating Assistant is a 48 px round button above the bottom bars.
+- Still unverified: physical phone re-check after deploy; the Flight and Report screens on phone.
