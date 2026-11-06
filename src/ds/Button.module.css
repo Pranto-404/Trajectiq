@@ -50,3 +50,6 @@
   visibility: hidden; opacity: 0; pointer-events: none; transition: opacity var(--dur-fast) var(--ease-enter), visibility var(--dur-fast);
 }
 .button:hover .tip, .button:focus-visible .tip { visibility: visible; opacity: 1; }
+
+.primary::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(110deg, transparent 25%, rgb(255 255 255 / .18) 48%, transparent 70%); opacity: 0; transition: opacity var(--dur-base); }
+@media (hover: hover) { .primary:not([aria-disabled="true"]):hover::after { opacity: 1; } }

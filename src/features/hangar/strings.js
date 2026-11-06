@@ -1,5 +1,21 @@
 // Bengali strings for the hangar (keys are the English source text). Part names and notes are engine data and stay in English.
 export const HANGAR_BN = {
+  'Drag to rotate · scroll to zoom': 'ঘোরাতে টানুন · বড় করতে স্ক্রল করুন', 'Reset view': 'দৃশ্য রিসেট করুন',
+  "Design advisor": "ডিজাইন পরামর্শক",
+  "YOUR NEXT DECISION": "আপনার পরের সিদ্ধান্ত",
+  "launch blockers": "উৎক্ষেপণের বাধা",
+  "trade-offs to review": "পর্যালোচনার বিষয়",
+  "Checks clear": "পরীক্ষা সফল",
+  "Ready for a flight rehearsal": "পরীক্ষামূলক উড্ডয়নের জন্য প্রস্তুত",
+  "Your design passes the engineering checks. Fly it, respond to events, then use the report to improve your next attempt.": "আপনার নকশা প্রকৌশল পরীক্ষায় উত্তীর্ণ। মিশন চালান, ঘটনায় সাড়া দিন এবং প্রতিবেদন দেখে পরের নকশা উন্নত করুন।",
+  "Inspect subsystem": "উপব্যবস্থা দেখুন",
+  "View all checks": "সব পরীক্ষা দেখুন",
+  "Science data path": "বিজ্ঞানের ডেটা পথ",
+  "Collection and link values are modeled per orbit; storage is total capacity. Only returned science scores.": "সংগ্রহ ও সংযোগের মান প্রতি কক্ষপথের হিসাব; সংরক্ষণ মোট ধারণক্ষমতা। ফেরত আসা বিজ্ঞানেই স্কোর মেলে।",
+  "Collect": "সংগ্রহ",
+  "Store": "সংরক্ষণ",
+  "Return": "ফেরত",
+
   'Spacecraft hangar': 'মহাকাশযান হ্যাঙ্গার', 'Live mission (read-only)': 'চলমান মিশন (শুধু দেখা)', 'Build your way to': 'আপনার নকশায় পৌঁছান', 'Every installed class changes the engineering model.': 'বসানো প্রতিটি যন্ত্রাংশ মিশনের হিসাব বদলে দেয়।',
   'Mission board': 'মিশন বোর্ড', 'Show guided help': 'নির্দেশনা দেখান', 'Return at least': 'ফেরত আনতে হবে কমপক্ষে', 'science units': 'বিজ্ঞান একক', 'stay within': 'খরচ রাখুন', 'credits': 'ক্রেডিট',
   'Hardware is locked after launch': 'উৎক্ষেপণের পর যন্ত্রাংশ লক করা', 'Finish or discard this flight to edit.': 'বদলাতে হলে মিশন শেষ করুন অথবা মুছে দিন।', 'Hardware is read-only': 'যন্ত্রাংশ শুধু দেখা যাবে', 'Flight in progress': 'মিশন চলছে', 'Back to flight': 'মিশনে ফিরুন', 'A flight is already in progress': 'একটি মিশন ইতিমধ্যে চলছে',

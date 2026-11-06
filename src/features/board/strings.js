@@ -1,6 +1,25 @@
 // Bengali strings for the board. Keys are the English source text (the project convention), so a missing key shows English.
 // Scenario titles and summaries are engine data and stay in English; every label around them is translated.
 export const BOARD_BN = {
+  "MISSION DESIGN LAB": "মিশন ডিজাইন ল্যাব",
+  "Make every choice count.": "প্রতিটি সিদ্ধান্তই গুরুত্বপূর্ণ।",
+  "Build a spacecraft. Balance the trade-offs. Bring the science home.": "মহাকাশযান তৈরি করুন। সীমাবদ্ধতার মধ্যে সিদ্ধান্ত নিন। বিজ্ঞান পৃথিবীতে ফিরিয়ে আনুন।",
+  "Build selected mission": "নির্বাচিত মিশন তৈরি করুন",
+  "YOUR OBJECTIVE": "আপনার লক্ষ্য",
+  "Watch your": "খেয়াল রাখুন",
+  "Only science returned to Earth counts.": "শুধু পৃথিবীতে ফেরত আসা বিজ্ঞান গণনা হয়।",
+  "SCIENCE TARGET": "বিজ্ঞানের লক্ষ্য",
+  "MISSION BUDGET": "মিশন বাজেট",
+  "Schematic mission artwork · not a trajectory": "প্রতীকী মিশন চিত্র · প্রকৃত গতিপথ নয়",
+  "Your mission journey": "আপনার মিশনের ধাপ",
+  "Choose a science goal": "বিজ্ঞানের লক্ষ্য বাছুন",
+  "Engineer your spacecraft": "মহাকাশযান তৈরি করুন",
+  "Fly & make decisions": "উড়ুন ও সিদ্ধান্ত নিন",
+  "Learn & redesign": "শিখুন ও নতুন নকশা করুন",
+  "MISSION LIBRARY": "মিশন সংগ্রহ",
+  "Choose your next frontier": "পরের গন্তব্য বেছে নিন",
+  "units": "একক",
+
   'Filter destinations': 'গন্তব্য বাছাই',
   'Build this mission': 'এই মিশন তৈরি করুন',
   'All destinations': 'সব গন্তব্য',

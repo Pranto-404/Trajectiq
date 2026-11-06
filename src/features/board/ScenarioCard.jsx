@@ -3,6 +3,7 @@ import {motion, useMotionValue, useSpring} from 'motion/react';
 import {Icon, Chip, spring} from '@/ds/index.js';
 import {useT} from '@/i18n/index.js';
 import {criticalLabel} from './missionInfo.js';
+import {PlanetOrb} from './PlanetOrb.jsx';
 import {enterProps} from './motionUtil.js';
 import s from './board.module.css';
 
@@ -28,13 +29,14 @@ export function ScenarioCard({card, selected, index, reduced, tilt, locked, assu
   const rest = () => { rx.set(0); ry.set(0); };
   return (
     <motion.button
-      type="button" className={s.card} aria-pressed={selected} aria-labelledby={`${id}-t`} aria-describedby={`${id}-d`} data-scenario={card.id} data-selected={selected || undefined} data-locked={locked || undefined}
+      type="button" className={s.card} aria-pressed={selected} aria-disabled={locked || undefined} aria-labelledby={`${id}-t`} aria-describedby={`${id}-d`} data-scenario={card.id} data-selected={selected || undefined} data-locked={locked || undefined}
       {...enterProps(index, reduced)}
       style={tiltOn ? {rotateX: sx, rotateY: sy, transformPerspective: 900} : undefined}
       whileTap={reduced ? undefined : {scale: 0.985}}
       onPointerMove={move} onPointerLeave={rest} onBlur={rest}
-      onClick={() => onSelect(card.id)}
+      onClick={() => { if (!locked) onSelect(card.id); }}
     >
+      <span className={s.cardArtwork} aria-hidden="true"><PlanetOrb body={card.destination} colors={card.body?.colors} size={70} /><span className={s.cardOrbit} /></span>
       <span className={s.cardTop}>
         <span className="kicker">{card.tag}</span>
         {selected ? <span className={s.cardCheck}><Icon name="check" size={14} /><span className="sr-only">{t('Selected')}</span></span> : null}

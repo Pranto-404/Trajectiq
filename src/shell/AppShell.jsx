@@ -58,7 +58,7 @@ function Frame() {
   useDocumentLanguage(); useDensity(); useHistorySync();
   useEffect(() => { setConceptOpener(topic => a.openSheet('concept', {topic})); }, [a]);
   return (
-    <div className={s.shell}>
+    <div className={s.shell} data-background-paused={hidden || undefined}>
       <div className={s.cosmos} aria-hidden="true" data-paused={hidden || undefined}><div className={s.nebula} /><div className={s.stars} /><div className={s.orbitGlow} /></div>
       <a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>{t('Skip to content')}</a>
       <Header />

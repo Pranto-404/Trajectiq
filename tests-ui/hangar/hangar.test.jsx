@@ -97,12 +97,14 @@ describe('controls with live previews', () => {
     expect(screen.getByText('Launch · orbit')).toBeTruthy(); expect(screen.getAllByRole('button', {name: /About/}).length).toBeGreaterThan(3); // concept "?" triggers
   });
 
-  it('launch readiness is disabled with a visible reason when a hard check fails (launch-orbit compatibility)', async () => {
+  it('launch readiness remains available to explain failed checks, without authorizing launch', async () => {
     renderIn(<HangarScreen />); const user = userEvent.setup();
     expect(screen.getByRole('button', {name: /Launch readiness/}).getAttribute('aria-disabled')).toBeNull();
     await user.click(screen.getByRole('radio', {name: /30°/}));
     const btn = screen.getByRole('button', {name: /Launch readiness/});
-    expect(btn.getAttribute('aria-disabled')).toBe('true'); expect(btn).toHaveAccessibleDescription('Fix 1 failed check to launch');
+    expect(btn.getAttribute('aria-disabled')).toBeNull();
+    await user.click(btn); expect(useGame.getState().sheet.id).toBe('launch-check');
+    a()['game-launch'](); expect(useGame.getState().run).toBeNull();
     expect(screen.getAllByText(/Blocked/).length).toBeGreaterThan(0); expect(screen.getByTestId('margins')).toHaveTextContent('Launch blocked');
   });
 });

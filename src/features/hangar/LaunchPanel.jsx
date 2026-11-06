@@ -1,16 +1,16 @@
 import {Button, Chip} from '@/ds/index.js';
-import {useGame, selectLaunchGate, selectLaunchCheck} from '@/store/index.js';
+import {useGame, selectLaunchCheck} from '@/store/index.js';
 import {useT} from '@/i18n/index.js';
 import {useLocked} from './hooks.js';
 import s from './hangar.module.css';
 
-/** The "Launch readiness" entry. Disabled with a visible reason when a check fails or a flight is already active. */
+/** The "Launch readiness" entry. Always available for draft diagnostics; only active flights disable it. */
 export function LaunchButton({size = 'lg', block = false}) {
   const t = useT();
   const locked = useLocked();
-  const gate = useGame(selectLaunchGate), a = useGame(st => st.actions);
-  const ok = gate.ok && !locked;
-  const reason = locked ? t('A flight is already in progress') : gate.reason;
+  const a = useGame(st => st.actions);
+  const ok = !locked;
+  const reason = locked ? t('A flight is already in progress') : '';
   return <Button variant="primary" size={size} iconEnd="arrow-right" className={block ? s.block : undefined} disabled={!ok} disabledReason={reason || undefined} onClick={() => a['game-review']()}>{t('Launch readiness →')}</Button>;
 }
 

@@ -9,6 +9,7 @@ import {takeFlip, flipDelta} from '../board/flip.js';
 import {enterProps} from '../board/motionUtil.js';
 import {StageSlot} from './StageSlot.jsx';
 import {PartsTray} from './PartsTray.jsx';
+import {DesignAdvisor} from './DesignAdvisor.jsx';
 import {MarginsPanel} from './MarginsPanel.jsx';
 import {OrbitPanel} from './OrbitPanel.jsx';
 import {CrewStrip} from './CrewStrip.jsx';
@@ -59,7 +60,7 @@ export function HangarScreen() {
   const head = (
     <motion.header className={s.head} {...enterProps(0, reduced)}>
       <div className={s.headText}>
-        <span className="kicker">{mission.id} / {locked ? t('Live mission (read-only)') : t('Spacecraft hangar')}</span>
+        <span className="kicker">{mission.scenarioId} / {locked ? t('Live mission (read-only)') : t('Spacecraft hangar')}</span>
         <FlipTitle>{mission.title}</FlipTitle>
         <p className={s.lede}>{t('Build your way to')} {mission.bodyName}. {t('Every installed class changes the engineering model.')}</p>
       </div>
@@ -101,6 +102,7 @@ export function HangarScreen() {
         {lockPanel}
         <div className={s.stageSticky}><StageSlot stageRef={stageRef} onDropPart={drop} compact /></div>
         <CrewStrip />
+        <DesignAdvisor />
         <MarginsPanel />
         <OrbitPanel />
         {presets}
@@ -127,11 +129,12 @@ export function HangarScreen() {
           <StageSlot stageRef={stageRef} onDropPart={drop} />
           <CrewStrip />
           {presets}
+          <DesignAdvisor />
         </motion.div>
         <motion.aside className={s.colRight} {...enterProps(3, reduced)}>
+          <LaunchPanel />
           <MarginsPanel />
           <OrbitPanel />
-          <LaunchPanel />
         </motion.aside>
       </div>
     </div>

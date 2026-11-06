@@ -4,6 +4,17 @@ Keep this file current. Update it after every milestone, agent launch and agent 
 
 Last updated: 2026-11-06. Event date below is retained from the owner's project notes, not independently verified.
 
+## Mission experience review — 2026-11-06
+
+Current work supersedes historical production/next-step statements below. The React app was deployed from main at 6aa035d; this follow-up is on feat-mission-experience and is being published after verification.
+
+- Original animated mission briefing, destination illustrations, four-step journey, stronger light/dark visual hierarchy, and clearer mission actions.
+- Engine-backed design advisor prioritizes blockers then the scenario's critical resource; interactive collect/store/return diagram, stage reset control, and earlier launch readiness.
+- Fixed blocked access to launch diagnostics, locked scenario selection, fixed-duration flight progress, misleading scenario kicker, and light mobile action contrast. Final launch authorization remains guarded.
+- Motion respects both reduced-motion settings and hidden tabs. New strings include Bengali translations.
+- Verification: 371 Node + 351 UI tests passed; production/standalone build passed. Edge desktop and 375px responsive review; complete Mars Dust Season run returned 569 science, score 832, grade A. Physical-device and comprehensive screen-reader checks remain outstanding.
+- Research, assessment, and remaining limitations: [EXPERIENCE_REVIEW.md](../EXPERIENCE_REVIEW.md).
+
 ## Production publication — 2026-11-06
 
 Owner explicitly requested publication to GitHub main and Vercel after reviewing the ux-v7 result. Publishing the tested React app to main; Vercel runs build and tests before activation. Earlier statements that production remains v6 describe the prior state. Physical-device, screen-reader and full offline release checks remain outstanding and are not represented as passed. The committed dist standalone remains a v6 archive; Vercel serves the generated site directory and new standalone.

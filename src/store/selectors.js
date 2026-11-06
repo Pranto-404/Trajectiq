@@ -63,7 +63,7 @@ export function computeTelemetry(run) {
     thresholds: {batterySafe: .15, batteryWarn: .3, recorderWarn: .75},
     objectivePercent: a.m.scienceSuccess,
     lostMB: run.lostMB, safeMinutes: run.safeSteps * 5, inContact: !!run.contact, inEclipse: !!run.eclipse, safe: !!run.safe,
-    minute: run.minute, duration: a.m.duration, clock: Math.min(1, run.minute / 240), phase: run.phase, mode: run.mode,
+    minute: run.minute, duration: a.m.duration, clock: Math.min(1, Math.max(0, run.minute / Math.max(1, a.m.duration))), phase: run.phase, mode: run.mode,
     history: run.history
   };
 }

@@ -1,7 +1,7 @@
 .panel {
   position: relative; display: grid; gap: var(--space-3); padding: var(--panel-pad); min-width: 0;
   background: var(--glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--line-1); border-radius: var(--radius-panel); box-shadow: var(--inner-highlight);
+  border: 1px solid var(--line-1); border-radius: var(--radius-panel); box-shadow: var(--elevation-panel);
   transition: border-color var(--dur-fast) var(--ease-enter), box-shadow var(--dur-fast) var(--ease-enter);
 }
 /* corner ticks */

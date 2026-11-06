@@ -15,7 +15,7 @@
 .mobileAction { display: none; }
 @media (max-width: 760px) {
   .screen { padding-bottom: 90px; }
-  .mobileAction { display: flex; align-items: center; justify-content: space-between; gap: 12px; position: fixed; z-index: var(--z-hud); bottom: 0; left: 0; right: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: #080d15f5; border-top: 1px solid var(--line-2); box-shadow: 0 -8px 24px #0005; }
+  .mobileAction { display: flex; align-items: center; justify-content: space-between; gap: 12px; position: fixed; z-index: var(--z-hud); bottom: 0; left: 0; right: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--surface-1) 96%, transparent); border-top: 1px solid var(--line-2); box-shadow: 0 -8px 24px #0005; }
   .mobileAction > span { min-width: 0; font-size: var(--text-12); color: var(--text-2); }
   .mobileAction > button { flex-shrink: 0; }
 }
@@ -38,7 +38,7 @@
   position: relative; display: grid; align-content: start; gap: var(--space-2); text-align: left; min-height: 150px; padding: var(--space-4);
   border: 1px solid var(--line-1); border-radius: var(--radius-panel); color: var(--text-1); overflow: hidden;
   background: linear-gradient(160deg, color-mix(in srgb, var(--surface-3) 70%, transparent), var(--surface-2) 60%);
-  box-shadow: var(--inner-highlight); touch-action: manipulation; transform-style: preserve-3d; will-change: transform;
+  box-shadow: var(--inner-highlight); touch-action: manipulation; transform-style: preserve-3d;
   transition: border-color var(--dur-fast) var(--ease-enter), box-shadow var(--dur-fast) var(--ease-enter), background var(--dur-fast) var(--ease-enter);
 }
 .card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan-400), transparent); opacity: 0; transition: opacity var(--dur-base) var(--ease-enter); }
@@ -93,3 +93,82 @@
 .orbShade { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 70% 60%, transparent 40%, rgb(0 0 0 / .55) 100%); }
 @keyframes drift { to { transform: rotate(360deg); } }
 @media (max-width: 480px) { .charterHero { flex-direction: column; align-items: flex-start; } }
+
+/* Mission atlas: original orbital illustration and a readable decision hierarchy. */
+.missionHero { position: relative; display: grid; grid-template-columns: 1.25fr 1fr; overflow: hidden; border: 1px solid var(--line-1); border-radius: 24px; background: var(--hero-surface); box-shadow: var(--elevation-panel); }
+.heroCopy { padding: clamp(24px, 4vw, 56px); z-index: 1; }
+.eyebrow { display: flex; align-items: center; gap: 10px; color: var(--cyan-400); font: 600 11px var(--font-mono); letter-spacing: .14em; }
+.eyebrow > span { color: var(--text-3); margin-left: auto; }
+.eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 16px currentColor; }
+.heroCopy h1 { font-size: clamp(30px, 3.2vw, 52px); line-height: 1.12; letter-spacing: -.045em; margin: 24px 0 16px; }
+.heroCopy h1 em { font-style: normal; color: var(--cyan-400); }
+.heroCopy > p { color: var(--text-2); max-width: 46ch; line-height: 1.6; }
+.heroActions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+.selectedBrief { display: grid; gap: 6px; margin-top: 28px; padding-left: 14px; border-left: 2px solid var(--cyan-400); }
+.selectedBrief > span { font: 10px var(--font-mono); letter-spacing: .12em; color: var(--text-3); }
+.selectedBrief > strong { font-size: 16px; }
+.selectedBrief > small { color: var(--text-2); font-size: 12px; }
+.missionArt { position: relative; overflow: hidden; display: grid; place-items: center; min-height: 360px; background: var(--art-surface); border-left: 1px solid var(--line-1); }
+.artGrid { position: absolute; inset: 0; opacity: .3; background-image: linear-gradient(var(--line-2) 1px, transparent 1px), linear-gradient(90deg, var(--line-2) 1px, transparent 1px); background-size: 40px 40px; mask-image: radial-gradient(ellipse, black, transparent 75%); }
+.artCoordinates { position: absolute; top: 24px; left: 24px; font: 10px var(--font-mono); letter-spacing: .14em; color: var(--text-3); }
+.orbitalSystem { position: relative; width: 310px; height: 310px; display: grid; place-items: center; animation: planetArrive 650ms var(--ease-enter) both; }
+.heroPlanet { position: relative; z-index: 1; filter: drop-shadow(16px 20px 28px #0004); }
+.heroPlanet > span { display: block; }
+.orbitTrack, .orbitTrackOuter, .satelliteOrbit { position: absolute; inset: 18px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--cyan-400) 45%, transparent); transform: rotate(-24deg) scaleY(.65); }
+.orbitTrackOuter { inset: -14px; border-style: dashed; opacity: .45; transform: rotate(35deg) scaleY(.8); }
+.satelliteOrbit { inset: 7px; border: 0; z-index: 2; animation: satellite 26s linear infinite; }
+.satelliteOrbit > span { position: absolute; top: 7px; left: 50%; display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid var(--cyan-400); border-radius: 10px; color: var(--cyan-400); background: var(--surface-1); box-shadow: var(--glow-cyan); transform: rotate(24deg); }
+.signalRing { position: absolute; inset: 60px; border: 1px solid var(--cyan-400); border-radius: 50%; opacity: 0; animation: radioPulse 6s ease-out infinite; }
+.signalRing + .signalRing { animation-delay: 3s; }
+.artReadout { position: absolute; bottom: 35px; left: 24px; right: 24px; display: flex; justify-content: space-between; pointer-events: none; }
+.artReadout > span { display: grid; gap: 5px; font: 9px var(--font-mono); letter-spacing: .1em; color: var(--text-3); }
+.artReadout strong { font-size: 24px; letter-spacing: -.04em; color: var(--text-1); }
+.artReadout small { font-size: 11px; color: var(--text-2); }
+.artFoot { position: absolute; bottom: 10px; font: 9px var(--font-mono); color: var(--text-3); }
+.missionSteps { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line-1); background: var(--surface-1); }
+.missionSteps li { display: flex; align-items: center; gap: 12px; padding: 18px 22px; font-size: 12px; color: var(--text-2); }
+.missionSteps li + li { border-left: 1px solid var(--line-1); }
+.missionSteps li > span { font: 11px var(--font-mono); color: var(--cyan-400); }
+.missionSteps svg { margin-left: auto; flex-shrink: 0; opacity: .65; }
+.settingsPanel { padding: 20px; border: 1px solid var(--line-1); background: var(--glass); border-radius: var(--radius-panel); box-shadow: var(--elevation-panel); }
+.sectionHeading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 8px; }
+.sectionHeading h2 { margin-top: 7px; font-size: 24px; letter-spacing: -.025em; }
+.card { padding-top: 22px; box-shadow: var(--elevation-panel); }
+.cardTitle, .cardTop { padding-right: 60px; }
+.cardArtwork { position: absolute; top: 8px; right: -10px; width: 90px; height: 90px; display: grid; place-items: center; opacity: .85; pointer-events: none; }
+.cardArtwork .orb { display: block; }
+.cardOrbit { position: absolute; inset: 4px -12px; border: 1px solid var(--line-2); border-radius: 50%; transform: rotate(-35deg) scaleY(.45); }
+.cardSummary { margin-top: 6px; }
+.card[aria-disabled="true"] { cursor: not-allowed; }
+@keyframes satellite { from { transform: rotate(-24deg); } to { transform: rotate(336deg); } }
+@keyframes radioPulse { 0% { transform: scale(.85); opacity: .3; } 85%, 100% { transform: scale(1.85); opacity: 0; } }
+@keyframes planetArrive { from { transform: scale(.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@media (max-width: 760px) {
+  .missionHero { grid-template-columns: minmax(0, 1fr); }
+  .heroCopy { padding: 24px; }
+  .heroCopy h1 { font-size: 34px; }
+  .missionArt { min-height: 280px; border-left: 0; border-top: 1px solid var(--line-1); }
+  .orbitalSystem { width: 240px; height: 240px; }
+  .heroPlanet { transform: scale(.8); }
+  .missionSteps { grid-template-columns: 1fr 1fr; }
+  .missionSteps li { padding: 14px; font-size: 11px; gap: 8px; }
+  .missionSteps li:nth-child(3) { border-left: 0; }
+  .missionSteps li:nth-child(n+3) { border-top: 1px solid var(--line-1); }
+  .sectionHeading h2 { font-size: 20px; }
+  .heroActions > button:first-child { width: 100%; }
+}
+:global([data-motion="reduced"]) .orbSurface,
+:global([data-motion="reduced"]) .satelliteOrbit,
+:global([data-motion="reduced"]) .signalRing,
+:global([data-motion="reduced"]) .orbitalSystem { animation: none; }
+@media (prefers-reduced-motion: reduce) { .orbSurface, .satelliteOrbit, .signalRing, .orbitalSystem { animation: none; } }
+
+/* Keep the first mission decisions close to the opening briefing. */
+.heroCopy { padding: clamp(24px, 2.5vw, 36px); }
+.heroCopy h1 { font-size: clamp(30px, 2.8vw, 44px); margin-block: 16px 12px; }
+.heroActions { margin-top: 18px; }
+.selectedBrief { margin-top: 20px; }
+.main { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+.main > * { grid-column: 1 / -1; }
+.main > .settingsPanel { grid-column: auto; }
+@media (max-width: 760px) { .main { grid-template-columns: minmax(0, 1fr); } }

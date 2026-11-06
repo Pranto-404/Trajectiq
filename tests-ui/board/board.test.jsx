@@ -163,7 +163,7 @@ describe('motion and language', () => {
 
   it('is fully translated when the language is Bengali and falls back to English for engine data', () => {
     board(); act(() => a()['toggle-language']());
-    expect(screen.getByRole('heading', {level: 1}).textContent).toBe('আপনার মিশন সাজান।');
+    expect(screen.getByRole('heading', {level: 1}).textContent).toBe('আপনার মিশন সাজান।প্রতিটি সিদ্ধান্তই গুরুত্বপূর্ণ।');
     expect(screen.getByRole('radiogroup', {name: 'ধরন'})).toBeTruthy(); expect(screen.getByRole('button', {name: 'দ্রুত উৎক্ষেপণ'})).toBeTruthy();
     expect(document.querySelector('[data-scenario]')).toHaveTextContent(Object.values(SCENARIOS)[0].title);
     expect(screen.getByRole('group', {name: 'পরিস্থিতি'})).toBeTruthy();

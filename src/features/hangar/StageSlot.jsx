@@ -47,6 +47,7 @@ export function StageSlot({stageRef, onDropPart, compact}) {
           <Stage3D ref={stageRef} design={design} selected={category} hoverPart={hoverPart} run={run && !run.done ? run : null} phase="hangar" quality="auto" reduced={reduced} onPick={pick} onSocketHover={() => {}} fallback={fallback} />
         </Suspense>
       ) : fallback}
+      <div className={s.stageControls}><span>{t('Drag to rotate · scroll to zoom')}</span><button type="button" onClick={() => stageRef.current?.resetCamera?.()}>{t('Reset view')}</button></div>
       {over ? <div className={s.dropHint} aria-hidden="true">{t('Drop to install')}</div> : null}
     </div>
   );

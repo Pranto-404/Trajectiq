@@ -11,6 +11,7 @@ import {quickLaunch} from './quickLaunch.js';
 import {ScenarioCard} from './ScenarioCard.jsx';
 import {CrewSetup} from './CrewSetup.jsx';
 import {Charter} from './Charter.jsx';
+import {MissionHero} from './MissionHero.jsx';
 import {PitchBanner} from './PitchBanner.jsx';
 import {Stage3D} from '../stage/index.js';
 import s from './board.module.css';
@@ -43,16 +44,7 @@ export function BoardScreen() {
   return (
     <div className={s.screen} data-screen="board" ref={root}>
       <PitchBanner />
-      <motion.header className={s.hero} {...enterProps(0, reduced)}>
-        <div>
-          <span className="kicker">{t('Step 1 / Define your mission')}</span>
-          <h1>{t('Plan your mission.')}</h1>
-          <p className={s.lede}>{t('Pick how you play, choose an objective, then build the spacecraft that can reach it.')}</p>
-        </div>
-        <div className={s.row}>
-          <Button variant="ghost" size="sm" icon="payload" onClick={() => a.customize()} disabled={locked} disabledReason={locked ? lockReason : undefined}>{t('Engineering lab')}</Button>
-        </div>
-      </motion.header>
+      <MissionHero mission={mission} card={selectedCard} need={need} locked={locked} onBuild={accept} onHelp={() => a['game-help']()} />
 
       {locked ? (
         <Panel state="warning" kicker={t('Flight in progress')} title={t('Hardware is locked')} data-testid="flight-lock">
@@ -66,7 +58,7 @@ export function BoardScreen() {
 
       <div className={s.layout}>
         <div className={s.main}>
-          <motion.section className={s.block} aria-label={t('Play mode')} {...enterProps(1, reduced)}>
+          <motion.section className={`${s.block} ${s.settingsPanel}`} aria-label={t('Play mode')} {...enterProps(1, reduced)}>
             <span className="kicker">{t('How you play')}</span>
             <Segmented label={t('Mode')} value={mode} onChange={v => a['board-mode']({mode: v})} fullWidth
               options={[{value: 'solo', label: t('Solo'), icon: 'assistant', hint: t('You play every role')}, {value: 'crew', label: t('Crew'), icon: 'share', hint: t('2–4 players, shared decisions')}, {value: 'sandbox', label: t('Sandbox'), icon: 'motion', hint: t('No budget cap, unranked')}].map(o => ({...o, disabled: locked}))} />
@@ -75,7 +67,7 @@ export function BoardScreen() {
 
           {mode === 'crew' ? <CrewSetup reduced={reduced} locked={locked} /> : null}
 
-          <section className={s.block} aria-label={t('Difficulty')}>
+          <section className={`${s.block} ${s.settingsPanel}`} aria-label={t('Difficulty')}>
             <span className="kicker">{t('Difficulty')}</span>
             <Segmented label={t('Difficulty')} value={mission.difficulty} onChange={v => a['board-difficulty']({difficulty: v})} fullWidth
               options={diffs.map(d => ({value: d.id, label: d.label, hint: d.blurb, disabled: locked}))} />
@@ -83,7 +75,7 @@ export function BoardScreen() {
           </section>
 
           <section className={s.block} aria-label={t('Objective')}>
-            <span className="kicker">{t('Objective')}</span>
+            <div className={s.sectionHeading}><div><span className="kicker">{t('MISSION LIBRARY')}</span><h2>{t('Choose your next frontier')}</h2></div><Button variant="ghost" size="sm" icon="payload" onClick={() => a.customize()} disabled={locked}>{t('Engineering lab')}</Button></div>
             <div className={s.destinations} role="group" aria-label={t('Filter destinations')}>
               <button type="button" aria-pressed={destination === 'all'} onClick={() => setDestination('all')}>{t('All destinations')}</button>
               {groups.map(g => <button type="button" key={g.destination} aria-pressed={destination === g.destination} onClick={() => setDestination(g.destination)}>{g.label}</button>)}
