@@ -51,7 +51,7 @@ describe('pre-launch check sheet', () => {
     expect(within(sheet).getByRole('button', {name: /authorize launch/i}).getAttribute('aria-disabled')).toBe('true');
     for (const btn of within(roll).getAllByRole('button', {name: 'Sign off'})) await user.click(btn);
     await waitFor(() => expect(within(sheet).getByRole('button', {name: /authorize launch/i}).getAttribute('aria-disabled')).toBeNull());
-    expect(within(sheet).queryByRole('button', {name: 'Open the roll call'})).toBeNull(); // shown only once the crew package registers `rollcall`
+    expect(within(sheet).queryByRole('button', {name: 'Open the roll call'})).toBeTruthy(); // the crew package registers the `rollcall` sheet, so the entry point is offered
   });
 });
 
